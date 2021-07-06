@@ -1,13 +1,8 @@
 const puppeteer = require('puppeteer');
 import { Commands } from "./io/commands/commands"
+import { Actions } from "./io/actions/navigate"
 
 const command = new Commands
-command.parse(process.argv);
-
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('https://example.com');
-  await page.screenshot({ path: 'example.png' });
-  await browser.close();
-})();
+const actions = command.parse(process.argv);
+const navigate = new Actions.Navigate
+const page = navigate.launch()

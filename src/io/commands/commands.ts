@@ -11,7 +11,6 @@ export class Commands {
     parse(str: string []) {
 
         this.program.option('-d, --debug', 'output extra debugging')
-                    .option('-d, --debug', 'output extra debugging')
         this.program.parse(str);
     
         const options = this.program.opts();
