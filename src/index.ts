@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-import { Commands } from "io/commands/commands"
+import { Commands } from "./io/commands/commands"
 
 const command = new Commands
 command.parse(process.argv);
