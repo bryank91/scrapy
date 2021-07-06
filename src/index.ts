@@ -1,6 +1,13 @@
-import express from 'express';
+const puppeteer = require('puppeteer');
+import "../src/io/commands/command"
 
-const app = express();
-app.listen(4000, () => {
-  console.log(`server running on port 4000`);
-});
+const command = new Command;
+command.parse(process.argv);
+
+(async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto('https://example.com');
+  await page.screenshot({ path: 'example.png' });
+  await browser.close();
+})();
