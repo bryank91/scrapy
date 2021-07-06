@@ -1,7 +1,7 @@
-const { Commander } = require('commander');
-const program = new Commander();
+import { Command } from 'commander';
+const program = new Command();
 
-class Command {
+export class Commands {
     program: any; // Commander
 
     constructor() {
@@ -9,6 +9,13 @@ class Command {
     }
 
     parse(str: string []) {
-        return 1
+
+        this.program.option('-d, --debug', 'output extra debugging')
+                    .option('-d, --debug', 'output extra debugging')
+        this.program.parse(str);
+    
+        const options = this.program.opts();
+        
+        return options
     }
 }

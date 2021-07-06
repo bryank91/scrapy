@@ -6,12 +6,16 @@ Selenium scraping tool with Docker
 
 ## Setting up
 ### Running in local
-1. npm install
-2. npm run dev
+1. `npm install`
+2. `npm run dev`
 
 ### Running in docker
-1. docker-compose build
-2. docker-compose up
+1. `docker-compose build`
+2. `docker-compose up`
+
+## Running the application
+`npm run build`
+`npm run start -- <arg>`
 
 
 ## Guide

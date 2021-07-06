@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-import "../src/io/commands/command"
+import { Commands } from "io/commands/commands"
 
-const command = new Command;
+const command = new Commands
 command.parse(process.argv);
 
 (async () => {

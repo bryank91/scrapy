@@ -4,7 +4,7 @@
   "description": "Selenium scrapper ",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/index.js",
+    "start": "set NODE_PATH=./build&& node build/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts"
   },
