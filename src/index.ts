@@ -1,8 +1,17 @@
 const puppeteer = require('puppeteer');
 import { Commands } from "./io/commands/commands"
-import { Actions } from "./io/actions/navigate"
+import { Actions } from "./io/actions/shopify"
 
 const command = new Commands
 const actions = command.parse(process.argv);
-const navigate = new Actions.Navigate
-const page = navigate.getId()
+const shopify = new Actions.Shopify
+
+const execute =
+    (async () => {
+        const browser = await shopify.init()
+        const page = await shopify.getId(browser);
+        await shopify.close(browser);
+    })
+
+execute()
+
