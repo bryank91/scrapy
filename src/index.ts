@@ -9,8 +9,8 @@ const shopify = new Actions.Shopify
 const execute =
     (async () => {
         const browser = await shopify.init()
-        const page = await shopify.getId(browser);
-        await shopify.close(browser);
+        let ids = await shopify.getId(browser);
+        browser.close()
     })
 
 execute()

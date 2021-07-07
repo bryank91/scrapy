@@ -23,20 +23,20 @@ export namespace Actions {
         }
 
         // async get the id 
-        getId(browser: puppeteer.Browser) {
-            (async () => {
-                const page = await browser.newPage();
-                await page.goto(this.goTo);
-                let id =
-                    await page.evaluate((): number[] => {
-                        const { variants } = window.ShopifyAnalytics.meta.product;
-                        return variants; // array of shopify objects with id and names
-                    })
-                console.log(id);
-            })();
+        async getId(browser: puppeteer.Browser) {
+            const page = await browser.newPage();
+            await page.goto(this.goTo);
+            let id: any[] =
+                await page.evaluate((): number[] => {
+                    const { variants } = window.ShopifyAnalytics.meta.product;
+                    return variants; // array of shopify objects with id and names
+                })
+            console.log(id)
+            return id;
+
         } // return browser and id of array
 
-        addIdToCart(browser: puppeteer.Browser, id: number[]) {
+        async addIdToCart(browser: puppeteer.Browser, id: number[]) {
 
         }
 
