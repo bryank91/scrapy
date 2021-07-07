@@ -1,20 +1,23 @@
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
+import puppeteer, { PuppeteerNode } from "puppeteer"
 
 declare const window: any;
 
 export namespace Actions {
     export class Navigate {        
 
-        goTo : string;
+        goTo : string;        
 
         constructor() {
-            // placeholders
             this.goTo = "https://dailyclack.com/collections/switches/products/seal-switches"
+        }
+
+        init() : Promise<puppeteer.Browser> {
+            // do something here
         }
 
         getId(browser: unknown) {
             (async () => {
-                const browser = await puppeteer.launch();
                 const page = await browser.newPage();
                 await page.goto(this.goTo);
                 let id = 

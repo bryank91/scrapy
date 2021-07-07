@@ -2,7 +2,7 @@ import express from 'express';
 const app = express();
 
 class Server {
-  app : any;
+  app : Express.Application
 
   constructor() {
     this.app = app;
