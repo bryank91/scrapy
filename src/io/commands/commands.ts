@@ -11,6 +11,7 @@ export class Commands {
     parse(str: string []) {
 
         this.program.option('-d, --debug', 'output extra debugging')
+                    .option('-dc <url>, --dailyclack', 'check inventory level for daily clack')
         this.program.parse(str);
     
         const options = this.program.opts();

@@ -1,15 +1,14 @@
 import puppeteer, { Browser } from "puppeteer"
 
 declare const window: any;
-declare const inventory_quantity: any;
 
 export namespace Actions {
     export class Shopify {
 
         goTo: string;
 
-        constructor() {
-            this.goTo = "https://dailyclack.com/products/tx-springs-15mm-m"
+        constructor(goTo: string) {
+            this.goTo = goTo
         }
 
         // inits the browser
