@@ -12,6 +12,7 @@ export class Commands {
 
         this.program.option('-d, --debug', 'output extra debugging')
                     .option('-dc <url>, --dailyclack', 'check inventory level for daily clack')
+                    .option('-server', 'runs a express server')
         this.program.parse(str);
     
         const options = this.program.opts();

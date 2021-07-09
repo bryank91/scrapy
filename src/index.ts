@@ -1,8 +1,9 @@
-import Puppeteer from "puppeteer";
+import Puppeteer from "puppeteer"
 import { Commands } from "./io/commands/commands"
 import { Actions } from "./io/actions/shopify"
 import { Data } from "./data/shopify"
-import { Command, OptionValues } from "commander";
+import { Command, OptionValues } from "commander"
+import { Server } from "./io/server/server"
 
 const command = new Commands
 const options:OptionValues = command.parse(process.argv);
@@ -25,6 +26,11 @@ if (options.Dc != null) {
             return products
         })
     execute()
+} else if (options.Server == true) {
+    const express = require('express')
+    const app : Express.Application = express()
+    let server = new Server(app)
+    server.run()
 } else {
     console.warn("Something went wrong with the options passed in\n")
     console.warn(options)
