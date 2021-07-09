@@ -1,4 +1,3 @@
-// const puppeteer = require('puppeteer');
 import puppeteer, { Browser } from "puppeteer"
 
 declare const window: any;
@@ -41,13 +40,22 @@ export namespace Actions {
 
         } // return browser and id of array
 
-        async getInventory(page: puppeteer.Page) {
-            let inventory: any[] =
-                await page.evaluate(() => {
-                    const { variants } = inventory_quantity // need to target the script
-                    return variants; // array of shopify objects with id and names
-                })
-            return inventory;
+        // #id = id
+        // .class = class
+        // gets the content based on selector
+        async getContentBasedOnSelector(page: puppeteer.Page, selector: string) : Promise<string | null> {
+            await page.waitForSelector(selector)
+            const html = await page.$$eval(selector, element =>  {
+                return element[0].textContent
+            })
+            return html;
+        }
+
+        // parse array of objects in JSON string with the keyword as the key
+        async parseObjectsToList(jsonString: string, keyword: string) {
+            let json: Object [] = JSON.parse(jsonString)
+            return json.map((i:any) => i[keyword])
+            
         }
 
 
