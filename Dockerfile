@@ -1,15 +1,6 @@
-FROM node:14 as base
+FROM public.ecr.aws/lambda/nodejs:12
 
-WORKDIR /home/node/app
+COPY src/io/serverless/functions.js ./
 
-COPY package*.json ./
-
-RUN npm i
-
-COPY . .
-
-FROM base as production
-
-ENV NODE_PATH=./build
-
-RUN npm run build
+# You can overwrite command in `serverless.yml` template
+CMD ["functions.handler"]
