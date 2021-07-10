@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 
-export class Hosting {
+export class Server {
   private _app: Express
 
   constructor(app: Express) {

@@ -3,7 +3,7 @@ import { OptionValues } from "commander"
 
 import { Shopify } from "../actions/shopify"
 import { Data } from "../../data/shopify"
-import { Hosting as Server } from "../server/server"
+import { Server } from "../server/server"
 import { Parse } from "../commands/commands"
 
 export class Router {
