@@ -1,21 +1,21 @@
 import { Command } from 'commander';
 const program = new Command();
 
-export class Commands {
-    program: any; // Commander
+export class Parse {
+    private _program: any; // Commander
 
     constructor() {
-        this.program = program
+        this._program = program
     }
 
-    parse(str: string []) {
+    options(str: string []) {
 
-        this.program.option('-d, --debug', 'output extra debugging')
+        this._program.option('-d, --debug', 'output extra debugging')
                     .option('-dc <url>, --dailyclack', 'check inventory level for daily clack')
                     .option('-server', 'runs a express server')
-        this.program.parse(str);
+        this._program.parse(str);
     
-        const options = this.program.opts();
+        const options = this._program.opts();
         
         return options
     }

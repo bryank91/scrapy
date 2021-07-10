@@ -1,31 +1,30 @@
-import express from 'express';
+import express, { Express } from 'express';
 
-const app = express();
+export class Hosting {
+  private _app: Express
 
-export class Server {
-  app: Express.Application
-
-  constructor(app: Express.Application) {
-    this.app = app;
+  constructor(app: Express) {
+    this._app = app;
   }
 
   run() {
-    app.use(express.json())
+    this._app.use(express.json())
 
-    app.get('/', (req, res) => {
+    this._app.get('/', (req, res) => {
       res.send('Hello World!')
     })
     
-    app.post('/getName', function (req, res) {
+    this._app.post('/getName', function (req, res) {
       console.log(req.body)
       let request : string = req.body.Name != null ? req.body.Name : "Unknown" // TODO: there must be a better way to handle these types
       res.send('My name is:' + request)
     })
 
-    app.listen(4000, () => {
+    this._app.listen(4000, () => {
       console.log(`server running on port 4000`);
     });
   }
 }
+
 
 
