@@ -1,6 +1,6 @@
 # Scrapy
 ## Description
-Selenium scraping tool with multiple features. Currently built to run with Docker, Node and 
+Puppeteer scraping tool with multiple features. Currently built to run with Docker, Node and 
 Serverless. Can be run as an express HTTP server or a CLI command
 
 Supported sites
@@ -46,6 +46,7 @@ sls invoke --function hello
 - https://dev.to/dariansampare/setting-up-docker-typescript-node-hot-reloading-code-changes-in-a-running-container-2b2f
 - https://www.serverless.com/blog/container-support-for-lambda
 - https://www.proud2becloud.com/how-to-build-a-serverless-backend-with-typescript-nodejs-and-aws-lambda/
+- https://www.serverless.com/blog/serverless-express-rest-api
 
 ## Licence
 MIT

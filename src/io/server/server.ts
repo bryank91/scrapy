@@ -15,7 +15,6 @@ export class Server {
     })
     
     this._app.post('/getName', function (req, res) {
-      console.log(req.body)
       let request : string = req.body.Name != null ? req.body.Name : "Unknown" // TODO: there must be a better way to handle these types
       res.send('My name is:' + request)
     })

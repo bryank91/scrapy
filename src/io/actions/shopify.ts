@@ -1,4 +1,4 @@
-import puppeteer, { Browser } from "puppeteer"
+const chromium = require('chrome-aws-lambda');
 
 declare const window: any;
 
@@ -10,25 +10,15 @@ export class Shopify {
         this._goTo = goTo
     }
 
-    // inits the browser
-    init(): any {
-        return puppeteer.launch()
-    }
-
-    // closes the browser 
-    close(browser: puppeteer.Browser): any {
-        browser.close();
-    }
-
     // navigates to the page
-    async navigate(browser: puppeteer.Browser) {
+    async navigate(browser: any) {
         let page = await browser.newPage();
         await page.goto(this._goTo);
         return page
     }
 
     // async get the id 
-    async getProducts(page: puppeteer.Page) {
+    async getProducts(page: any) {
         let products: any[] =
             await page.evaluate(() => {
                 const { variants } = window.ShopifyAnalytics.meta.product;
@@ -41,9 +31,9 @@ export class Shopify {
     // #id = id
     // .class = class
     // gets the content based on selector
-    async getContentBasedOnSelector(page: puppeteer.Page, selector: string) : Promise<string | null> {
+    async getContentBasedOnSelector(page: any, selector: string) : Promise<string | null> {
         await page.waitForSelector(selector)
-        const html = await page.$$eval(selector, element =>  {
+        const html = await page.$$eval(selector, (element: any) =>  {
             return element[0].textContent
         })
         return html;

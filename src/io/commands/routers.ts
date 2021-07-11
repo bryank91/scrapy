@@ -1,10 +1,11 @@
-import Puppeteer from "puppeteer"
+const chromium = require('chrome-aws-lambda');
 import { OptionValues } from "commander"
 
 import { Shopify } from "../actions/shopify"
 import { Data } from "../../data/shopify"
 import { Server } from "../server/server"
 import { Parse } from "../commands/commands"
+import Chromium from "chrome-aws-lambda";
 
 export class Router {
     
@@ -23,9 +24,16 @@ export class Router {
         if (options.Dc != null) {
             const execute = 
                 (async () => {
-                    const shopify = await new Shopify(options.Dc)
-                    const browser: Puppeteer.Browser = await shopify.init()
-                    let page: Puppeteer.Page = await shopify.navigate(browser);
+                    let browser = await chromium.puppeteer.launch({
+                        args: chromium.args,
+                        defaultViewport: chromium.defaultViewport,
+                        executablePath: await chromium.executablePath,
+                        headless: true,
+                        ignoreHTTPSErrors: true,
+                      });
+
+                    let shopify = new Shopify(options.Dc)
+                    let page = await shopify.navigate(browser);
                     let products : any[] = await shopify.getProducts(page)          
                     let inventory = await shopify.getContentBasedOnSelector(page, "#VariantJson-product-template")
                     let listOfInventory : Data.Inventory = (typeof inventory === "string")  
