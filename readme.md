@@ -47,6 +47,7 @@ sls invoke --function hello
 - https://www.serverless.com/blog/container-support-for-lambda
 - https://www.proud2becloud.com/how-to-build-a-serverless-backend-with-typescript-nodejs-and-aws-lambda/
 - https://www.serverless.com/blog/serverless-express-rest-api
+- https://acloudguru.com/blog/engineering/serverless-browser-automation-with-aws-lambda-and-puppeteer
 
 ## Licence
 MIT
