@@ -20,6 +20,9 @@ service: scrapy
 # Check out our docs for more details
 frameworkVersion: '2'
 
+plugins:
+  - serverless-plugin-typescript
+
 provider:
   name: aws
   lambdaHashingVersion: 20201221
@@ -59,6 +62,7 @@ functions:
   hello:
     image:
       name: appimage
+      
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
