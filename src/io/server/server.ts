@@ -26,8 +26,8 @@ export class Server {
         res.send("Something went wrong")
     })
 
-    this._app.listen(4001, () => {
-      console.log(`server running on port 4001`);
+    this._app.listen(4000, () => {
+      console.log(`server running on port 4000`);
     });
 
     return this._app;
