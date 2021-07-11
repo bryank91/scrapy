@@ -1,35 +1,16 @@
-
+# serverless.yml
 
 service: scrapy
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs10.16.3
+  stage: dev
   region: ap-southeast-2
-
-package:
-  exclude:
-    - node_modules/**
-    - src/**  
-
-layers:
-  nodeModules:
-    path: layer
-    compatibleRuntimes:
-      - nodejs12.x
 
 functions:
   app:
     handler: index.handler
-    layers:
-      - {Ref: NodeModulesLambdaLayer}    
     events:
-      - http:
-          path: /getName
-          method: ANY
-          cors: true
-
-
-plugins:
-  - serverless-offline
-
+      - http: ANY /
+      - http: 'ANY {proxy+}'

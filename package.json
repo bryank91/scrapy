@@ -6,9 +6,7 @@
   "scripts": {
     "start": "set NODE_PATH=./build&& node build/index.js",
     "build": "tsc -p .",
-    "dev": "nodemon src/index.ts",
-    "pre-deploy": "rm -rf node_modules .serverless && npm install && npm run build && ;prepare-layer.sh",
-    "deploy-dev": "npm run pre-deploy && set NODE_ENV=dev sls deploy"
+    "dev": "nodemon src/index.ts"
   },
   "author": "Kho, Bryan",
   "license": "MIT",
@@ -16,7 +14,7 @@
     "commander": "^8.0.0",
     "express": "^4.17.1",
     "selenium": "^2.20.0",
-    "serverless-offline": "^7.0.0"
+    "serverless-http": "^2.7.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
