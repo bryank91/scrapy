@@ -2,3 +2,6 @@ node_modules/
 build/
 example.png
 .serverless/
+layer/
+.build/
+assets/
