@@ -1,4 +1,3 @@
-const chromium = require('chrome-aws-lambda');
 import { OptionValues } from "commander"
 
 import { Shared } from "../actions/shared"

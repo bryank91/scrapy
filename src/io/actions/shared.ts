@@ -7,7 +7,7 @@ export namespace Shared {
     export async function execute(site: string) {
         
             let browser = await chromium.puppeteer.launch({
-                args: chromium.args,
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
                 defaultViewport: chromium.defaultViewport,
                 executablePath: await chromium.executablePath,
                 headless: true,

@@ -1,5 +1,3 @@
-const chromium = require('chrome-aws-lambda');
-
 declare const window: any;
 
 export class Shopify {
