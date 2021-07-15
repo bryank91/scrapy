@@ -1,21 +1,15 @@
 import { Command } from 'commander';
-const program = new Command();
 
-export class Parse {
-    private _program: any; // Commander
+export namespace Parse {
 
-    constructor() {
-        this._program = program
-    }
+    export function options(program: Command, str: string []) {
 
-    options(str: string []) {
-
-        this._program.option('-d, --debug', 'output extra debugging')
+        program.option('-d, --debug', 'output extra debugging')
                     .option('-dc <url>, --dailyclack', 'check inventory level for daily clack')
                     .option('-server', 'runs a express server')
-        this._program.parse(str);
+        program.parse(str);
     
-        const options = this._program.opts();
+        const options = program.opts();
         
         return options
     }

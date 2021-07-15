@@ -6,7 +6,7 @@ const sls = require('serverless-http');
 // if no arguments are passed, default to server
 if (process.argv.length > 2) {
         console.log("Running with arguments")
-        const route = new Router(process.argv)
+        const route = Router.init(process.argv)
         const options: OptionValues = route.init()
         route.routeOptions(options)
 } else {

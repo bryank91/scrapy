@@ -14,12 +14,11 @@ export namespace Shared {
                 ignoreHTTPSErrors: true,
             });
 
-            let shopify = new Shopify(site)
-            let page = await shopify.navigate(browser);
-            let products : any[] = await shopify.getProducts(page)          
-            let inventory = await shopify.getContentBasedOnSelector(page, "#VariantJson-product-template")
+            let page = await Shopify.navigate(site,browser)
+            let products : any[] = await Shopify.getProducts(page)          
+            let inventory = await Shopify.getContentBasedOnSelector(page, "#VariantJson-product-template")
             let listOfInventory : Data.Inventory = (typeof inventory === "string")  
-                                ? await shopify.parseObjectsToList(inventory,"inventory_quantity")
+                                ? await Shopify.parseObjectsToList(inventory,"inventory_quantity")
                                 : []        
             await browser.close()
 
