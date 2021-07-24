@@ -3,13 +3,13 @@ import { Command, OptionValues } from "commander"
 import { Shared } from "../actions/shared"
 import { Server } from "../server/server"
 import { Parse } from "../commands/commands"
+import { OCR } from "../ocr/ocr"
 
 export namespace Router {
     
     export function init(argv: any): OptionValues {
         const command = new Command()
-        const parse = Parse.options(command,argv)
-        return parse.options(argv);
+        return Parse.options(command,argv)
     }
 
     export function routeOptions(options: OptionValues) {
@@ -17,6 +17,8 @@ export namespace Router {
             Shared.getInventory(options.Dc).then((result) => {
                 console.log(result)
             })
+        } else if (options.Ocr != null) {            
+            const _ = OCR.convertTextFromImage(options.Ocr, "eng")        
         } else if (options.Server == true) {
             const express = require('express')
             const app = express()
