@@ -14,7 +14,7 @@ export namespace Router {
 
     export function routeOptions(options: OptionValues) {
         if (options.Dc != null) {
-            Shared.execute(options.Dc).then((result) => {
+            Shared.getInventory(options.Dc).then((result) => {
                 console.log(result)
             })
         } else if (options.Server == true) {

@@ -1,9 +1,8 @@
 import { Browser, Page } from "puppeteer-core"
 
-
 declare const window: any;
 
-export namespace Shopify {
+export namespace html {
 
     // goto param takes in the url and browser takes in the lamda pupeteer browser
     export async function navigate(goto: string, browser: Browser) {
@@ -26,10 +25,18 @@ export namespace Shopify {
     // #id = id
     // .class = class
     // gets the content based on selector
-    export async function getContentBasedOnSelector(page: Page, selector: string) : Promise<string | null> {
+    export async function getSingleTextContentBasedOnSelector(page: Page, selector: string) : Promise<string | null> {
         await page.waitForSelector(selector)
         const html = await page.$$eval(selector, (element: any) =>  {
             return element[0].textContent
+        })
+        return html;
+    }
+
+    export async function getValueBasedOnSelector(page: Page, selector: string) : Promise <any [] | null> {
+        await page.waitForSelector(selector)
+        const html = await page.$$eval(selector, (element: any) =>  {
+            return element.Value
         })
         return html;
     }

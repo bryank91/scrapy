@@ -19,7 +19,7 @@ export class Server {
     this._app.post('/getInventory', function (req, res) {
       req.body.Url != null 
       ?       
-        Shared.execute(req.body.Url).then((result) => {
+        Shared.getInventory(req.body.Url).then((result) => {
           res.send(result)
         })
       : 
