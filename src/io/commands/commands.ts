@@ -15,10 +15,13 @@ export namespace Parse {
 
         program
             .command('test')
+            .argument('<file>')
             .description('run test commands')
-            .action(() => {
-                let source = new FileTypes.File("new.txt")
-                let fileExist = FileHandle.writeFile("hello world", source)
+            .action((file) => {
+                // TODO: this can be improve to handle errors without relying on library
+                // let source = new FileTypes.File("new.txt")
+
+                let fileExist = FileHandle.writeFile("hello world", file)
             })
 
         program
