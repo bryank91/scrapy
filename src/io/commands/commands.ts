@@ -27,6 +27,10 @@ export namespace Parse {
         program
             .command('ch <url>')
             .description('get changes for a website')
+            .action((url) => {
+                console.log('Looking for any changes on the site..')
+                Shared.getChanges(url)
+            })
 
         program
             .command('ocr <file> <language>')
