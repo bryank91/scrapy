@@ -1,4 +1,7 @@
 import { Command } from 'commander';
+import { Shared } from "../actions/shared"
+import { Server } from "../server/server"
+import { OCR } from "../ocr/ocr"
 
 export namespace Parse {
 
@@ -6,12 +9,50 @@ export namespace Parse {
 
         program
             .version('0.1.0')
-            .option('-d, --debug', 'output extra debugging')
-            .option('-dc <url>, --dailyclack', 'check inventory level for daily clack')
-            .option('-ocr <url>', '--tesseract', 'uses OCR to grab text from a specified img url')
-            .option('-server', 'runs a express server')
+
+        program
+            .command('test')
+            .description('run test commands')
+
+        program
+            .command('dc <url>')
+            .description('check inventory level for daily clack')
+            .action((url) => {
+                console.log('Processing daily clack...')
+                Shared.getInventory(url).then((result) => {
+                    console.log(result)
+                })
+            })
+
+        program
+            .command('ch <url>')
+            .description('get changes for a website')
+
+        program
+            .command('ocr <file> <language>')
+            .description('uses OCR to grab text from a specified img url')
+            .action((file,language) => {
+                // TODO: currently default to english only for now                
+                OCR.convertTextFromFile(file, "eng")     
+            })
+
+        program
+            .command('server')
+            .description('runs a express server')
+            .action(() => {
+                const express = require('express')
+                const app = express()
+                const server = new Server(app)
+                server.run()
+            })
+
+        program
+            .option('-d, --debug', 'enable more verbose logging')
+
+        program            
             .parse(str);
-    
+
+
         const options = program.opts();
         
         return options
