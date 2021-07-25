@@ -2,8 +2,15 @@ import fs from 'fs'
 
 export namespace FileTypes {
 
+    export type File = {
+        Path: string
+        Content: string
+    }
+
+    export type FilePath = string
+
     // TODO: can use neverthrow in the future
-    export class File {
+    export class ResultFile {
 
         path: string | undefined
 
