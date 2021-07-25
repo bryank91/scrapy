@@ -3,6 +3,9 @@ import { Shared } from "../actions/shared"
 import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
 
+import { FileHandle } from "../file/fileHandle"
+import { FileTypes } from "../../data/fileTypes"
+
 export namespace Parse {
 
     export function options(program: Command, str: string[]) {
@@ -13,6 +16,10 @@ export namespace Parse {
         program
             .command('test')
             .description('run test commands')
+            .action(() => {
+                let source = new FileTypes.File("new.txt")
+                let fileExist = FileHandle.writeFile("hello world", source)
+            })
 
         program
             .command('dc')
@@ -25,14 +32,16 @@ export namespace Parse {
                 })
             })
 
+        // TODO: can be improve to support multiple selectors
         program
             .command('ch')
-            .description('get changes for a website based on the url and selector')
+            .description('get changes for a website based on the selector and comparing to the file source')
             .argument('<url>', 'the url of the site ')
             .argument('<selector>', 'the selector to target the value at')
-            .action((url, selector) => {
+            .argument('[file]', 'the file to write/read')
+            .action((url, selector, file) => {
                 console.log('Looking for any changes on the site..')
-                const res = Shared.getChanges(url, selector)
+                const res = Shared.getChanges(url, selector, file)
             })
 
         program
