@@ -6,6 +6,10 @@ Serverless. Can be run as an express HTTP server or a CLI command
 Supported sites
 - Shopify
 
+## Configuration
+Ensure this is performed before any of the task
+1. Create a headers.json file. You can refer to an example in `headers.example.json`
+
 ## Running in Docker and Development
 #### Local Development
 > This runs as nodemon which allows watch

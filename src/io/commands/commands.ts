@@ -5,7 +5,7 @@ import { OCR } from "../ocr/ocr"
 
 export namespace Parse {
 
-    export function options(program: Command, str: string []) {
+    export function options(program: Command, str: string[]) {
 
         program
             .version('0.1.0')
@@ -15,8 +15,9 @@ export namespace Parse {
             .description('run test commands')
 
         program
-            .command('dc <url>')
+            .command('dc')
             .description('check inventory level for daily clack')
+            .argument('<url>', 'the url of the site')
             .action((url) => {
                 console.log('Processing daily clack...')
                 Shared.getInventory(url).then((result) => {
@@ -25,9 +26,10 @@ export namespace Parse {
             })
 
         program
-            .command('ch <url> <selector>')
+            .command('ch')
             .description('get changes for a website based on the url and selector')
             .argument('<url>', 'the url of the site ')
+            .argument('<selector>', 'the selector to target the value at')
             .action((url, selector) => {
                 console.log('Looking for any changes on the site..')
                 const res = Shared.getChanges(url, selector)
@@ -39,7 +41,7 @@ export namespace Parse {
             .argument('<file>', 'relative location of file to perform ocr reading on')
             .argument('[language]', 'the language to perform OCR upon', 'eng')
             .action((file, language) => {
-                OCR.convertTextFromFile(file, language)     
+                OCR.convertTextFromFile(file, language)
             })
 
         program
@@ -52,12 +54,12 @@ export namespace Parse {
         program
             .option('-d, --debug', 'enable more verbose logging')
 
-        program            
+        program
             .parse(str);
 
 
         const options = program.opts();
-        
+
         return options
     }
 }
