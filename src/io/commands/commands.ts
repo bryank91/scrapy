@@ -25,11 +25,11 @@ export namespace Parse {
             })
 
         program
-            .command('ch <url>')
-            .description('get changes for a website')
-            .action((url) => {
+            .command('ch <url> <selector>')
+            .description('get changes for a website based on the url and selector')
+            .action((url, selector) => {
                 console.log('Looking for any changes on the site..')
-                Shared.getChanges(url)
+                const res = Shared.getChanges(url, selector)
             })
 
         program

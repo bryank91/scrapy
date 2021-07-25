@@ -33,11 +33,21 @@ export namespace Shared {
             return products
     }
 
-    export async function getChanges(site: HtmlTypes.Site ) {
+    export async function getChanges(site: HtmlTypes.Site, selector: string ) {
 
         let browser = await initBrowser()
 
         let page = await html.navigate(site,browser)
+
+        // use this for debugging
+        // console.log(await page.content())
+
+        const res : string[] | null = await html.getValueBasedOnSelector(page,selector)       
+        res?.map(i => {
+            console.log(i)
+        })
+                
+        await browser.close()
 
     }
 }

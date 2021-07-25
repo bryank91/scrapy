@@ -7,6 +7,18 @@ export namespace html {
     // goto param takes in the url and browser takes in the lamda pupeteer browser
     export async function navigate(goto: string, browser: Browser) {
         let page = await browser.newPage();
+        
+        // set extra headers
+        await page.setExtraHTTPHeaders({
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69',
+            'upgrade-insecure-requests': '1',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'en-US,en;q=0.9,en;q=0.8',
+            'Referer': 'http://www.google.com/'
+        })
+    
+
         await page.goto(goto);
         return page
     }
@@ -35,10 +47,10 @@ export namespace html {
 
     export async function getValueBasedOnSelector(page: Page, selector: string) : Promise <any [] | null> {
         await page.waitForSelector(selector)
-        const html = await page.$$eval(selector, (element: any) =>  {
-            return element.Value
+        const arrayOfSelectors = await page.$$eval(selector, anchors => {
+            return anchors.map(anchor => anchor.textContent)
         })
-        return html;
+        return arrayOfSelectors
     }
 
     // parse array of objects in JSON string with the keyword as the key
