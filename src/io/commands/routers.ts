@@ -18,7 +18,7 @@ export namespace Router {
                 console.log(result)
             })
         } else if (options.Ocr != null) {            
-            const _ = OCR.convertTextFromImage(options.Ocr, "eng")        
+            const _ = OCR.convertTextFromFile(options.Ocr, "eng")        
         } else if (options.Server == true) {
             const express = require('express')
             const app = express()
