@@ -27,9 +27,6 @@ export namespace html {
 
     } // return browser and id of array
 
-    // #id = id
-    // .class = class
-    // gets the content based on selector
     export async function getSingleTextContentBasedOnSelector(page: Page, selector: string) : Promise<string | null> {
         await page.waitForSelector(selector)
         const html = await page.$$eval(selector, (element: any) =>  {
@@ -38,6 +35,7 @@ export namespace html {
         return html;
     }
 
+    // get array of values based on selector defined
     export async function getValueBasedOnSelector(page: Page, selector: string) : Promise <any [] | null> {
         await page.waitForSelector(selector)
         const arrayOfSelectors = await page.$$eval(selector, anchors => {

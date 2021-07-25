@@ -27,17 +27,19 @@ export namespace Parse {
         program
             .command('ch <url> <selector>')
             .description('get changes for a website based on the url and selector')
+            .argument('<url>', 'the url of the site ')
             .action((url, selector) => {
                 console.log('Looking for any changes on the site..')
                 const res = Shared.getChanges(url, selector)
             })
 
         program
-            .command('ocr <file> <language>')
+            .command('ocr')
             .description('uses OCR to grab text from a specified img url')
-            .action((file,language) => {
-                // TODO: currently default to english only for now                
-                OCR.convertTextFromFile(file, "eng")     
+            .argument('<file>', 'relative location of file to perform ocr reading on')
+            .argument('[language]', 'the language to perform OCR upon', 'eng')
+            .action((file, language) => {
+                OCR.convertTextFromFile(file, language)     
             })
 
         program
