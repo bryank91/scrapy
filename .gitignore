@@ -6,3 +6,4 @@ layer/
 .build/
 assets/
 eng.traineddata
+headers.json

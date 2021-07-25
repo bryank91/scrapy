@@ -1,4 +1,5 @@
 import { Browser, Page } from "puppeteer-core"
+import { Config } from "../../data/config"
 
 declare const window: any;
 
@@ -9,16 +10,8 @@ export namespace html {
         let page = await browser.newPage();
         
         // set extra headers
-        await page.setExtraHTTPHeaders({
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69',
-            'upgrade-insecure-requests': '1',
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
-            'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'en-US,en;q=0.9,en;q=0.8',
-            'Referer': 'http://www.google.com/'
-        })
+        await page.setExtraHTTPHeaders(Config.headers)
     
-
         await page.goto(goto);
         return page
     }
