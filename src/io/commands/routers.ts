@@ -1,9 +1,7 @@
 import { Command, OptionValues } from "commander"
 
-import { Shared } from "../actions/shared"
 import { Server } from "../server/server"
 import { Parse } from "../commands/commands"
-import { OCR } from "../ocr/ocr"
 
 export namespace Router {
     
@@ -11,4 +9,13 @@ export namespace Router {
         const command = new Command()
         return Parse.options(command,argv)
     }
+
+    export function server() {
+        console.log("Running server")
+        const express = require('express')
+        const init = express()
+        const server = new Server(init)
+        server.run()
+    }
+
 }

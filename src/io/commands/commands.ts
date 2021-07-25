@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { Shared } from "../actions/shared"
-import { Server } from "../server/server"
+import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
 
 export namespace Parse {
@@ -40,10 +40,7 @@ export namespace Parse {
             .command('server')
             .description('runs a express server')
             .action(() => {
-                const express = require('express')
-                const app = express()
-                const server = new Server(app)
-                server.run()
+                Router.server()
             })
 
         program

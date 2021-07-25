@@ -9,9 +9,5 @@ if (process.argv.length > 2) {
         const _ = Router.init(process.argv)
         // Router.routeOptions(options)
 } else {
-        console.log("Running server")
-        const express = require('express')
-        const init = express()
-        const server = new Server(init)
-        server.run()
+        Router.server()
 }
