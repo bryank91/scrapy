@@ -20,7 +20,7 @@ export namespace FileHandle {
     }
 
     // compare the difference between the source and the target file
-    export async function compare(source: string, target: FileTypes.File): Promise<boolean> {
-        return false
+    export async function compare(source: FileTypes.File, target: FileTypes.File): Promise<boolean> {
+        return (source.Content == target.Content) ? true : false
     }
 }

@@ -15,13 +15,26 @@ export namespace Parse {
 
         program
             .command('test')
-            .argument('<file>')
+            .argument('<source>','the source file that you want to compare against')
+            .argument('<target>','the target file that you want compare against')
             .description('run test commands')
-            .action((file) => {
+            .action((source,target) => {
                 // TODO: this can be improve to handle errors without relying on library
                 // let source = new FileTypes.File("new.txt")
+                                
+                // query state
+                (async () => {
+                    await FileHandle.writeFile("hello world", source)
+                    await FileHandle.writeFile("hello world2", target)
 
-                let fileExist = FileHandle.writeFile("hello world", file)
+                    let sourceFile = await FileHandle.readFile('hello.txt')
+                    let targetFile = await FileHandle.readFile('hello2.txt')
+                    let isSimilar = await FileHandle.compare(sourceFile,targetFile)
+
+                    await isSimilar ? console.log("It is similar") : console.log("different")                
+                })();
+
+                
             })
 
         program
