@@ -33,7 +33,7 @@ export namespace Shared {
         return products
     }
 
-    export async function getChanges(site: HtmlTypes.Site, selector: string, file: string) {
+    export async function getSelectorValue(site: HtmlTypes.Site, selector: string, file: string) {
 
         let browser = await initBrowser()
 

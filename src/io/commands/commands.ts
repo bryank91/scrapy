@@ -54,7 +54,7 @@ export namespace Parse {
             .argument('[file]', 'the file to write/read')
             .action((url, selector, file) => {
                 console.log('Looking for any changes on the site..')
-                const res = Shared.getChanges(url, selector, file)
+                const res = Shared.getSelectorValue(url, selector, file)
             })
 
         program
