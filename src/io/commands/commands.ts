@@ -20,10 +20,6 @@ export namespace Parse {
             .argument('<target>','the target file that you want compare against')
             .description('run test commands')
             .action((source,target) => {
-                // TODO: this can be improve to handle errors without relying on library
-                // let source = new FileTypes.File("new.txt")
-                                
-                // query state
                 (async () => {
                     FileHandle.writeFile("hello world", source)
                     await FileHandle.writeFile("hello world2", target)
