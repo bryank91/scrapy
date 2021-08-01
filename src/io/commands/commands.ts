@@ -6,6 +6,7 @@ import { OCR } from "../ocr/ocr"
 import { FileHandle } from "../file/fileHandle"
 import { FileTypes } from "../../data/fileTypes"
 
+
 export namespace Parse {
 
     export function options(program: Command, str: string[]) {
@@ -24,7 +25,7 @@ export namespace Parse {
                                 
                 // query state
                 (async () => {
-                    await FileHandle.writeFile("hello world", source)
+                    FileHandle.writeFile("hello world", source)
                     await FileHandle.writeFile("hello world2", target)
 
                     let sourceFile = await FileHandle.readFile('hello.txt')
