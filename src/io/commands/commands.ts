@@ -21,8 +21,8 @@ export namespace Parse {
             .description('run test commands')
             .action((source,target) => {
                 (async () => {
-                    let sourceFile = await FileHandle.readFile('hello.txt')
-                    let targetFile = await FileHandle.readFile('hello2.txt')
+                    let sourceFile = await FileHandle.readFile(source)
+                    let targetFile = await FileHandle.readFile(target)
                     let isSimilar = await FileHandle.compare(sourceFile,targetFile)
 
                     await isSimilar ? console.log("It is similar") : console.log("different")                
