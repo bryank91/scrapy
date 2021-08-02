@@ -8,6 +8,7 @@ export namespace FileTypes {
     }
 
     export type FilePath = string
+    export type ContentType = string | null | undefined
 
     // TODO: can use neverthrow in the future
     export class ResultFile {

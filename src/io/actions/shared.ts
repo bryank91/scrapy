@@ -2,8 +2,15 @@ const chromium = require('chrome-aws-lambda');
 
 import { html } from "../actions/html"
 import { HtmlTypes } from "../../data/htmlTypes"
+import { FileHandle } from "../file/fileHandle";
 
 export namespace Shared {
+
+    export type ReturnComparison = 
+        {
+            Changes: boolean,
+            Content: string[]
+        }
 
     async function initBrowser() {
         let browser = await chromium.puppeteer.launch({
@@ -33,21 +40,43 @@ export namespace Shared {
         return products
     }
 
-    export async function getSelectorValue(site: HtmlTypes.Site, selector: string, file: string) {
+    export async function getDifferencesUsingFileSystem
+        (site: HtmlTypes.Site, selector: string, file: string)
+        : Promise<ReturnComparison>
+    {
 
         let browser = await initBrowser()
-
         let page = await html.navigate(site, browser)
 
-        // use this for debugging
-        // console.log(await page.content())
+        const res: string[] | null 
+            = await html.getValueBasedOnSelector(page, selector)            
 
-        const res: string[] | null = await html.getValueBasedOnSelector(page, selector)
-        res?.map(i => {
-            console.log(i)
-        })
+        let newFileContent : string = 
+            res != null || undefined
+            ? res!.join("\n") // unsafe mode as we handle null/undefined values
+            : ""
 
+        let oldFile = await FileHandle.readFile(file)   
+
+        // write to file
+        await FileHandle.writeFile(newFileContent, file)
         await browser.close()
+
+        if (oldFile.Content == newFileContent) 
+        { 
+            return {
+                Changes: false,
+                Content: [] // no changes hence empty array
+            }                             
+        } 
+        else 
+        { 
+            return {
+                Changes: true,
+                Content: newFileContent.split("\n")
+                            .filter(x => !oldFile.Content.split("\n").includes(x))
+            }      
+        }
 
     }
 }

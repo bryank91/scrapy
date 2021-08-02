@@ -12,18 +12,15 @@ export namespace Parse {
     export function options(program: Command, str: string[]) {
 
         program
-            .version('0.1.0')
-
+            .version('0.1.0')        
+            
         program
-            .command('test')
+            .command('compare')
             .argument('<source>','the source file that you want to compare against')
             .argument('<target>','the target file that you want compare against')
             .description('run test commands')
             .action((source,target) => {
                 (async () => {
-                    FileHandle.writeFile("hello world", source)
-                    await FileHandle.writeFile("hello world2", target)
-
                     let sourceFile = await FileHandle.readFile('hello.txt')
                     let targetFile = await FileHandle.readFile('hello2.txt')
                     let isSimilar = await FileHandle.compare(sourceFile,targetFile)
@@ -47,14 +44,16 @@ export namespace Parse {
 
         // TODO: can be improve to support multiple selectors
         program
-            .command('ch')
+            .command('changes')
             .description('get changes for a website based on the selector and comparing to the file source')
             .argument('<url>', 'the url of the site ')
             .argument('<selector>', 'the selector to target the value at')
-            .argument('[file]', 'the file to write/read')
+            .argument('<file>', 'the file to write/read')
             .action((url, selector, file) => {
                 console.log('Looking for any changes on the site..')
-                const res = Shared.getSelectorValue(url, selector, file)
+                Shared.getDifferencesUsingFileSystem(url, selector, file).then((result) => {
+                    console.log(result) // if similar return false else true
+                })
             })
 
         program
