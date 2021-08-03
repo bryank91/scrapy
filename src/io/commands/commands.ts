@@ -4,7 +4,6 @@ import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
 
 import { FileHandle } from "../file/fileHandle"
-import { FileTypes } from "../../data/fileTypes"
 
 
 export namespace Parse {
@@ -46,14 +45,24 @@ export namespace Parse {
         program
             .command('changes')
             .description('get changes for a website based on the selector and comparing to the file source')
-            .argument('<url>', 'the url of the site ')
+            .argument('<url>', 'the url of the site ')  
             .argument('<selector>', 'the selector to target the value at')
             .argument('<file>', 'the file to write/read')
+            .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds')
             .action((url, selector, file) => {
                 console.log('Looking for any changes on the site..')
-                Shared.getDifferencesUsingFileSystem(url, selector, file).then((result) => {
-                    console.log(result) // if similar return false else true
-                })
+
+                if (options.forever) {
+                    console.log('Running as a forever method')
+                    Shared.getDifferencesUsingFileSystem(url, selector, file).then((result) => {
+                        console.log(result) // if similar return false else true
+                    })
+                } else {
+                    Shared.getDifferencesUsingFileSystem(url, selector, file).then((result) => {
+                        console.log(result) // if similar return false else true
+                    })
+                }
+
             })
 
         program

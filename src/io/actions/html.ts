@@ -1,5 +1,5 @@
 import { Browser, Page } from "puppeteer-core"
-import { Config } from "../../data/config"
+import { Data } from "../../data/config"
 
 declare const window: any;
 
@@ -10,7 +10,7 @@ export namespace html {
         let page = await browser.newPage();
         
         // set extra headers
-        await page.setExtraHTTPHeaders(Config.headers)
+        await page.setExtraHTTPHeaders(Data.Config.headers)
     
         await page.goto(goto);
         return page

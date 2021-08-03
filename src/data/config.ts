@@ -1,4 +1,4 @@
 // retrieve headers for browsers
-export namespace Config {
+export namespace Data.Config {
     export const headers = require('../../headers.json')
 }

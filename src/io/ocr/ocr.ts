@@ -1,9 +1,9 @@
 const { createWorker } = require('tesseract.js');
-import { OCRTypes } from "../../data/ocrTypes"
+import { Data } from "../../data/ocr"
 
 export namespace OCR {
     // converts a file hosted in the URL to text. taking in a filename and the language
-    export async function convertTextFromURL(url : OCRTypes.Site, lang : OCRTypes.Language) {
+    export async function convertTextFromURL(url : Data.OCR.Site, lang : Data.OCR.Language) {
         const worker = createWorker({
             logger: (m:any) => console.log(m), // Add logger here
           });
@@ -19,7 +19,7 @@ export namespace OCR {
     }
 
     // converts the file to text. taking in a filename and the language
-    export async function convertTextFromFile(filename: string, lang: OCRTypes.Language) {
+    export async function convertTextFromFile(filename: string, lang: Data.OCR.Language) {
         const worker = createWorker({
             logger: (m:any) => console.log(m), // Add logger here
           });

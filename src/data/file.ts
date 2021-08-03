@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-export namespace FileTypes {
+export namespace Data.File {
 
     export type File = {
         Path: string

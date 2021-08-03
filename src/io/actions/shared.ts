@@ -1,7 +1,7 @@
 const chromium = require('chrome-aws-lambda');
 
 import { html } from "../actions/html"
-import { HtmlTypes } from "../../data/htmlTypes"
+import { Data } from "../../data/html"
 import { FileHandle } from "../file/fileHandle";
 
 export namespace Shared {
@@ -24,14 +24,14 @@ export namespace Shared {
         return browser
     }
 
-    export async function getInventory(site: HtmlTypes.Site) {
+    export async function getInventory(site: Data.Html.Site) {
 
         let browser = await initBrowser()
 
         let page = await html.navigate(site, browser)
         let products: any[] = await html.getProducts(page)
         let inventory = await html.getSingleTextContentBasedOnSelector(page, "#VariantJson-product-template")
-        let listOfInventory: HtmlTypes.Inventory = (typeof inventory === "string")
+        let listOfInventory: Data.Html.Inventory = (typeof inventory === "string")
             ? await html.parseObjectsToList(inventory, "inventory_quantity")
             : []
         await browser.close()
@@ -40,8 +40,11 @@ export namespace Shared {
         return products
     }
 
+    // gets the differences of a site and writes it to a file
+    // will be able to run repetitively if a foreverTimer is provided
+    // if not provided, defaults to 0 where it runs once
     export async function getDifferencesUsingFileSystem
-        (site: HtmlTypes.Site, selector: string, file: string)
+        (site: Data.Html.Site, selector: string, file: string, foreverTimer: number = 0)
         : Promise<ReturnComparison>
     {
 
@@ -77,6 +80,10 @@ export namespace Shared {
                             .filter(x => !oldFile.Content.split("\n").includes(x))
             }      
         }
+
+    }
+
+    export async function foreverFunction(fn: () => Promise<ReturnComparison>) {
 
     }
 }
