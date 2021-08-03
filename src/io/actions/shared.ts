@@ -82,8 +82,5 @@ export namespace Shared {
         }
 
     }
-
-    export async function foreverFunction(fn: () => Promise<ReturnComparison>) {
-
-    }
+ 
 }
