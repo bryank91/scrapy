@@ -13,6 +13,7 @@
   "dependencies": {
     "chrome-aws-lambda": "^10.0.0",
     "commander": "^8.0.0",
+    "discord.js": "^13.0.0",
     "express": "^4.17.1",
     "serverless": "^2.51.2",
     "serverless-http": "^2.7.0",

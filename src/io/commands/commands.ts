@@ -2,32 +2,47 @@ import { Command } from 'commander';
 import { Shared } from "../actions/shared"
 import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
+import { Discord } from '../discord/webhook';
 
 import { FileHandle } from "../file/fileHandle"
-
 
 export namespace Parse {
 
     export function options(program: Command, str: string[]) {
 
         program
-            .version('0.1.0')        
-            
-        program
+            .version('0.1.0')
+
+        let util = program.command('util')
+
+        util
+            .description('utility commands')
+            .command('discord')
+            .description('run discord commands')
+            .argument('<webhook>', 'the webhook that you want to send message to')
+            .argument('<content>', 'the string that you want to send')
+            .description('Sends a message to the discord webhook')
+            .action((webhook, content) => {
+                (async () => {
+                    console.log('Sending message')
+                    await Discord.Webhook.sendMessage(webhook, content)
+                })()
+            })
+        util
             .command('compare')
-            .argument('<source>','the source file that you want to compare against')
-            .argument('<target>','the target file that you want compare against')
-            .description('run test commands')
-            .action((source,target) => {
+            .argument('<source>', 'the source file that you want to compare against')
+            .argument('<target>', 'the target file that you want compare against')
+            .description('compare the differences between 2 files')
+            .action((source, target) => {
                 (async () => {
                     let sourceFile = await FileHandle.readFile(source)
                     let targetFile = await FileHandle.readFile(target)
-                    let isSimilar = await FileHandle.compare(sourceFile,targetFile)
+                    let isSimilar = await FileHandle.compare(sourceFile, targetFile)
 
-                    await isSimilar ? console.log("It is similar") : console.log("different")                
-                })();
+                    await isSimilar ? console.log("It is similar") : console.log("different")
+                })()
 
-                
+
             })
 
         program
@@ -45,27 +60,27 @@ export namespace Parse {
         program
             .command('changes')
             .description('get changes for a website based on the selector and comparing to the file source')
-            .argument('<url>', 'the url of the site ')  
+            .argument('<url>', 'the url of the site ')
             .argument('<selector>', 'the selector to target the value at')
             .argument('<file>', 'the file to write/read')
             .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
-            .action((url, selector, file, options) => {   
+            .action((url, selector, file, options) => {
 
-                let doForever : number = options.forever 
-                                         ? parseInt(String(options.forever))
-                                         : 0
+                let doForever: number = options.forever
+                    ? parseInt(String(options.forever))
+                    : 0
 
-                function doGetDifference() : void {
+                function doGetDifference(): void {
                     Shared.getDifferencesUsingFileSystem(url, selector, file, doForever).then((result) => {
                         console.log(result) // if similar return false else true
                     })
                 }
 
                 if (doForever >= 60) {  // sets a hard limit   
-                    console.log("Running forever function...")                             
+                    console.log("Running forever function...")
                     setInterval(
                         () => { doGetDifference() }
-                    , doForever*1000) // it takes in ms
+                        , doForever * 1000) // it takes in ms
                 } else {
                     console.log('Looking for any changes on the site once...')
                     doGetDifference()
