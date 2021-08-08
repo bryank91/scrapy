@@ -61,7 +61,6 @@ export namespace Shared {
 
         let oldFile = await FileHandle.readFile(file)   
 
-        // write to file
         await FileHandle.writeFile(newFileContent, file)
         await browser.close()
 
