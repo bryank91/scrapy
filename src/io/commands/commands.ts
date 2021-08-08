@@ -8,6 +8,26 @@ import { FileHandle } from "../file/fileHandle"
 
 export namespace Parse {
 
+    // Helper Functions
+    function doGetDifference(url: string, selector: string, file: string, doForever: number): void {
+        Shared.getDifferencesUsingFileSystem(url, selector, file, doForever).then((result) => {
+            (async () => {
+                await console.log(result) // if similar return false else true
+                if (result.Changes) {
+                    const combined = await result.Content.join("\n")
+                    await Discord.Webhook.sendMessage("spidey", combined)
+                }
+            })()
+        })
+    }
+
+    // returns if options exist for forever. takes in options from commander
+    function getDoForever(options: any): number {
+        return options.forever
+            ? parseInt(String(options.forever))
+            : 0
+    }
+
     export function options(program: Command, str: string[]) {
 
         program
@@ -24,7 +44,6 @@ export namespace Parse {
             .description('Sends a message to the discord webhook')
             .action((webhook, content) => {
                 (async () => {
-                    console.log('Sending message')
                     await Discord.Webhook.sendMessage(webhook, content)
                 })()
             })
@@ -45,6 +64,29 @@ export namespace Parse {
 
             })
 
+        // TODO: can be improve to support multiple selectors
+        util
+            .command('changes')
+            .description('get changes for a website based on the selector and comparing to the file source')
+            .argument('<url>', 'the url of the site ')
+            .argument('<selector>', 'the selector to target the value at')
+            .argument('<file>', 'the file to write/read')
+            .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
+            .action((url, selector, file, options) => {
+
+                let doForever = getDoForever(options)
+
+                if (doForever >= 60) {  // sets a hard limit   
+                    console.log("Running forever function...")
+                    setInterval(
+                        () => { doGetDifference(url, selector, file, doForever) }
+                        , doForever * 1000) // it takes in ms
+                } else {
+                    console.log('Looking for any changes on the site once...')
+                    doGetDifference(url, selector, file, doForever)
+                }
+            })
+
         program
             .command('dc')
             .description('check inventory level for daily clack')
@@ -56,23 +98,25 @@ export namespace Parse {
                 })
             })
 
-        // TODO: can be improve to support multiple selectors
         program
             .command('changes')
             .description('get changes for a website based on the selector and comparing to the file source')
-            .argument('<url>', 'the url of the site ')
-            .argument('<selector>', 'the selector to target the value at')
-            .argument('<file>', 'the file to write/read')
+            .argument('<profileId>', 'the id from config.discord that you want to use')
             .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
-            .action((url, selector, file, options) => {
+            .action((profileId, options) => {
 
-                let doForever: number = options.forever
-                    ? parseInt(String(options.forever))
-                    : 0
+                let doForever = getDoForever(options)
+                let profile = Discord.Webhook.getWebhook(profileId)
 
                 function doGetDifference(): void {
-                    Shared.getDifferencesUsingFileSystem(url, selector, file, doForever).then((result) => {
-                        console.log(result) // if similar return false else true
+                    Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, doForever).then((result) => {
+                        (async () => {
+                            await console.log(result) // if similar return false else true
+                            if (result.Changes) {
+                                const combined = await result.Content.join("\n")
+                                await Discord.Webhook.sendMessage(profileId, combined)
+                            }
+                        })()
                     })
                 }
 

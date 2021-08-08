@@ -1,10 +1,12 @@
 {
     "spidey": {
+        "url": "https://www.google.com",
+        "selector": ".cssSelector",
+        "file": "testfile",
         "webhook": {
             "id": "12345",
             "token": "ABCDE"
         },
-        "url": "https://www.example.com",
         "footer": "Made by you",
         "title": "Notifier"
     }

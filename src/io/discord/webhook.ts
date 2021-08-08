@@ -21,9 +21,10 @@ export namespace Discord.Webhook {
         config.title && embed.setTitle(config.title)
         config.footer && embed.setFooter(config.footer)
         config.url && embed.setURL(config.url).addFields({ name: "Source", value: config.url })
+        config.selector && embed.setURL(config.url).addFields({ name: "Selector", value: config.selector })
 
         try {
-            embed.setDescription(message + "\n" + message + "\n" + message)
+            embed.setDescription(message)
                 .setTimestamp()
 
             webhookClient.send({
