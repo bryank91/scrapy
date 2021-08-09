@@ -1,19 +1,22 @@
 import { Data } from '../../data/config'
+import { Data as Profile } from '../../data/profile'
 import { WebhookClient, MessageEmbed } from 'discord.js'
+
 
 export namespace Discord.Webhook {
 
-    export function getWebhook(webhookId: string) {
+    export function getWebhook(webhookId: string): Profile.Profile.ChangeProfile[] | [] {
         try {
             console.log(Data.Config.discord[webhookId])
             return Data.Config.discord[webhookId]
         } catch (e) {
-            return console.log("Unable to retrieve webhookId:\n" + e)
+            console.log("Unable to retrieve webhookId:\n" + e)
+            return []
         }
     }
-    export async function sendMessage(webhookId: string, message: string) {
 
-        let config = await getWebhook(webhookId)
+    export async function sendMessage(config: Profile.Profile.ChangeProfile, message: string) {
+
         const webhookClient = await new WebhookClient(config.webhook);
 
         let embed = new MessageEmbed()
@@ -28,8 +31,7 @@ export namespace Discord.Webhook {
                 .setTimestamp()
 
             webhookClient.send({
-                username: webhookId,
-                embeds: [embed],
+                embeds: [embed]
             });
         } catch (e) {
             await console.log(e)

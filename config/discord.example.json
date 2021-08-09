@@ -1,13 +1,26 @@
 {
-    "spidey": {
-        "url": "https://www.google.com",
-        "selector": ".cssSelector",
-        "file": "testfile",
-        "webhook": {
-            "id": "12345",
-            "token": "ABCDE"
+    "spidey": [
+        {
+            "url": "https://www.google.com",
+            "selector": ".cssSelector",
+            "file": "testfile",
+            "webhook": {
+                "id": "12345",
+                "token": "ABCDE"
+            },
+            "footer": "Made by you",
+            "title": "Notifier"
         },
-        "footer": "Made by you",
-        "title": "Notifier"
-    }
+        {
+            "url": "https://www.google.com",
+            "selector": ".cssSelector",
+            "file": "testfile",
+            "webhook": {
+                "id": "12345",
+                "token": "ABCDE"
+            },
+            "footer": "Made by you",
+            "title": "Notifier"
+        },
+    ]
 }
