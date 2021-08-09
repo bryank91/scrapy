@@ -74,15 +74,19 @@ export namespace Parse {
 
                 function doGetDifference(): void {
                     profiles.forEach(profile => {
-                        Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, doForever).then((result) => {
-                            (async () => {
-                                await console.log(result) // if similar return false else true
-                                if (result.Changes) {
-                                    const combined = await result.Content.join("\n")
-                                    await Discord.Webhook.sendMessage(profileId, combined)
-                                }
-                            })()
-                        })
+                        try {
+                            Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, doForever).then((result) => {
+                                (async () => {
+                                    await console.log(result) // if similar return false else true
+                                    if (result.Changes) {
+                                        const combined = await result.Content.join("\n")
+                                        await Discord.Webhook.sendMessage(profileId, combined)
+                                    }
+                                })()
+                            })
+                        } catch (e) {
+                            console.log(e)
+                        }
                     });
                 }
 
