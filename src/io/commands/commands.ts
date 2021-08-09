@@ -80,7 +80,7 @@ export namespace Parse {
                                     await console.log(result) // if similar return false else true
                                     if (result.Changes) {
                                         const combined = await result.Content.join("\n")
-                                        await Discord.Webhook.sendMessage(profileId, combined)
+                                        await Discord.Webhook.sendMessage(profile, combined)
                                     }
                                 })()
                             })

@@ -5,7 +5,7 @@ import { WebhookClient, MessageEmbed } from 'discord.js'
 
 export namespace Discord.Webhook {
 
-    export function getWebhook(webhookId: string): Profile.Profile.ChangeProfile[] | [] {
+    export function getWebhook(webhookId: string): any[] | [] {
         try {
             console.log(Data.Config.discord[webhookId])
             return Data.Config.discord[webhookId]
@@ -15,8 +15,9 @@ export namespace Discord.Webhook {
         }
     }
 
-    export async function sendMessage(config: Profile.Profile.ChangeProfile, message: string) {
+    export async function sendMessage(config: any, message: string) {
 
+        console.log(config.webhook)
         const webhookClient = await new WebhookClient(config.webhook);
 
         let embed = new MessageEmbed()
