@@ -18,7 +18,9 @@ services:
     command: npm run start
   
   ts-node-service:
-    image: scrapy
+    build: # build required again due to how dumb EB works
+      context: .
+      dockerfile: Dockerfile # 
     depends_on: 
       - ts-node-docker
     volumes:
