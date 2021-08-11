@@ -10,6 +10,7 @@ eng.traineddata
 headers.json
 *txt
 discord.json
+.env
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
