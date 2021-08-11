@@ -32,7 +32,7 @@ RUN npm i
 
 COPY . .
 
-CMD ["google-chrome-stable"]
+# CMD ["google-chrome-stable"]
 
 ENV NODE_PATH=./build
 

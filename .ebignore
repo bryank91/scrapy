@@ -1,4 +1,4 @@
-# assets
+# Assets
 node_modules/
 build/
 example.png
@@ -7,9 +7,7 @@ layer/
 .build/
 assets/
 eng.traineddata
-headers.json
 *txt
-discord.json
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
