@@ -8,9 +8,10 @@ services:
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
+      - ./config:/home/node/app/config
     container_name: ts-node-docker
     expose:
       - '4000'
     ports:
       - '4000:4000'
-    command: npm run start -- changes --forever 60 spidey
+    command: npm run start -- changes --forever 60 pingers
