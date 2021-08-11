@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: scrapy
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
@@ -15,4 +16,14 @@ services:
     ports:
       - ${PORT}:4000
     command: npm run start
-    # npm run start -- changes --forever 60 testing & && npm run start &
+  
+  ts-node-service:
+    image: scrapy
+    depends_on: 
+      - ts-node-docker
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+      - ./config:/home/node/app/config
+    container_name: ts-node-service
+    command: npm run start -- changes --forever 60 ${PROFILE}
