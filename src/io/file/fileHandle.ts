@@ -3,6 +3,12 @@ import { Data } from "data/file";
 const fsPromises = fs.promises;
 
 export namespace FileHandle {
+
+    // checks if the file exist
+    export async function checkFileExist(target: string): Promise<boolean> {
+        return fs.existsSync(target)
+    }
+
     // writes the content to target file
     export async function writeFile(content: Data.File.ContentType, target: Data.File.FilePath): Promise<void> {
         let safeContent = content == null || undefined ? "" : content
@@ -12,10 +18,10 @@ export namespace FileHandle {
     // read the file and return the path and the content
     // if it does not exist, creates the file
     export async function readFile(target: string): Promise<Data.File.File> {
-        
+
         async function readFileHelper() {
             if (fs.existsSync(target)) {
-                return await fs.readFileSync(target,'utf8')
+                return await fs.readFileSync(target, 'utf8')
             } else {
                 console.log('File does not exist. Creating file...')
                 await writeFile("", target)

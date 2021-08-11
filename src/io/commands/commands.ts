@@ -72,10 +72,10 @@ export namespace Parse {
                 let doForever = getDoForever(options)
                 let profiles = Discord.Webhook.getWebhook(profileId)
 
-                function doGetDifference(): void {
+                function doGetDifference(forceNotify: boolean = false): void {
                     profiles.forEach(profile => {
                         try {
-                            Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, doForever).then((result) => {
+                            Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, forceNotify).then((result) => {
                                 (async () => {
                                     await console.log(result) // if similar return false else true
                                     if (result.Changes) {
@@ -90,14 +90,15 @@ export namespace Parse {
                     });
                 }
 
-                if (doForever >= 60) {  // sets a hard limit   
+                if (doForever >= 5) {  // sets a hard limit   
                     console.log("Running forever function...")
                     setInterval(
                         () => { doGetDifference() }
                         , doForever * 1000) // it takes in ms
                 } else {
                     console.log('Looking for any changes on the site once...')
-                    doGetDifference()
+                    let forceNotify = true
+                    doGetDifference(forceNotify)
                 }
             })
 
