@@ -6,29 +6,52 @@ Serverless. Can be run as an express HTTP server or a CLI command
 Supported sites
 - Shopify
 
+## Pre-requisites
+- Node 16 (use nvm)
+- Python 3.7.2 (https://www.python.org/downloads/) or use (brew install pyenv)
+- AWS CLI (https://aws.amazon.com/cli/)
+- EB CLI (https://github.com/aws/aws-elastic-beanstalk-cli-setup)
+
 ## Configuration
 Ensure this is performed before any of the task
-1. Create a headers.json file. You can refer to an example in `headers.example.json`
+1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
+2. To configure profiles, copy discord.example.json to discord.json and configure your profiles
+3. To configure headers for puppeteer, copy headers.example.json to headers.json and configure the headers
 
 ## Running in Docker and Development
-#### Local Development
+### Local Development
 > This runs as nodemon which allows watch
 1. `npm install`
 2. `npm run dev`
 
-#### Running in docker
+or 
+
+2. `npm run build`
+3. `npm run start -- <arg>`
+
+### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
 1. `docker-compose build`
 2. `docker-compose up`
 
-#### Running the application
+### Running the application
 > To run the application with arguments
 
 `npm run build`
 `npm run start -- <arg>`
 
+### Deploying to Elastic Beanstalk
+> Some files such as .ebignore allows you to push files that are ignored by .gitignore
+> This is important fo EB deployments
+1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
+2. Use `EB init` (or `eb init -f` if you require reconfiguration) to set up the zone and application 
+3. `EB create <environment>` to create the environment
+4. `EB Deploy` to deploy the application to the environment
+
+Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
+
 ## Running serverless
-#### Deployment instructions
+### Deployment instructions
 
 > **Requirements**: Docker. In order to build images locally and push them to ECR, you need to have Docker installed on your local machine. Please refer to [official documentation](https://docs.docker.com/get-docker/).
 
@@ -38,7 +61,7 @@ In order to deploy your service, run the following command
 sls deploy
 ```
 
-#### Test your service
+### Test your service
 
 After successful deployment, you can test your service remotely by using the following command:
 
@@ -52,6 +75,7 @@ sls invoke --function hello
 - https://www.proud2becloud.com/how-to-build-a-serverless-backend-with-typescript-nodejs-and-aws-lambda/
 - https://www.serverless.com/blog/serverless-express-rest-api
 - https://acloudguru.com/blog/engineering/serverless-browser-automation-with-aws-lambda-and-puppeteer
+- https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
 
 ## Licence
 MIT
