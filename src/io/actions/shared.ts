@@ -9,7 +9,8 @@ export namespace Shared {
     export type ReturnComparison =
         {
             Changes: boolean,
-            Content: string[]
+            Content: string[],
+            Error: string | boolean
         }
 
     async function initBrowser() {
@@ -49,41 +50,52 @@ export namespace Shared {
             forceNotify: boolean = false) // notifies immediately regardless of fileExist
         : Promise<ReturnComparison> {
 
-        let browser = await initBrowser()
-        let page = await html.navigate(site, browser)
+        try {
+            let browser = await initBrowser()
+            let page = await html.navigate(site, browser)
 
-        const res: string[] | null
-            = await html.getValueBasedOnSelector(page, selector)
+            const res: string[] | null
+                = await html.getValueBasedOnSelector(page, selector)
 
-        let newFileContent: string =
-            res != null || undefined
-                ? res!.join("\n") // unsafe mode as we handle null/undefined values
-                : ""
+            let newFileContent: string =
+                res != null || undefined
+                    ? res!.join("\n") // unsafe mode as we handle null/undefined values
+                    : ""
 
-        let fileExist = await FileHandle.checkFileExist(file)
+            let fileExist = await FileHandle.checkFileExist(file)
 
-        let oldFile = await FileHandle.readFile(file)
+            let oldFile = await FileHandle.readFile(file)
 
-        await FileHandle.writeFile(newFileContent, file)
-        await browser.close()
+            await FileHandle.writeFile(newFileContent, file)
+            await browser.close()
 
-        if (!fileExist && !forceNotify) {
+            if (!fileExist && !forceNotify) {
+                return {
+                    Changes: false,
+                    Content: newFileContent.split("\n")
+                        .filter(x => !oldFile.Content.split("\n").includes(x)),
+                    Error: false
+                }
+            } else if (oldFile.Content == newFileContent) {
+                return {
+                    Changes: false,
+                    Content: [], // no changes hence empty array
+                    Error: false
+                }
+            }
+            else {
+                return {
+                    Changes: true,
+                    Content: newFileContent.split("\n")
+                        .filter(x => !oldFile.Content.split("\n").includes(x)),
+                    Error: false
+                }
+            }
+        } catch (e) {
             return {
                 Changes: false,
-                Content: newFileContent.split("\n")
-                    .filter(x => !oldFile.Content.split("\n").includes(x))
-            }
-        } else if (oldFile.Content == newFileContent) {
-            return {
-                Changes: false,
-                Content: [] // no changes hence empty array
-            }
-        }
-        else {
-            return {
-                Changes: true,
-                Content: newFileContent.split("\n")
-                    .filter(x => !oldFile.Content.split("\n").includes(x))
+                Content: [], // no changes hence empty array
+                Error: e // log the error
             }
         }
 

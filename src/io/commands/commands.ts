@@ -78,9 +78,12 @@ export namespace Parse {
                             Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, forceNotify).then((result) => {
                                 (async () => {
                                     await console.log(result) // if similar return false else true
-                                    if (result.Changes) {
+                                    if (result.Changes && !result.Error) {
                                         const combined = await result.Content.join("\n")
                                         await Discord.Webhook.sendMessage(profile, combined)
+                                    } else if (!result.Changes && result.Error) {
+                                        console.log("Encountered error")
+                                        // TODO: alert once
                                     }
                                 })()
                             })
