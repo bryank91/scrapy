@@ -23,6 +23,7 @@ services:
       dockerfile: Dockerfile # 
     depends_on: 
       - ts-node-docker
+    restart: always
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
