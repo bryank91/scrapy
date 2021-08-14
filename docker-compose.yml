@@ -23,7 +23,10 @@ services:
       dockerfile: Dockerfile # 
     depends_on: 
       - ts-node-docker
-    restart: always
+    restart_policy:
+        condition: any
+        max_attempts: 5
+        delay: 5s
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
