@@ -48,6 +48,19 @@ or
 3. `EB create <environment>` to create the environment
 4. `EB Deploy` to deploy the application to the environment
 
+> There is some manual steps that you need to perform
+5. `EB ssh` to go into the environment
+6. `sudo bash` to run as root
+7. Follow the steps in https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html 
+to install node
+8. Run cronatab with `crontab -e`
+
+> Step 9 might differ depends on where node is installed.
+> use `whereis node`
+9. Copy what is in `docker-cron` into crontab
+
+
+
 Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
 
 ## Running serverless
