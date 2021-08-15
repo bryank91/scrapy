@@ -11,6 +11,7 @@ headers.json
 *txt
 discord.json
 .env
+.env.prod
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

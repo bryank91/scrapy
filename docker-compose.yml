@@ -14,13 +14,13 @@ services:
     expose:
       - 4000
     ports:
-      - ${PORT}:4000
+      - 80:4000
     command: npm run start
   
   ts-node-service:
     build: # build required again due to how dumb EB works
       context: .
-      dockerfile: Dockerfile # 
+      dockerfile: Dockerfile #         
     depends_on: 
       - ts-node-docker
     volumes:
@@ -28,4 +28,4 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
       - ./config:/home/node/app/config
     container_name: ts-node-service
-    command: npm run start -- changes --forever 60 ${PROFILE}
+    command: npm run start -- changes --forever 60 pingers
