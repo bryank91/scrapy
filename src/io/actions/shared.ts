@@ -3,6 +3,8 @@ const chromium = require('chrome-aws-lambda');
 import { html } from "../actions/html"
 import { Data } from "../../data/html"
 import { FileHandle } from "../file/fileHandle";
+import { Data as Config } from "../../data/config"
+import e from "express";
 
 export namespace Shared {
 
@@ -45,28 +47,43 @@ export namespace Shared {
     // will be able to run repetitively if a foreverTimer is provided
     // if not provided, defaults to 0 where it runs once
     export async function getDifferencesUsingFileSystem
-        (site: Data.Html.Site, selector: string,
-            file: string,
+        (profile: Config.Discord,
             forceNotify: boolean = false) // notifies immediately regardless of fileExist
         : Promise<ReturnComparison> {
 
         try {
             let browser = await initBrowser()
-            let page = await html.navigate(site, browser)
+            let page = await html.navigate(profile.url, browser)
 
-            const res: string[] | null
-                = await html.getValueBasedOnSelector(page, selector)
+            const selectorValues: string[] | null
+                = await html.getValueBasedOnSelector(page, profile.selector)
+
+            const metadata = await Promise.all(profile.metadataSelector.map(async (el) => {
+                let res = await html.getValueBasedOnAttribute(page, el.selector, el.attribute)
+                return res
+            }))
+
+            const merged: string[] | null | undefined =
+                selectorValues?.map((el, i) => {
+                    let res = el //TODO: mutable
+
+                    metadata.forEach(element => {
+                        res = res + "\n" + element![i]
+                    });
+                    return res
+                })
 
             let newFileContent: string =
-                res != null || undefined
-                    ? res!.join("\n") // unsafe mode as we handle null/undefined values
+                merged != null || undefined
+                    ? merged!.join("\n--\n") // unsafe mode as we handle null/undefined values
                     : ""
 
-            let fileExist = await FileHandle.checkFileExist(file)
 
-            let oldFile = await FileHandle.readFile(file)
+            let fileExist = await FileHandle.checkFileExist(profile.file)
 
-            await FileHandle.writeFile(newFileContent, file)
+            let oldFile = await FileHandle.readFile(profile.file)
+
+            await FileHandle.writeFile(newFileContent, profile.file)
             await browser.close()
 
             if (!fileExist && !forceNotify) {

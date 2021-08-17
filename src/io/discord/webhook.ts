@@ -1,5 +1,4 @@
-import { Data } from '../../data/config'
-import { Data as Profile } from '../../data/profile'
+import { Data as Config } from '../../data/config'
 import { WebhookClient, MessageEmbed } from 'discord.js'
 
 
@@ -7,8 +6,8 @@ export namespace Discord.Webhook {
 
     export function getWebhook(webhookId: string): any[] | [] {
         try {
-            console.log(Data.Config.discord[webhookId])
-            return Data.Config.discord[webhookId]
+            console.log(Config.discord[webhookId])
+            return Config.discord[webhookId]
         } catch (e) {
             console.log("Unable to retrieve webhookId:\n" + e)
             return []

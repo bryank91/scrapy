@@ -75,7 +75,7 @@ export namespace Parse {
                 function doGetDifference(forceNotify: boolean = false): void {
                     profiles.forEach(profile => {
                         try {
-                            Shared.getDifferencesUsingFileSystem(profile.url, profile.selector, profile.file, forceNotify).then((result) => {
+                            Shared.getDifferencesUsingFileSystem(profile, forceNotify).then((result) => {
                                 (async () => {
                                     await console.log(result) // if similar return false else true
                                     if (result.Changes && !result.Error) {
