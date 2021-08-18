@@ -60,7 +60,11 @@ export namespace Shared {
 
             const metadata = await Promise.all(profile.metadataSelector.map(async (el) => {
                 let res = await html.getValueBasedOnAttribute(page, el.selector, el.attribute)
-                return res
+                if (el.attribute == 'href' && res != null) {
+                    return html.cleanHref(res, profile.domain) // allows cleaning of href
+                } else {
+                    return res
+                }
             }))
 
             const merged: string[] | null | undefined =

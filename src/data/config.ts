@@ -20,7 +20,8 @@ export namespace Data {
         file: string,
         webhook: Data.Webhook
         footer: string,
-        title: string
+        title: string,
+        domain: string // used for relative pathing in href
     }
 
 }

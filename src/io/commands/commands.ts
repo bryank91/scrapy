@@ -5,6 +5,7 @@ import { OCR } from "../ocr/ocr"
 import { Discord } from '../discord/webhook';
 
 import { FileHandle } from "../file/fileHandle"
+import { Data as Config } from "data/config"
 
 export namespace Parse {
 
@@ -80,7 +81,9 @@ export namespace Parse {
                                     await console.log(result) // if similar return false else true
                                     if (result.Changes && !result.Error) {
                                         const combined = await result.Content.join("\n")
-                                        await Discord.Webhook.sendMessage(profile, combined)
+                                        const parsedProfile: Config.Discord = profile
+                                        await Discord.Webhook.sendMessage(parsedProfile, combined)
+
                                     } else if (!result.Changes && result.Error) {
                                         console.log("Encountered error")
                                         // TODO: alert once

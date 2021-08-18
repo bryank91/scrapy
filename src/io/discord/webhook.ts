@@ -4,6 +4,11 @@ import { WebhookClient, MessageEmbed } from 'discord.js'
 
 export namespace Discord.Webhook {
 
+    export type DiscordList = {
+        title: string
+        description: string
+    }
+
     export function getWebhook(webhookId: string): any[] | [] {
         try {
             console.log(Config.discord[webhookId])
@@ -14,9 +19,8 @@ export namespace Discord.Webhook {
         }
     }
 
-    export async function sendMessage(config: any, message: string) {
+    export async function sendMessage(config: Config.Discord, message: string) {
 
-        console.log(config.webhook)
         const webhookClient = await new WebhookClient(config.webhook);
 
         let embed = new MessageEmbed()
@@ -30,9 +34,11 @@ export namespace Discord.Webhook {
             embed.setDescription(message)
                 .setTimestamp()
 
-            webhookClient.send({
-                embeds: [embed]
-            });
+            if (message.length > 0) {
+                webhookClient.send({
+                    embeds: [embed]
+                });
+            }
         } catch (e) {
             await console.log(e)
         }

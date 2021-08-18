@@ -59,4 +59,11 @@ export namespace html {
 
     }
 
+    // to be used for atttributes that uses href
+    export function cleanHref(arr: string[], domain: string) {
+        return arr.map((el) => {
+            return (domain + el)
+        })
+    }
+
 }
