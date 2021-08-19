@@ -3,24 +3,38 @@
         {
             "url": "https://www.google.com",
             "selector": ".cssSelector",
+            "metadataSelector": [
+                {
+                    "selector": ".product-card",
+                    "attribute": "href"
+                }
+            ],
             "file": "testfile",
             "webhook": {
                 "id": "12345",
                 "token": "ABCDE"
             },
             "footer": "Made by you",
-            "title": "Notifier"
+            "title": "Notifier",
+            "domain": "https://example.com"
         },
         {
             "url": "https://www.google.com",
             "selector": ".cssSelector",
+            "metadataSelector": [
+                {
+                    "selector": ".product-card",
+                    "attribute": "href"
+                }
+            ],
             "file": "testfile",
             "webhook": {
                 "id": "12345",
                 "token": "ABCDE"
             },
             "footer": "Made by you",
-            "title": "Notifier"
-        },
+            "title": "Notifier",
+            "domain": "https://example.com"
+        }
     ]
 }

@@ -4,7 +4,7 @@ services:
   ts-node-docker:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-aws
     image: scrapy
     volumes:
       - ./src:/home/node/app/src
@@ -20,7 +20,7 @@ services:
   ts-node-service:
     build: # build required again due to how dumb EB works
       context: .
-      dockerfile: Dockerfile #         
+      dockerfile: Dockerfile-aws      
     depends_on: 
       - ts-node-docker
     volumes:
