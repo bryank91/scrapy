@@ -12,6 +12,10 @@ Supported sites
 - AWS CLI (https://aws.amazon.com/cli/)
 - EB CLI (https://github.com/aws/aws-elastic-beanstalk-cli-setup)
 
+## Notes
+Dockerfile has been renamed to use Dockerfile-aws as there will be a conflict when docker-compose and dockerfile is used
+
+
 ## Configuration
 Ensure this is performed before any of the task
 1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
