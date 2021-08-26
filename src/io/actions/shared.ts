@@ -15,13 +15,13 @@ export namespace Shared {
             Error: string | boolean
         }
 
-    async function initBrowser() {
+    export async function initBrowser() {
         let browser = await chromium.puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath,
-            headless: true,
-            ignoreHTTPSErrors: true,
+            headless: false,
+            ignoreHTTPSErrors: true
         });
 
         return browser
