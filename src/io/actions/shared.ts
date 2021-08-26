@@ -15,13 +15,16 @@ export namespace Shared {
             Error: string | boolean
         }
 
-    async function initBrowser() {
+    export async function initBrowser() {
         let browser = await chromium.puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath,
-            headless: true,
+            headless: false,
             ignoreHTTPSErrors: true,
+            userDataDir: '/tmp/myChromeSession' // this is neat, it stores the last session that is used. 
+                                                // might not useful for all types of monitoring
+                                                // we will need a clear separation from each type of commands
         });
 
         return browser

@@ -6,7 +6,7 @@ declare const window: any;
 export namespace html {
 
     // goto param takes in the url and browser takes in the lamda pupeteer browser
-    export async function navigate(goto: string, browser: Browser) {
+    export async function navigate(goto: string, browser: Browser) : Promise<Page> {
         let page = await browser.newPage();
 
         // set extra headers

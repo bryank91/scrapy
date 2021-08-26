@@ -3,6 +3,7 @@ import { Shared } from "../actions/shared"
 import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
 import { Discord } from '../discord/webhook';
+import { Discord as Login } from '../discord/login'
 
 import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
@@ -50,6 +51,19 @@ export namespace Parse {
                 })()
 
 
+            })
+
+        program
+            .command('discord')
+            .description('monitors the discord chat channel')
+            .action(() => {
+                async function doDiscordStuff() {                    
+                    await console.log('Doing discord stuff...')
+                    let _ = await Login.login()
+                }
+
+                doDiscordStuff()
+            
             })
 
         program
