@@ -44,7 +44,7 @@ or
 `npm run build`
 `npm run start -- <arg>`
 
-### Deploying to Elastic Beanstalk
+### Creating in Elastic Beanstalk
 > Some files such as .ebignore allows you to push files that are ignored by .gitignore
 > This is important fo EB deployments
 1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
@@ -63,7 +63,11 @@ to install node
 > use `whereis node`
 9. Copy what is in `docker-cron` into crontab
 
-
+### Deployment Steps
+1. docker build -t scrapy -f Dockerfile-aws .
+2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
+3. docker push <unique>/scrapy:latest
+4. eb deploy <environment name>
 
 Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
 
