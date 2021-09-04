@@ -4,7 +4,7 @@ import { html } from "../actions/html"
 import { Data } from "../../data/html"
 import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "../../data/config"
-import e from "express";
+import { Discord } from "../discord/webhook";
 
 export namespace Shared {
 
@@ -31,9 +31,16 @@ export namespace Shared {
 
         let browser = await initBrowser()
 
-        let page = await html.navigate(site, browser)
-        let products: any[] = await html.getProducts(page)
-        let inventory = await html.getSingleTextContentBasedOnSelector(page, "#VariantJson-product-template")
+
+        let pageData = await html.navigate(site, browser)
+
+        let errorLogger = await Discord.Webhook.getErrorLogger()
+
+        if (errorLogger && pageData.Response.status() != 200)
+            Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site)
+
+        let products: any[] = await html.getProducts(pageData.Page)
+        let inventory = await html.getSingleTextContentBasedOnSelector(pageData.Page, "#VariantJson-product-template")
         let listOfInventory: Data.Html.Inventory = (typeof inventory === "string")
             ? await html.parseObjectsToList(inventory, "inventory_quantity")
             : []
@@ -53,13 +60,18 @@ export namespace Shared {
 
         try {
             let browser = await initBrowser()
-            let page = await html.navigate(profile.url, browser)
+            let pageData = await html.navigate(profile.url, browser)
+
+            let errorLogger = await Discord.Webhook.getErrorLogger()
+
+            if (errorLogger && pageData.Response.status() != 200)
+                Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + profile.domain)
 
             const selectorValues: string[] | null
-                = await html.getValueBasedOnSelector(page, profile.selector)
+                = await html.getValueBasedOnSelector(pageData.Page, profile.selector)
 
             const metadata = await Promise.all(profile.metadataSelector.map(async (el) => {
-                let res = await html.getValueBasedOnAttribute(page, el.selector, el.attribute)
+                let res = await html.getValueBasedOnAttribute(pageData.Page, el.selector, el.attribute)
                 if (el.attribute == 'href' && res != null) {
                     return html.cleanHref(res, profile.domain) // allows cleaning of href
                 } else {

@@ -1,19 +1,26 @@
-import { Browser, Page } from "puppeteer-core"
+import { Discord } from "io/discord/webhook";
+import { Browser, HTTPResponse, Page } from "puppeteer-core"
 import { Data as Config } from "../../data/config"
 
 declare const window: any;
 
 export namespace html {
 
+    type PageData = {
+        Page: Page
+        Response: HTTPResponse
+    }
+
     // goto param takes in the url and browser takes in the lamda pupeteer browser
-    export async function navigate(goto: string, browser: Browser) {
+    export async function navigate(goto: string, browser: Browser): Promise<PageData> {
         let page = await browser.newPage();
 
         // set extra headers
         await page.setExtraHTTPHeaders(Config.headers)
 
-        await page.goto(goto);
-        return page
+        let response = await page.goto(goto);
+
+        return { Page: page, Response: response }
     }
 
     // async get the id 

@@ -19,7 +19,16 @@ export namespace Discord.Webhook {
         }
     }
 
-    export async function sendMessage(config: Config.Discord, message: string) {
+    export function getErrorLogger(): Config.Webhook | null {
+        try {
+            return Config.errorLogger
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+    }
+
+    export async function sendMessage(config: Config.Discord, message: string): Promise<void> {
 
         const webhookClient = await new WebhookClient(config.webhook);
 
@@ -43,5 +52,20 @@ export namespace Discord.Webhook {
             await console.log(e)
         }
 
+    }
+
+    export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
+        const webhookClient = await new WebhookClient(webhook);
+        let embed = new MessageEmbed()
+        embed.setTitle('ScrapyErrorLogger')
+
+        try {
+            embed.setDescription(message)
+            webhookClient.send({
+                embeds: [embed]
+            })
+        } catch (e) {
+            await console.log(e)
+        }
     }
 }

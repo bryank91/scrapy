@@ -7,9 +7,10 @@ layer/
 .build/
 assets/
 eng.traineddata
-headers.json
+config/headers.json
 *txt
-discord.json
+config/discord.json
+config/error.json
 .env
 .env.prod
 

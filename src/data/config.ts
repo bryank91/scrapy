@@ -2,6 +2,7 @@
 export namespace Data {
     export const headers = require('../../config/headers.json')
     export const discord = require('../../config/discord.json')
+    export const errorLogger = require('../../config/error.json')
 
     export type Webhook = {
         id: string,
