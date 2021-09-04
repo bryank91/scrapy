@@ -8,8 +8,9 @@ declare const window: any;
 export namespace Discord {
     export async function login() {
         let browser = await Shared.initBrowser()
-        let page = await html.navigate("https://discord.com/login", browser)
-        
+        let pageData = await html.navigate("https://discord.com/login", browser)
+        let page = await pageData.Page
+
         const emailSelector = 'input[aria-label="Email or phone number"]';
         const passwordSelector = 'input[aria-label="Password"]';
         const submitButtonsSelector = 'button[type="submit"]';
@@ -44,17 +45,17 @@ export namespace Discord {
             const submitHandle = await page.$(submitButtonsSelector)
             await page.waitForSelector(submitButtonsSelector);
             await submitHandle!.click();
-            
+
         }
 
-        await console.log('Waiting for page...')       
-        await page.waitForTimeout(5000) 
+        await console.log('Waiting for page...')
+        await page.waitForTimeout(5000)
 
         await page.waitForSelector(dcIcon);
         // const dcIconHandle = await page.$(dcIcon)
-        const dcHandle = 
-            await page.evaluate( function () {
-                let el :HTMLElement = document.querySelector('div[aria-label=" Daily Clack"]')!
+        const dcHandle =
+            await page.evaluate(function () {
+                let el: HTMLElement = document.querySelector('div[aria-label=" Daily Clack"]')!
                 el.click()
             })
 
@@ -70,14 +71,14 @@ export namespace Discord {
 
         */
 
-        await page.waitForTimeout(5000) 
+        await page.waitForTimeout(5000)
 
         const wtsHandle = await page.$(wtsLink)
         await page.waitForSelector(wtsLink);
         wtsHandle!.click()
 
         await page.waitForTimeout(5000)
-        let source = await page.content()        
+        let source = await page.content()
 
         console.log(source)
 

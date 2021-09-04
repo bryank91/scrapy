@@ -17,11 +17,13 @@ export namespace GoogleForms {
         const radioSelctors = 'div[aria-checked="false"]'
         const inputAreaSelector = '.quantumWizTextinputPaperinputInputArea'
 
+        /*
         page.waitForSelector(textSelectors)
         let textInputs = await page.$$(textSelectors)
         await textInputs.forEach((e) => {
             e.type('this is a test')
         })
+        */
 
         // await browser.close()
 

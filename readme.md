@@ -21,6 +21,7 @@ Ensure this is performed before any of the task
 1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
 2. To configure profiles, copy discord.example.json to discord.json and configure your profiles
 3. To configure headers for puppeteer, copy headers.example.json to headers.json and configure the headers
+4. To configure error in discord for puppeteer, copy error.example.json to error.json and configure the headers
 
 ## Running in Docker and Development
 ### Local Development
