@@ -15,16 +15,34 @@ export namespace Shared {
             Error: string | boolean
         }
 
-    export async function initBrowser() {
-        let browser = await chromium.puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath,
-            headless: false,
-            ignoreHTTPSErrors: true
-        });
+    type browserType = "persist" | "ephemeral"
 
-        return browser
+    const persistentSession = {
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: chromium.executablePath,
+        headless: false,
+        ignoreHTTPSErrors: true,
+        userDataDir: '/tmp/myChromeSession' // this is neat, it stores the last session that is used. 
+        // might not useful for all types of monitoring
+        // we will need a clear separation from each type of commands
+    }
+
+    const session = {
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        defaultViewport: chromium.defaultViewport,
+        executablePath: chromium.executablePath,
+        headless: false,
+        ignoreHTTPSErrors: true,
+    }
+
+
+    export async function initBrowser(browserType?: browserType) {
+        if (!browserType || browserType == "ephemeral") {
+            return await chromium.puppeteer.launch(session);
+        } else if (browserType == "persist") {
+            return await chromium.puppeteer.launch(persistentSession);
+        }
     }
 
     export async function getInventory(site: Data.Html.Site) {
