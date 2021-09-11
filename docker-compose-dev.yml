@@ -28,4 +28,13 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
       - ./config:/home/node/app/config
     container_name: ts-node-service
-    command: npm run start -- changes --forever 60 pingers
+    command: npm run start -- changes --forever 60 testing
+
+  ts-node-database: # used only for development. in PRD, a database need to exist
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+      

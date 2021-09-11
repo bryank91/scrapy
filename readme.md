@@ -35,6 +35,11 @@ or
 
 ### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
+#### Dev
+1. `docker-compose -f docker-compose-dev.yml build`
+2. `docker-compose -f docker-compose-dev.yml up`
+
+#### Production
 1. `docker-compose build`
 2. `docker-compose up`
 
