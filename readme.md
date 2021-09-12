@@ -23,8 +23,11 @@ Ensure this is performed before any of the task
 3. To configure headers for puppeteer, copy headers.example.json to headers.json and configure the headers
 
 ### Database Setup
-1. `npm install pg --save`
-2. `npx sequelize-cli db:create`
+1. Running postgresql using docker
+`docker run --name postgresql -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
+
+2. `npm install pg --save`
+3. `npx sequelize-cli db:create`
 
 ## Running in Docker and Development
 ### Local Development
