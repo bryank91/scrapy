@@ -11,16 +11,20 @@ Supported sites
 - Python 3.7.2 (https://www.python.org/downloads/) or use (brew install pyenv)
 - AWS CLI (https://aws.amazon.com/cli/)
 - EB CLI (https://github.com/aws/aws-elastic-beanstalk-cli-setup)
+- Postgresql
 
 ## Notes
 Dockerfile has been renamed to use Dockerfile-aws as there will be a conflict when docker-compose and dockerfile is used
-
 
 ## Configuration
 Ensure this is performed before any of the task
 1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
 2. To configure profiles, copy discord.example.json to discord.json and configure your profiles
 3. To configure headers for puppeteer, copy headers.example.json to headers.json and configure the headers
+
+### Database Setup
+1. `npm install pg --save`
+2. `npx sequelize-cli db:create`
 
 ## Running in Docker and Development
 ### Local Development
