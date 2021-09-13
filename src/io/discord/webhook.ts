@@ -54,6 +54,27 @@ export namespace Discord.Webhook {
 
     }
 
+    export async function simpleMessage(messages: Config.SimpleDiscord[], webhook: Config.Webhook, title: string = 'Pinger') {
+        const webhookClient = await new WebhookClient(webhook);
+        let embed = new MessageEmbed()
+
+        try {
+            embed.setTitle(title)
+            embed.setTimestamp()
+            let parsedMessage = messages.map(el => {
+                return { name: el.title, value: el.url } // does not support extra in SimpleDiscord
+            })
+
+            parsedMessage && embed.setFields(parsedMessage)
+            webhookClient.send({
+                embeds: [embed]
+            })
+        } catch (e) {
+            await console.log(e)
+        }
+
+    }
+
     export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
         const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed()

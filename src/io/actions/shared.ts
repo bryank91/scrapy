@@ -31,7 +31,6 @@ export namespace Shared {
 
         let browser = await initBrowser()
 
-
         let pageData = await html.navigate(site, browser)
 
         let errorLogger = await Discord.Webhook.getErrorLogger()

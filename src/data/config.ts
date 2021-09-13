@@ -25,4 +25,10 @@ export namespace Data {
         domain: string // used for relative pathing in href
     }
 
+    export type SimpleDiscord = {
+        title: string
+        url: string
+        extra?: string
+    }
+
 }

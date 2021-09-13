@@ -7,6 +7,9 @@ import { Discord } from '../discord/webhook';
 import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
 
+import axios from 'axios';
+
+
 export namespace Parse {
 
     // returns if options exist for forever. takes in options from commander
@@ -62,6 +65,57 @@ export namespace Parse {
                     console.log(result)
                 })
             })
+
+        let shopify = program.command('shopify')
+
+        shopify
+            .description('Shopify tooling')
+            .command('products')
+            .description('get links of all products periodically')
+            .argument('<url>', 'url to check against on. usually products.json')
+            .argument('<file>', 'file name to append to')
+            .argument('<discordId>', 'discord id')
+            .argument('<discordToken>', 'discord token')
+            .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
+            .action((url, file, discordId, discordToken, options) => {
+                console.log('Checking shopify products..')
+                let doForever = getDoForever(options)
+
+                function getShopifyJson() {
+                    axios.get(url).then((response) => {
+                        let productJson = response.data
+                        let newProductJson: Config.SimpleDiscord[] = productJson["products"].map((product: any) => {
+                            let link: string = url.replace('products.json', 'products/' + product.handle)
+                            return { title: product.title, url: link }
+                        });
+                        return newProductJson
+                    }).then(async function (res) {
+                        let source = await FileHandle.readFile(file)
+                        let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
+                        await FileHandle.writeFile(JSON.stringify(res), file)
+
+                        let results = await FileHandle.compareObjects(res, sourceJSON)
+                        await console.log(results)
+                        return results;
+
+                    }).then((res: Config.SimpleDiscord[]) => {
+                        let webhook: Config.Webhook = { id: discordId, token: discordToken }
+                        if (res.length > 0) Discord.Webhook.simpleMessage(res, webhook)
+                    })
+                }
+
+                if (doForever >= 5) {  // sets a hard limit   
+                    console.log("Running forever function...")
+                    setInterval(
+                        () => { getShopifyJson() }
+                        , doForever * 1000) // it takes in ms
+                } else {
+                    console.log('Looking for any changes on the site once...')
+                    getShopifyJson()
+                }
+
+            })
+
 
         program
             .command('changes')
