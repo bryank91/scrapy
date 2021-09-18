@@ -75,6 +75,32 @@ export namespace Discord.Webhook {
 
     }
 
+    export async function atcMessage(messages: Config.ShopifyATC, webhook: Config.Webhook, title: string = 'Pinger') {
+        const webhookClient = await new WebhookClient(webhook);
+        let embed = new MessageEmbed()
+
+        try {
+            embed.setTitle(title)
+            embed.setTimestamp()
+            embed.setTitle(messages.title)
+            let parsedMessage = messages.variants.map(el => {
+                return {
+                    name: el.title + " - " + el.option1 + " - " + el.option2 + " - " + el.option3,
+                    value: el.url
+                }
+            })
+
+            parsedMessage && embed.setFields(parsedMessage)
+            webhookClient.send({
+                embeds: [embed]
+            })
+        } catch (e) {
+            await console.log(e)
+        }
+
+    }
+
+
     export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
         const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed()

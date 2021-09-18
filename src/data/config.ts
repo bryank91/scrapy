@@ -31,4 +31,20 @@ export namespace Data {
         extra?: string
     }
 
+    export type ShopifyATC = {
+        title: string
+        url: string
+        variants: Variants[]
+
+    }
+    export type Variants = {
+        title: string
+        url: string
+        option1: string | null | undefined
+        option2: string | null | undefined
+        option3: string | null | undefined
+    }
+
+
+
 }
