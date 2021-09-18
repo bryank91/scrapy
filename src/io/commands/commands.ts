@@ -145,7 +145,7 @@ export namespace Parse {
                                     option2: variant.option2 !== undefined && variant.option2,
                                     option3: variant.option3 !== undefined && variant.option3
                                 }
-                                console.log(res)
+
                                 return res
                             })
 
@@ -157,7 +157,7 @@ export namespace Parse {
                             }
                             return res
                         });
-                        console.log(newProductJson)
+
                         return newProductJson
                     }).then(async function (res) {
                         let source = await FileHandle.readFile(file)
