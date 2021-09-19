@@ -63,13 +63,27 @@ to install node
 > use `whereis node`
 9. Copy what is in `docker-cron` into crontab
 
-### Deployment Steps
+### Deployment Steps (AWS)
 1. docker build -t scrapy -f Dockerfile-aws .
 2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
 3. docker push <unique>/scrapy:latest
 4. eb deploy <environment name>
 
 Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
+
+### Deployment Steps (Azure)
+1. `az login` (pre-req you have Azure installed)
+2. `az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
+3. `az appservice plan create --name scrapy --resource-group Scrapy --sku B1 --is-linux`
+
+Pushing to ACR
+1. `az acr create --name scrapy --resource-group Scrapy --sku standard`
+2. `docker login scrapy.azurecr.io`
+3. `docker build -f Dockerfile-azure --tag scrapy:latest .`
+4. `docker tag scrapy scrapy.azurecr.io/scrapy`
+
+To remove:
+4. `az webapp delete --name scrapy-app --resource-group Scrapy` (to remove after testing)
 
 ## Running serverless
 ### Deployment instructions

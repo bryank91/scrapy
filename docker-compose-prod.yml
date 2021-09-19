@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  ts-node-docker:
+    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    container_name: ts-node-docker
+    expose:
+      - 4000
+    ports:
+      - 80:4000
+    command: npm run start
+  
+  ts-node-service:
+    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    depends_on: 
+      - ts-node-docker
+    container_name: ts-node-service
+    command: npm run start -- changes --forever 60 testing

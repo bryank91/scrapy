@@ -2,20 +2,23 @@ version: '3.7'
 
 services:
   ts-node-docker:
-    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-azure
+    image: scrapy
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
       - ./config:/home/node/app/config
     container_name: ts-node-docker
-    expose:
-      - 4000
     ports:
-      - 80:4000
+      - 80:${PORT}
     command: npm run start
   
   ts-node-service:
-    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    build: # build required again due to how dumb EB works
+      context: .
+      dockerfile: Dockerfile-azure      
     depends_on: 
       - ts-node-docker
     volumes:
@@ -23,4 +26,4 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
       - ./config:/home/node/app/config
     container_name: ts-node-service
-    command: npm run start -- changes --forever 60 pingers
+    command: npm run start -- changes --forever 60 testing
