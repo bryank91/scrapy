@@ -11,8 +11,12 @@ services:
       - ./nodemon.json:/home/node/app/nodemon.json
       - ./config:/home/node/app/config
     container_name: ts-node-docker
+    environment: 
+      PORT: 8080
+    expose:
+      - 8080
     ports:
-      - 80:${PORT}
+      - 80:8080
     command: npm run start
   
   ts-node-service:
