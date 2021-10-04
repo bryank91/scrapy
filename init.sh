@@ -21,10 +21,5 @@ libxrender1 libxss1 libxtst6 libnss3 libgbm-dev
 # Install chromium
 sudo apt install chromium-browser
 
-###
-### COPY YOUR JSON FILES INTO THE HEADERS
-###
-
-# Build and install
-# npm install
-# npm build
+# Install all required npm depedencies
+npm install

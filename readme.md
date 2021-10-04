@@ -6,6 +6,8 @@ Serverless. Can be run as an express HTTP server or a CLI command
 Supported sites
 - Shopify
 
+---
+
 ## Pre-requisites
 - Node 16 (use nvm)
 - Python 3.7.2 (https://www.python.org/downloads/) or use (brew install pyenv)
@@ -56,40 +58,20 @@ or
 `npm run build`
 `npm run start -- <arg>`
 
-### Creating in Elastic Beanstalk (AWS)
-> Some files such as .ebignore allows you to push files that are ignored by .gitignore
-> This is important fo EB deployments
-1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
-2. Use `EB init` (or `eb init -f` if you require reconfiguration) to set up the zone and application 
-3. `EB create <environment>` to create the environment
-4. `EB Deploy` to deploy the application to the environment
+---
 
-> There is some manual steps that you need to perform
-5. `EB ssh` to go into the environment
-6. `sudo bash` to run as root
-7. Follow the steps in https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html 
-to install node
-```
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install node
-```
+## Azure
+## Create in Ubuntu VM 
+1. Clone the repository `git clone https://github.com/bryank91/scrapy.git`
+2. Run the initializer shell to build all the depedencies `./init.sh`
+3. Create json files for headers, errors and discord
+4. Build the project `npm run build`
+5. Run the project with `npm run start -- --help`
 
-8. Run cronatab with `crontab -e`
+If you run into errors in regards to running the start command (eg. ???), run 
+`. ~/.nvm/nvm.sh && nvm install node`
 
-> Step 9 might differ depends on where node is installed.
-> use `whereis node`
-9. Copy what is in `docker-cron` into crontab
-
-### Deployment Steps (AWS)
-1. docker build -t scrapy -f Dockerfile-aws .
-2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
-3. docker push <unique>/scrapy:latest
-4. eb deploy <environment name>
-
-Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
-
-### Create App Service Steps (Azure)
+### Create App Service Steps
 1. `az login` (pre-req you have Azure installed)
 2. Create Resource Group in AU 
 `az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
@@ -128,29 +110,43 @@ To see logs:
 1. `az webapp loconfig --name scrapy --resource-group Scrapy --docker-container-logging filesystem`
 2. `az webapp log tail --name scrapy --resource-group Scrapy`
 
-## Create in Ubuntu VM 
-1. git clone repository
-2. `sudo apt update`
-3. `sudo apt install nodejs npm`
-4. Install node
+---
+
+## AWS (Deprecated)
+### Creating in Elastic Beanstalk 
+> Some files such as .ebignore allows you to push files that are ignored by .gitignore
+> This is important fo EB deployments
+1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
+2. Use `EB init` (or `eb init -f` if you require reconfiguration) to set up the zone and application 
+3. `EB create <environment>` to create the environment
+4. `EB Deploy` to deploy the application to the environment
+
+> There is some manual steps that you need to perform
+5. `EB ssh` to go into the environment
+6. `sudo bash` to run as root
+7. Follow the steps in https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html 
+to install node
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 . ~/.nvm/nvm.sh
 nvm install node
 ```
-5. Install chromium depedencies
-```
-sudo apt-get install -yq --no-install-recommends libasound2 libatk1.0-0 libc6 libcairo2 \
-libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 \
-libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 \
-libx11-xcb1 libxcb1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 \
-libxrender1 libxss1 libxtst6 libnss3 libgbm-dev
-```
-6. Install chromium `sudo apt install chromium-browser`
-4. `npm install`
-5. `npm run build`
-6. Copy json files for headers 
 
+8. Run cronatab with `crontab -e`
+
+> Step 9 might differ depends on where node is installed.
+> use `whereis node`
+9. Copy what is in `docker-cron` into crontab
+
+### Deployment Steps
+1. docker build -t scrapy -f Dockerfile-aws .
+2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
+3. docker push <unique>/scrapy:latest
+4. eb deploy <environment name>
+
+Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
+
+---
 
 ## Running serverless (Preview)
 ### Deployment instructions
