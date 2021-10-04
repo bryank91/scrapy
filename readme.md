@@ -56,7 +56,7 @@ or
 `npm run build`
 `npm run start -- <arg>`
 
-### Creating in Elastic Beanstalk
+### Creating in Elastic Beanstalk (AWS)
 > Some files such as .ebignore allows you to push files that are ignored by .gitignore
 > This is important fo EB deployments
 1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
@@ -69,13 +69,19 @@ or
 6. `sudo bash` to run as root
 7. Follow the steps in https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html 
 to install node
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install node
+```
+
 8. Run cronatab with `crontab -e`
 
 > Step 9 might differ depends on where node is installed.
 > use `whereis node`
 9. Copy what is in `docker-cron` into crontab
 
-### Deployment Steps
+### Deployment Steps (AWS)
 1. docker build -t scrapy -f Dockerfile-aws .
 2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
 3. docker push <unique>/scrapy:latest
@@ -83,7 +89,46 @@ to install node
 
 Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
 
-## Running serverless
+### Create App Service Steps (Azure)
+1. `az login` (pre-req you have Azure installed)
+2. Create Resource Group in AU 
+`az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
+3. Create appservice plan 
+`az appservice plan create --name scrapy --resource-group Scrapy --sku B1 --is-linux`
+4. App deployment with docker-compose 
+`az webapp create --resource-group Scrapy --plan scrapy --name scrapy --multicontainer-config-type compose --multicontainer-config-file docker-compose-prod.yml`
+5. Gets the identity of the webapp 
+`az webapp identity assign --resource-group Scrapy --name scrapy --query principalId --output tsv`
+6. Gets the subscrption id 
+`az account show --query id --output tsv`
+7. With the crendentials above
+`az role assignment create --assignee <principal-id> --scope /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.ContainerRegistry/registries/<registry-name> --role "AcrPull"`
+8. `<principal-id>` is from step 5, `<registry-name>` is scrapy, `<subscription-id>` from from step 6, `<myResourceGroup>` is Scrapy
+9. Update the RG permissions 
+`az resource update --ids /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.Web/sites/<app-name>/config/web --set properties.acrUseManagedIdentityCreds=True`
+9. `<subscription-id>` is from step 6, `<myResourceGroup>` is Scrapy, `<app-name>` is scrapy
+10. You will need to try to access the site to trigger the docker-compose pull
+
+Source: https://docs.microsoft.com/en-us/azure/app-service/tutorial-custom-container?pivots=container-linux
+
+Pushing to ACR
+1. `az acr create --name scrapy --resource-group Scrapy --sku standard`
+2. `docker login scrapy.azurecr.io`
+3. `docker build -f Dockerfile-azure --tag scrapy:latest .`
+4. `docker tag scrapy scrapy.azurecr.io/scrapy`
+
+To remove:
+1. `az webapp delete --name scrapy --resource-group Scrapy` (to remove after testing)
+
+To SSH (not working atm):
+1. Configure: https://docs.microsoft.com/en-au/azure/app-service/configure-linux-open-ssh-session
+2.  `az webapp ssh --name scrapy --resource-group Scrapy`
+
+To see logs:
+1. `az webapp loconfig --name scrapy --resource-group Scrapy --docker-container-logging filesystem`
+2. `az webapp log tail --name scrapy --resource-group Scrapy`
+
+## Running serverless (Preview)
 ### Deployment instructions
 
 > **Requirements**: Docker. In order to build images locally and push them to ECR, you need to have Docker installed on your local machine. Please refer to [official documentation](https://docs.docker.com/get-docker/).
