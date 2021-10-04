@@ -78,15 +78,21 @@ Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
 
 ### Create App Service Steps (Azure)
 1. `az login` (pre-req you have Azure installed)
-2. Create Resource Group in AU `az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
-3. Create appservice plan `az appservice plan create --name scrapy --resource-group Scrapy --sku B1 --is-linux`
-4. App deployment with docker-compose `az webapp create --resource-group Scrapy --plan scrapy --name scrapy --multicontainer-config-type compose --multicontainer-config-file docker-compose-prod.yml`
-5. Gets the identity of the webapp `az webapp identity assign --resource-group Scrapy --name scrapy --query principalId --output tsv`
-6. Gets the subscrption id `az account show --query id --output tsv`
+2. Create Resource Group in AU 
+`az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
+3. Create appservice plan 
+`az appservice plan create --name scrapy --resource-group Scrapy --sku B1 --is-linux`
+4. App deployment with docker-compose 
+`az webapp create --resource-group Scrapy --plan scrapy --name scrapy --multicontainer-config-type compose --multicontainer-config-file docker-compose-prod.yml`
+5. Gets the identity of the webapp 
+`az webapp identity assign --resource-group Scrapy --name scrapy --query principalId --output tsv`
+6. Gets the subscrption id 
+`az account show --query id --output tsv`
 7. With the crendentials above
 `az role assignment create --assignee <principal-id> --scope /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.ContainerRegistry/registries/<registry-name> --role "AcrPull"`
 8. `<principal-id>` is from step 5, `<registry-name>` is scrapy, `<subscription-id>` from from step 6, `<myResourceGroup>` is Scrapy
-9. Update the RG permissions `az resource update --ids /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.Web/sites/<app-name>/config/web --set properties.acrUseManagedIdentityCreds=True`
+9. Update the RG permissions 
+`az resource update --ids /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.Web/sites/<app-name>/config/web --set properties.acrUseManagedIdentityCreds=True`
 9. `<subscription-id>` is from step 6, `<myResourceGroup>` is Scrapy, `<app-name>` is scrapy
 10. You will need to try to access the site to trigger the docker-compose pull
 
@@ -101,9 +107,13 @@ Pushing to ACR
 To remove:
 1. `az webapp delete --name scrapy --resource-group Scrapy` (to remove after testing)
 
-To SSH:
+To SSH (not working atm):
 1. Configure: https://docs.microsoft.com/en-au/azure/app-service/configure-linux-open-ssh-session
 2.  `az webapp ssh --name scrapy --resource-group Scrapy`
+
+To see logs:
+1. `az webapp loconfig --name scrapy --resource-group Scrapy --docker-container-logging filesystem`
+2. `az webapp log tail --name scrapy --resource-group Scrapy`
 
 ## Running serverless (Preview)
 ### Deployment instructions

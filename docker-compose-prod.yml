@@ -2,16 +2,18 @@ version: '3.7'
 
 services:
   ts-node-docker:
-    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    image: scrapy.azurecr.io/scrapy:latest
     container_name: ts-node-docker
+    environment: 
+      PORT: 8080
     expose:
-      - 4000
+      - 8080
     ports:
-      - 80:4000
+      - 80:8080
     command: npm run start
   
   ts-node-service:
-    image: 289064355108.dkr.ecr.ap-southeast-2.amazonaws.com/scrapy:latest
+    image: scrapy.azurecr.io/scrapy:latest
     depends_on: 
       - ts-node-docker
     container_name: ts-node-service

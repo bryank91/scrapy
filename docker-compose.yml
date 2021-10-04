@@ -24,7 +24,7 @@ services:
       context: .
       dockerfile: Dockerfile-azure      
     depends_on: 
-      - ts-node-docker
+      - ts-node-docker   
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
