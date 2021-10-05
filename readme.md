@@ -83,12 +83,20 @@ Run the project with
 
 > If you run into errors in regards to running the start command (eg. ???), run  `. ~/.nvm/nvm.sh && nvm install node`
 
+> In certain cases, you might not be able to build. you will need to delete node_modules, downgrade npm and npm install
+
 To enhance reliability of the application, it is recommended to add the process_monitor.sh into crontab
 
+`cp cronjob.env.sh.example cronjob.env.sh`
+
+In `cronjob.env.sh` change `[user]` to your home directory name 
+
 `crontab -e`
+
+Add this into crontab 
+
 ```
-# Add this into crontab -e
-* * * * * /usr/bin/bash /home/bryan/scrapy/scripts/process_monitor.sh 10 testing >> /var/log/cron.log 2>&1
+*/1 * * * *     (. /home/[user]/scrapy/cronjob.env.sh; /home/[user]/scrapy/scripts/process_monitor.sh <time> <profile> >> /home/[user]/cron.log; )
 ```
 
 
