@@ -71,7 +71,7 @@ Run the initializer shell to build all the depedencies
 
 `./init.sh`
 
-Create json files for headers, errors and discord
+Create json files for headers, errors and discord. Example files provided
 
 Build the project 
 
@@ -86,8 +86,6 @@ Run the project with
 > In certain cases, you might not be able to build. you will need to delete node_modules, downgrade npm and npm install
 
 To enhance reliability of the application, it is recommended to add the process_monitor.sh into crontab
-
-`cp cronjob.env.sh.example cronjob.env.sh`
 
 In `cronjob.env.sh` change `[user]` to your home directory name 
 

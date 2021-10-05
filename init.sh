@@ -26,3 +26,6 @@ nvm install node
 
 ### Allow process_monitor to be run in crontab
 chmod +x ./scripts/process_monitor.sh
+
+### Create necessary files for cron. reuquire manual update
+cp cronjob.env.sh.example cronjob.env.sh
