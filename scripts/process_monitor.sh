@@ -12,5 +12,5 @@ then
     echo "Application is still running.."
 else
     echo "Application is stopped. Restarting..."
-    cd /home/bryan/scrapy/ && npm start -- changes --forever $1 $2 >> scrapy_logs.txt &
+    cd /home/bryan/scrapy/ && $(which npm) start -- changes --forever $1 $2 >> scrapy_logs.txt &
 fi
