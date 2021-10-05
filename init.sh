@@ -23,3 +23,6 @@ nvm install node
 
 # Install all required npm depedencies
 npm install
+
+### Allow process_monitor to be run in crontab
+chmod +x ./scripts/process_monitor.sh

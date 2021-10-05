@@ -62,14 +62,35 @@ or
 
 ## Azure
 ## Create in Ubuntu VM 
-1. Clone the repository `git clone https://github.com/bryank91/scrapy.git`
-2. Run the initializer shell to build all the depedencies `./init.sh`
-3. Create json files for headers, errors and discord
-4. Build the project `npm run build`
-5. Run the project with `npm run start -- --help`
 
-If you run into errors in regards to running the start command (eg. ???), run 
-`. ~/.nvm/nvm.sh && nvm install node`
+Clone the repository 
+
+`git clone https://github.com/bryank91/scrapy.git`
+
+Run the initializer shell to build all the depedencies 
+
+`./init.sh`
+
+Create json files for headers, errors and discord
+
+Build the project 
+
+`npm run build`
+
+Run the project with 
+
+`npm run start -- --help`
+
+> If you run into errors in regards to running the start command (eg. ???), run  `. ~/.nvm/nvm.sh && nvm install node`
+
+To enhance reliability of the application, it is recommended to add the process_monitor.sh into crontab
+
+`crontab -e`
+```
+# Add this into crontab -e
+* * * * * /usr/bin/bash /home/bryan/scrapy/scripts/process_monitor.sh 10 testing >> /var/log/cron.log 2>&1
+```
+
 
 ### Create App Service Steps
 1. `az login` (pre-req you have Azure installed)
