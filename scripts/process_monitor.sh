@@ -9,7 +9,8 @@
 
 if pgrep -x "node" > /dev/null
 then
-    npm start -- changes --forever $2 $1 >> scrapy_logs.txt &
+    echo "Application is still running.."
 else
-    echo "Stopped"
+    echo "Application is stopped. Restarting..."
+    npm start -- changes --forever $2 $1 >> scrapy_logs.txt &
 fi
