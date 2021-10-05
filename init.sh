@@ -16,13 +16,13 @@ libxrender1 libxss1 libxtst6 libnss3 libgbm-dev
 # Install chromium
 sudo apt install chromium-browser
 
+# Install all required npm depedencies
+npm install
+
 ### Update node to the latest version
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 . ~/.nvm/nvm.sh
 nvm install node
-
-# Install all required npm depedencies
-npm install
 
 ### Allow process_monitor to be run in crontab
 chmod +x ./scripts/process_monitor.sh
