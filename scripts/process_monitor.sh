@@ -4,13 +4,16 @@
 # -x flag only match processes whose name (or command line if -f is
 # specified) exactly match the pattern. 
 
-# param1: frequency in seconds
-# param2: profile name
+# param1: root directory of scrapy
+# eg. /home/bryan/scrapy/
+# param2: command to run
+# eg. changes --forever 60 testing
+
 
 if pgrep -x "node" > /dev/null
 then
     echo "Application is still running.."
 else
     echo "Application is stopped. Restarting..."
-    cd /home/bryan/scrapy/ && $(which npm) start -- changes --forever $1 $2 >> scrapy_logs.txt &
+    cd $1 && $(which npm) start -- $2 >> scrapy_logs.txt &
 fi
