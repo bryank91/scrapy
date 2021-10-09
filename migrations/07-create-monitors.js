@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       selector: {
-        allowNull: false, 
+        allowNull: true, // required if using certain types of monitors 
         type: Sequelize.STRING
       },
       frequencySeconds: {
@@ -49,13 +49,21 @@ module.exports = {
         }
       },
       nestedSelectorsId: { // relationship with DiscordWebhook
-        allowNull: false,
+        allowNull: true, // will not be required in most cases
         type: Sequelize.INTEGER,
         references: {        
           model: 'NestedSelectors',
           key: 'id'
         }
-      },      
+      },
+      monitorTypes: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'MonitorTypes',
+          key: 'id'
+        }
+      },          
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

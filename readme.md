@@ -1,7 +1,7 @@
 # Scrapy
 ## Description
 Puppeteer scraping tool with multiple features. Currently built to run with Docker, Node and 
-Serverless. Can be run as an express HTTP server or a CLI command
+Serverless (preview). Can be run as an express HTTP server or a CLI command
 
 Supported sites
 - Shopify
@@ -27,7 +27,6 @@ Ensure this is performed before any of the task
 ### Database Setup
 1. Running postgresql using docker
 `docker run --name postgresql -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres`
-
 2. `npm install pg --save`
 3. `npx sequelize-cli db:create`
 
