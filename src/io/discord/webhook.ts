@@ -62,6 +62,10 @@ export namespace Discord.Webhook {
             embed.setTitle(title)
             embed.setTimestamp()
             let parsedMessage = messages.map(el => {
+                
+                // set the title of the last element
+                embed.setTitle(el.title)
+
                 return { name: el.title, value: el.url } // does not support extra in SimpleDiscord
             })
 
