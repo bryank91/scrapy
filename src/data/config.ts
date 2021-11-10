@@ -44,7 +44,4 @@ export namespace Data {
         option2: string | null | undefined
         option3: string | null | undefined
     }
-
-
-
 }

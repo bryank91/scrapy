@@ -1,13 +1,13 @@
 import { Command, OptionValues } from "commander"
 
 import { Server } from "../server/server"
-import { Parse } from "../commands/commands"
+import { Commands } from "../commands/commands"
 
 export namespace Router {
     
     export function init(argv: any): OptionValues {
         const command = new Command()
-        return Parse.options(command,argv)
+        return Commands.Parse.options(command,argv)
     }
 
     export function server() {

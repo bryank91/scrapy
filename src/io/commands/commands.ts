@@ -11,7 +11,7 @@ import axios from 'axios';
 import { idText } from 'typescript';
 
 
-export namespace Parse {
+export namespace Commands.Parse {
 
     // returns if options exist for forever. takes in options from commander
     function getDoForever(options: any): number {
@@ -39,6 +39,7 @@ export namespace Parse {
                     await Discord.Webhook.sendMessage(webhook, content)
                 })()
             })
+            
         util
             .command('compare')
             .argument('<source>', 'the source file that you want to compare against')
