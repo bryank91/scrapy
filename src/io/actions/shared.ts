@@ -29,23 +29,31 @@ export namespace Shared {
 
     export async function getInventory(site: Data.Html.Site) {
 
-        let browser = await initBrowser()
+        const browser = await initBrowser();
 
-        let pageData = await html.navigate(site, browser)
+        const pageData = await html.navigate(site, browser);
 
-        let errorLogger = await Discord.Webhook.getErrorLogger()
+        const errorLogger = await Discord.Webhook.getErrorLogger();
 
-        if (errorLogger && pageData.Response.status() != 200)
-            Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site)
+        if (errorLogger && pageData.Response.status() != 200) {
+            Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site);
+        }
 
-        let products: any[] = await html.getProducts(pageData.Page)
-        let inventory = await html.getSingleTextContentBasedOnSelector(pageData.Page, "#VariantJson-product-template")
-        let listOfInventory: Data.Html.Inventory = (typeof inventory === "string")
+        const products: Config.ShopifyProduct[] = await html.getProducts(pageData.Page);
+        const inventory = await html.getSingleTextContentBasedOnSelector(pageData.Page, "#VariantJson-product-template")
+        const listOfInventory: Data.Html.Inventory = (typeof inventory === "string")
             ? await html.parseObjectsToList(inventory, "inventory_quantity")
             : []
         await browser.close()
 
-        await products.map((i: any, index) => i["inventory"] = listOfInventory[index])
+        await products.map((i: Config.ShopifyProduct, index) => {
+            return {
+                ...i,
+                ...((listOfInventory[index] !== undefined && listOfInventory[index] !== null) && {
+                    inventory: parseInt(listOfInventory[index])
+                })
+            }
+        });
         return products
     }
 
