@@ -1,6 +1,5 @@
 import { Browser, HTTPResponse, Page } from "puppeteer-core";
 import { Data as Config } from "../../data/config";
-import { ShopifyProduct } from './shared';
 
 declare const window: any;
 
@@ -25,7 +24,7 @@ export namespace html {
 
     // async get the id 
     export async function getProducts(page: Page) {
-        let products: ShopifyProduct[] =
+        let products: Config.ShopifyProduct[] =
             await page.evaluate(() => {
                 const { variants } = window.ShopifyAnalytics.meta.product;
                 return variants; // array of shopify objects with id and names

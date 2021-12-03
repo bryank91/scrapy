@@ -6,15 +6,6 @@ import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "../../data/config"
 import { Discord } from "../discord/webhook";
 
-export interface ShopifyProduct {
-    id: string;
-    price: number;
-    name: string;
-    public_title: string | null;
-    sku: string;
-    inventory?: number;
-}
-
 export namespace Shared {
 
     export type ReturnComparison =
@@ -48,14 +39,14 @@ export namespace Shared {
             Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site);
         }
 
-        const products: ShopifyProduct[] = await html.getProducts(pageData.Page);
+        const products: Config.ShopifyProduct[] = await html.getProducts(pageData.Page);
         const inventory = await html.getSingleTextContentBasedOnSelector(pageData.Page, "#VariantJson-product-template")
         const listOfInventory: Data.Html.Inventory = (typeof inventory === "string")
             ? await html.parseObjectsToList(inventory, "inventory_quantity")
             : []
         await browser.close()
 
-        await products.map((i: ShopifyProduct, index) => {
+        await products.map((i: Config.ShopifyProduct, index) => {
             return {
                 ...i,
                 ...((listOfInventory[index] !== undefined && listOfInventory[index] !== null) && {

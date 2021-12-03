@@ -45,6 +45,12 @@ export namespace Data {
         option3: string | null | undefined
     }
 
-
-
+    export type ShopifyProduct = {
+        id: string;
+        price: number;
+        name: string;
+        public_title: string | null;
+        sku: string;
+        inventory?: number;
+    }
 }
