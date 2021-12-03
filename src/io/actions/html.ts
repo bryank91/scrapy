@@ -1,6 +1,6 @@
-import { Discord } from "io/discord/webhook";
-import { Browser, HTTPResponse, Page } from "puppeteer-core"
-import { Data as Config } from "../../data/config"
+import { Browser, HTTPResponse, Page } from "puppeteer-core";
+import { Data as Config } from "../../data/config";
+import { ShopifyProduct } from './shared';
 
 declare const window: any;
 
@@ -25,7 +25,7 @@ export namespace html {
 
     // async get the id 
     export async function getProducts(page: Page) {
-        let products: any[] =
+        let products: ShopifyProduct[] =
             await page.evaluate(() => {
                 const { variants } = window.ShopifyAnalytics.meta.product;
                 return variants; // array of shopify objects with id and names
@@ -35,7 +35,15 @@ export namespace html {
     } // return browser and id of array
 
     export async function getSingleTextContentBasedOnSelector(page: Page, selector: string): Promise<string | null> {
-        await page.waitForSelector(selector)
+        const timeoutInSeconds = 10;
+        try {
+            await page.waitForSelector(selector, { timeout: timeoutInSeconds * 1000 });
+        } catch (e: unknown) {
+            if ((e as Error)?.name === 'TimeoutError') {
+                console.log(`Timed out after ${timeoutInSeconds} seconds - no access to inventory`);
+                return null;
+            }
+        }
         const html = await page.$$eval(selector, (element: any) => {
             return element[0].textContent
         })
