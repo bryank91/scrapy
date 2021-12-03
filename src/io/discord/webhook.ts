@@ -1,6 +1,11 @@
-import { Data as Config } from '../../data/config'
-import { WebhookClient, MessageEmbed } from 'discord.js'
+import { Data as Config } from '../../data/config';
+import { WebhookClient, MessageEmbed, Message } from 'discord.js';
 
+// Error bot
+const errorWebhook: Config.Webhook = {
+    id: '883538158715826196',
+    token: 'uhXhLGaZmO3G1W7Asiya-cqn1jM1duf4fsivhGXhxL405RD3B7mTijnWlC-OQzqOTnFR'
+};
 
 export namespace Discord.Webhook {
 
@@ -30,7 +35,7 @@ export namespace Discord.Webhook {
 
     export async function sendMessage(config: Config.Discord, message: string): Promise<void> {
 
-        const webhookClient = await new WebhookClient(config.webhook);
+        const webhookClient = await new WebhookClient(config.webhook.id, config.webhook.token);
 
         let embed = new MessageEmbed()
 
@@ -49,13 +54,45 @@ export namespace Discord.Webhook {
                 });
             }
         } catch (e) {
-            await console.log(e)
+            console.log(e);
+            // TODO: get this to log error to Discord if env is production
+            // await logError(errorWebhook, e.toString()); 
         }
 
     }
 
+    export async function productMessage(messages: Config.ShopifyProduct[], webhook: Config.Webhook, title: string = 'Pinger') {
+        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
+        let embed = new MessageEmbed();
+
+        try {
+            embed.setTitle(title)
+            embed.setTimestamp()
+            let parsedMessage = messages.map(el => {
+                let unitText = `$${(Math.round(el.price) / 100).toFixed(2)}`;
+                if (el.inventory !== undefined) {
+                    if (el.inventory > 0) {
+                        unitText = `${el.inventory} remaining @ ${unitText}`;
+                    } else if (el.inventory < 0) {
+                        unitText = `${Math.abs(el.inventory)} bought @ ${unitText}`;
+                    }
+                }
+                return { name: el.name, value: unitText };
+            });
+
+            parsedMessage && embed.addFields(parsedMessage)
+            webhookClient.send({
+                embeds: [embed]
+            })
+        } catch (e) {
+            console.log(e);
+            // TODO: get this to log error to Discord if env is production
+            // await logError(errorWebhook, e.toString());
+        }
+    }
+
     export async function simpleMessage(messages: Config.SimpleDiscord[], webhook: Config.Webhook, title: string = 'Pinger') {
-        const webhookClient = await new WebhookClient(webhook);
+        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
         let embed = new MessageEmbed()
 
         try {
@@ -69,18 +106,20 @@ export namespace Discord.Webhook {
                 return { name: el.title, value: el.url } // does not support extra in SimpleDiscord
             })
 
-            parsedMessage && embed.setFields(parsedMessage)
+            parsedMessage && embed.addFields(parsedMessage)
             webhookClient.send({
                 embeds: [embed]
             })
         } catch (e) {
-            await console.log(e)
+            console.log(e);
+            // TODO: get this to log error to Discord if env is production
+            // await logError(errorWebhook, e.toString());
         }
 
     }
 
     export async function atcMessage(messages: Config.ShopifyATC, webhook: Config.Webhook, title: string = 'Pinger') {
-        const webhookClient = await new WebhookClient(webhook);
+        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
         let embed = new MessageEmbed()
 
         try {
@@ -94,19 +133,21 @@ export namespace Discord.Webhook {
                 }
             })
 
-            parsedMessage && embed.setFields(parsedMessage)
+            parsedMessage && embed.addFields(parsedMessage)
             webhookClient.send({
                 embeds: [embed]
             })
         } catch (e) {
-            await console.log(e)
+            console.log(e);
+            // TODO: get this to log error to Discord if env is production
+            // await logError(errorWebhook, e.toString());
         }
 
     }
 
 
     export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
-        const webhookClient = await new WebhookClient(webhook);
+        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
         let embed = new MessageEmbed()
         embed.setTitle('ScrapyErrorLogger')
 

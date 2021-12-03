@@ -8,8 +8,6 @@ import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
 
 import axios from 'axios';
-import { idText } from 'typescript';
-
 
 export namespace Parse {
 
@@ -57,13 +55,20 @@ export namespace Parse {
             })
 
         program
-            .command('dc')
-            .description('check inventory level for daily clack')
-            .argument('<url>', 'the url of the site')
-            .action((url) => {
-                console.log('Processing daily clack...')
+            .command('ic')
+            .description('check inventory level for a product in site')
+            .argument('<url>', 'the url of the product')
+            .option('--id <discordId>', 'discord id')
+            .option('--token <discordToken>', 'discord token')
+            .action((url, options) => {
+                console.log('Gathering inventory for product...')
                 Shared.getInventory(url).then((result) => {
-                    console.log(result)
+                    if (result.length > 0 && options.id && options.token) {
+                        const webhook: Config.Webhook = { id: options.id, token: options.token }
+                        Discord.Webhook.productMessage(result, webhook).finally(() => console.log('Done'));
+                    } else {
+                        console.log(result);
+                    }
                 })
             })
 
