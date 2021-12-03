@@ -35,7 +35,7 @@ export namespace Discord.Webhook {
 
     export async function sendMessage(config: Config.Discord, message: string): Promise<void> {
 
-        const webhookClient = await new WebhookClient(config.webhook.id, config.webhook.token);
+        const webhookClient = await new WebhookClient(config.webhook);
 
         let embed = new MessageEmbed()
 
@@ -62,7 +62,7 @@ export namespace Discord.Webhook {
     }
 
     export async function productMessage(messages: Config.ShopifyProduct[], webhook: Config.Webhook, title: string = 'Pinger') {
-        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
+        const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed();
 
         try {
@@ -92,7 +92,7 @@ export namespace Discord.Webhook {
     }
 
     export async function simpleMessage(messages: Config.SimpleDiscord[], webhook: Config.Webhook, title: string = 'Pinger') {
-        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
+        const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed()
 
         try {
@@ -119,7 +119,7 @@ export namespace Discord.Webhook {
     }
 
     export async function atcMessage(messages: Config.ShopifyATC, webhook: Config.Webhook, title: string = 'Pinger') {
-        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
+        const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed()
 
         try {
@@ -147,7 +147,7 @@ export namespace Discord.Webhook {
 
 
     export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
-        const webhookClient = await new WebhookClient(webhook.id, webhook.token);
+        const webhookClient = await new WebhookClient(webhook);
         let embed = new MessageEmbed()
         embed.setTitle('ScrapyErrorLogger')
 
