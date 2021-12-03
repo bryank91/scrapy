@@ -41,6 +41,10 @@ or
 2. `npm run build`
 3. `npm run start -- <arg>`
 
+``` 
+You might need to force install chromium for fresh installations using "node node_modules/puppeteer/install.js" 
+```
+
 ### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
 #### Dev
