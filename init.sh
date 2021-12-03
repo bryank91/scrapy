@@ -19,6 +19,7 @@ sudo apt install chromium-browser
 # Install all required npm depedencies
 npm install
 
+
 ### Update node to the latest version
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 . ~/.nvm/nvm.sh
@@ -29,3 +30,5 @@ chmod +x ./scripts/process_monitor.sh
 
 ### Create necessary files for cron. reuquire manual update
 cp cronjob.env.sh.example cronjob.env.sh
+
+# At times you will need to install chromium via puppeteer "node node_modules/puppeteer/install.js"
