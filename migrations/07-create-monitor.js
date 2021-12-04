@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Monitors', {
+    await queryInterface.createTable('Monitor', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -24,11 +24,11 @@ module.exports = {
         allowNull: true, // defaults to 60s
         type: Sequelize.INTEGER
       },
-      differencesId: { // relationship with Template
+      differenceId: { // relationship with Difference
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'Differences',
+          model: 'Difference',
           key: 'id'
         }  
       },
@@ -36,7 +36,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'Templates',
+          model: 'Template',
           key: 'id'
         }
       },
@@ -44,23 +44,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'DiscordWebhooks',
+          model: 'DiscordWebhook',
           key: 'id'
         }
       },
-      nestedSelectorsId: { // relationship with DiscordWebhook
+      nestedSelectorId: { // relationship with NestedSelector
         allowNull: true, // will not be required in most cases
         type: Sequelize.INTEGER,
         references: {        
-          model: 'NestedSelectors',
+          model: 'NestedSelector',
           key: 'id'
         }
       },
-      monitorTypes: {
+      monitorTypeId: { // relationship with MonitorType
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'MonitorTypes',
+          model: 'MonitorType',
           key: 'id'
         }
       },          
@@ -74,7 +74,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Monitors');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('Monitor');
   }
 };

@@ -3,26 +3,27 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class MonitorTypes extends Model {
+  class Difference extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate(_models) {
       // define association here
     }
   };
-  MonitorTypes.init({
-    id: DataTypes.INTEGER,
-    name: DataTypes.STRING
+  Difference.init({
+    name: DataTypes.STRING,
+    value: DataTypes.TEXT
   }, {
     sequelize,
-    modelName: 'MonitorTypes',
+    modelName: 'Difference',
   });
-    MonitorTypes.associate = function(models) {
+
+  Difference.associate = function(models) {
     // associations can be defined here
-      MonitorTypes.belongsTo(models.Monitors)
+      Difference.hasMany(models.Monitor)
   };
-  return MigrationTypes;
+  return Difference;
 };

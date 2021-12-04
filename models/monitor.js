@@ -3,32 +3,37 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Monitors extends Model {
+  class Monitor extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate(_models) {
       // define association here
     }
   };
-  Monitors.init({
+  Monitor.init({
     name: DataTypes.STRING,
     siteurl: DataTypes.STRING,
     selector: DataTypes.STRING,
     frequencySeconds: DataTypes.INTEGER,
+    differenceId: DataTypes.INTEGER,
+    discordWebhookId: DataTypes.INTEGER,
+    monitorTypeId: DataTypes.INTEGER,
+    nestedSelectorId: DataTypes.INTEGER,
     templateId: DataTypes.INTEGER,
-    discordWebhookId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'Monitors',
+    modelName: 'Monitor',
   });
-  Monitors.associate = function(models) {
+  Monitor.associate = function(models) {
     // associations can be defined here
-      Monitors.belongsTo(models.Templates)
-      Monitors.belongsTo(models.DiscordWebhook)
-      Monitors.belongsTo(models.Differences)
+    Monitor.belongsTo(models.Difference)
+    Monitor.belongsTo(models.DiscordWebhook)
+    Monitor.belongsTo(models.MonitorType)
+    Monitor.belongsTo(models.NestedSelector)
+    Monitor.belongsTo(models.Template)
   };
-  return Monitors;
+  return Monitor;
 };

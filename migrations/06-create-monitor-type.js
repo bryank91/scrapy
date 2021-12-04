@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('MonitorTypes', {
+    await queryInterface.createTable('MonitorType', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,7 +16,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('MonitorTypes');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('MonitorType');
   }
 };

@@ -21,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Template',
   });
-  Monitors.associate = function(models) {
+  Monitor.associate = function(models) {
     // associations can be defined here
-      Template.hasMany(models.Monitors)
+      Template.hasMany(models.Monitor)
   };
 
   return Template;
