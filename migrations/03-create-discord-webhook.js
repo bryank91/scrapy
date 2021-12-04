@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('DiscordWebhooks', {
+    await queryInterface.createTable('DiscordWebhook', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -30,7 +30,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('DiscordWebhooks');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('DiscordWebhook');
   }
 };

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('NestedSelectors', {
+    await queryInterface.createTable('NestedSelector', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -26,7 +26,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('NestedSelectors');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('NestedSelector');
   }
 };

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('ErrorLoggings', {
+    await queryInterface.createTable('ErrorLogging', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,11 +12,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      description: {
+        allowNull: false,
+        type: Sequelize.TEXT
+      },
       discordWebhookId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'DiscordWebhooks',
+          model: 'DiscordWebhook',
           key: 'id'
        }        
       },
@@ -30,7 +34,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('ErrorLoggings');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('ErrorLogging');
   }
 };
