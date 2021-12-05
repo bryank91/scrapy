@@ -50,12 +50,18 @@ export namespace html {
     }
 
     // get array of values based on selector defined
-    export async function getValueBasedOnSelector(page: Page, selector: string): Promise<any[] | null> {
-        await page.waitForSelector(selector)
-        const arrayOfSelectors = await page.$$eval(selector, anchors => {
-            return anchors.map(anchor => anchor.textContent)
-        })
-        return arrayOfSelectors
+    // if not found in timeout seconds, return null
+    export async function getValueBasedOnSelector(page: Page, selector: string, timeout: number = 5000): Promise<any[] | null> {
+        try {
+            await page.waitForSelector(selector, {timeout: timeout}) != null
+            const arrayOfSelectors = await page.$$eval(selector, anchors => {
+                return anchors.map(anchor => anchor.textContent)
+            })
+            return arrayOfSelectors
+        } catch (e) {
+            console.log('Timeout limit reached. Exiting..')
+            return null
+        }
     }
 
     export async function getValueBasedOnAttribute(page: Page, selector: string, attribute: string): Promise<any[] | null> {
