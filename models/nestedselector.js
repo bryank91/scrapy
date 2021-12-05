@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class NestedSelectors extends Model {
+  class NestedSelector extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,17 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  NestedSelectors.init({
+  NestedSelector.init({
     selector: DataTypes.STRING,
     attribute: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'NestedSelectors',
+    modelName: 'NestedSelector',
   });
 
-  NestedSelectors.associate = function(models) {
+  NestedSelector.associate = function(models) {
     // associations can be defined here
-      NestedSelectors.hasOne(models.Monitors)
+      NestedSelector.hasMany(models.Monitor)
   };  
-  return NestedSelectors;
+  return NestedSelector;
 };

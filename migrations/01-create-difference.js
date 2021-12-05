@@ -1,12 +1,16 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Differences', {
+    await queryInterface.createTable('Difference', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       value: { // differences which we use to compare with the DB
         allowNull: false,        
@@ -22,7 +26,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Differences');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('Difference');
   }
 };

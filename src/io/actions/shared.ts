@@ -46,15 +46,12 @@ export namespace Shared {
             : []
         await browser.close()
 
-        await products.map((i: Config.ShopifyProduct, index) => {
-            return {
-                ...i,
-                ...((listOfInventory[index] !== undefined && listOfInventory[index] !== null) && {
-                    inventory: parseInt(listOfInventory[index])
-                })
-            }
-        });
-        return products
+        return products.map((i: Config.ShopifyProduct, index) => ({
+            ...i,
+            ...((listOfInventory[index] !== undefined && listOfInventory[index] !== null) && {
+                inventory: parseInt(listOfInventory[index])
+            })
+        }));
     }
 
     // gets the differences of a site and writes it to a file

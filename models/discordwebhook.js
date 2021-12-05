@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate(_models) {
       // define association here
     }
   };
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 
   DiscordWebhook.associate = function(models) {
     // associations can be defined here
-      DiscordWebhook.hasMany(models.Monitors)
+      DiscordWebhook.hasMany(models.Monitor)
       DiscordWebhook.hasMany(models.ErrorLogging)
   };
   return DiscordWebhook;
