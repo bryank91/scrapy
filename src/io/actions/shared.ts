@@ -12,7 +12,7 @@ export namespace Shared {
         {
             Changes: boolean,
             Content: string[],
-            Error: string | boolean
+            Error: any
         }
 
     async function initBrowser() {
@@ -63,7 +63,7 @@ export namespace Shared {
         : Promise<ReturnComparison> {
 
         let browser = await initBrowser()
-        
+
         try {
             let pageData = await html.navigate(profile.url, browser)
 
@@ -129,14 +129,15 @@ export namespace Shared {
                     Error: false
                 }
             }
-        } catch (e) {
-            await browser.close()
+        } catch (e) {            
             return {
                 Changes: false,
                 Content: [], // no changes hence empty array
-                Error: e // log the error
+                Error: e
             }
             
+        } finally {
+            await browser.close()
         }
 
     }

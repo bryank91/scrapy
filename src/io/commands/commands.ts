@@ -223,6 +223,8 @@ export namespace Parse {
                             })
                         } catch (e) {
                             console.log(e)
+                        } finally {
+                            return 1
                         }
                     });
                 }
