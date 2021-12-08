@@ -34,16 +34,20 @@ Ensure this is performed before any of the task
 ### Local Development
 > This runs as nodemon which allows watch
 1. `npm install`
-2. `npm run dev`
-
-or 
-
 2. `npm run build`
-3. `npm run start -- <arg>`
+3. `npm run start -- --help`
+4. `npm run start -- <arg>`
 
 ``` 
 You might need to force install chromium for fresh installations using "node node_modules/puppeteer/install.js" 
 ```
+
+### Running the application
+> To run the application with arguments
+
+`npm run build`
+`npm run start -- <arg>`
+
 
 ### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
@@ -54,12 +58,6 @@ You might need to force install chromium for fresh installations using "node nod
 #### Production
 1. `docker-compose build`
 2. `docker-compose up`
-
-### Running the application
-> To run the application with arguments
-
-`npm run build`
-`npm run start -- <arg>`
 
 ---
 
@@ -97,8 +95,18 @@ In `cronjob.env.sh` change `[user]` to your home directory name
 Add this into crontab 
 
 ```
-*/1 * * * *     (. /home/[user]/scrapy/cronjob.env.sh; /home/[user]/scrapy/scripts/process_monitor.sh <time> <profile> >> /home/[user]/cron.log; )
+*/1 * * * *     (. /home/[user]/scrapy/cronjob.env.sh; /home/[user]/scrapy/scripts/process_monitor.sh <directory> <command> >> /home/[user]/cron.log; )
 ```
+
+Sample directory
+```
+"/home/[user]/scrapy"
+```
+
+Sample command
+```
+"changes profile1 --forever 30"
+``` 
 
 
 ### Create App Service Steps
