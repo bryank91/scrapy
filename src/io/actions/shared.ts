@@ -62,8 +62,9 @@ export namespace Shared {
             forceNotify: boolean = false) // notifies immediately regardless of fileExist
         : Promise<ReturnComparison> {
 
+        let browser = await initBrowser()
+        
         try {
-            let browser = await initBrowser()
             let pageData = await html.navigate(profile.url, browser)
 
             let errorLogger = await Discord.Webhook.getErrorLogger()
@@ -129,11 +130,13 @@ export namespace Shared {
                 }
             }
         } catch (e) {
+            await browser.close()
             return {
                 Changes: false,
                 Content: [], // no changes hence empty array
                 Error: e // log the error
             }
+            
         }
 
     }
