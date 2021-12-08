@@ -141,7 +141,6 @@ export namespace Parse {
                         let newProductJson: Config.ShopifyATC[] = productJson["products"].map((product: any) => {
 
                             let variants: any[] = product.variants.map((variant: any) => {
-                                // https://www.qwertykeys.com/cart/34743034019974:1
                                 let res =
                                 {
                                     title: variant.title,
@@ -168,7 +167,6 @@ export namespace Parse {
                         let source = await FileHandle.readFile(file)
                         let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
                         await FileHandle.writeFile(JSON.stringify(res), file)
-                        // https://discord.com/api/webhooks/873504876641021992/ELl5D8Xk3Lya5qVojcDmI04P1AHygs3h_mcGdEz4MRSNfwNnKXcUrGzjAlBlfh3CaWQC
 
                         let results = await FileHandle.compareObjects(res, sourceJSON)
                         await console.log(results)
