@@ -2,10 +2,13 @@ import { Command } from 'commander';
 import { Shared } from "../actions/shared"
 import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
-import { Discord } from '../discord/webhook';
+import { Discord } from '../discord/webhook'
 
 import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
+import { Selenium } from 'io/actions/selenium'
+import { Cheerio } from 'io/actions/cheerio'
+import { Shopify } from 'io/actions/shopify';
 
 import axios from 'axios';
 
@@ -16,6 +19,18 @@ export namespace Parse {
         return options.forever
             ? parseInt(String(options.forever))
             : 0
+    }
+
+    function setForever(doForever: number, func:Function) {
+        if (doForever >= 3) {  // sets a hard limit   
+            console.log("Running forever function...")
+            setInterval(
+                () => { func() }
+                , doForever * 1000) // it takes in ms
+        } else {
+            console.log('Looking for any changes on the site once...')
+            func();
+        }
     }
 
     export function options(program: Command, str: string[]) {
@@ -76,6 +91,8 @@ export namespace Parse {
 
         shopify
             .description('Shopify tooling')
+
+        shopify
             .command('products')
             .description('get links of all products periodically')
             .argument('<url>', 'url to check against on. usually products.json')
@@ -87,40 +104,27 @@ export namespace Parse {
                 console.log('Checking shopify products..')
                 let doForever = getDoForever(options)
 
-                function getShopifyJson() {
-                    axios.get(url).then((response) => {
-                        let productJson = response.data
-                        let newProductJson: Config.SimpleDiscord[] = productJson["products"].map((product: any) => {
-                            let link: string = url.replace('products.json', 'products/' + product.handle)
-                            return { title: product.title, url: link }
-                        });
-                        return newProductJson
-                    }).then(async function (res) {
-                        let source = await FileHandle.readFile(file)
-                        let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
-                        await FileHandle.writeFile(JSON.stringify(res), file)
-
-                        let results = await FileHandle.compareObjects(res, sourceJSON)
-                        await console.log(results)
-                        return results;
-
-                    }).then((res: Config.SimpleDiscord[]) => {
-                        let webhook: Config.Webhook = { id: discordId, token: discordToken }
-                        if (res.length > 0) Discord.Webhook.simpleMessage(res, webhook)
-                    })
+                let shopify : Shopify.Construct = {
+                    url: url,
+                    file: file,
+                    discordId: discordId,
+                    discordToken: discordToken
                 }
 
-                if (doForever >= 3) {  // sets a hard limit   
-                    console.log("Running forever function...")
-                    setInterval(
-                        () => { getShopifyJson() }
-                        , doForever * 1000) // it takes in ms
-                } else {
-                    console.log('Looking for any changes on the site once...')
-                    getShopifyJson()
-                }
+                setForever(doForever, () => { Shopify.getShopifyJson(shopify) })
 
             })
+
+        shopify
+            .command('profile')
+            .description('periodically checks stock based on profiles')
+            .argument('<profileId>', 'the id from config.discord that you want to use')
+            .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
+            .action((profileId, options) => {
+                let profiles = Discord.Webhook.getWebhook(profileId)
+                let doForever = getDoForever(options)
+                setForever(doForever, () => { Shopify.getShopifyJsonProfile(profiles) })
+            });
 
         shopify.
             command('atc')
@@ -133,112 +137,44 @@ export namespace Parse {
             .action((url, file, discordId, discordToken, options) => {
                 console.log('Checking ATC links')
 
+                let shopify : Shopify.Construct = {
+                    url: url,
+                    file: file,
+                    discordId: discordId,
+                    discordToken: discordToken
+                }
+
                 let doForever = getDoForever(options)
-
-                function getATC() {
-                    axios.get(url).then((response) => {
-                        let productJson = response.data
-                        let newProductJson: Config.ShopifyATC[] = productJson["products"].map((product: any) => {
-
-                            let variants: any[] = product.variants.map((variant: any) => {
-                                let res =
-                                {
-                                    title: variant.title,
-                                    url: url.replace('products.json', 'cart/' + variant.id + ":1"),
-                                    option1: variant.option1 !== undefined && variant.option1,
-                                    option2: variant.option2 !== undefined && variant.option2,
-                                    option3: variant.option3 !== undefined && variant.option3
-                                }
-
-                                return res
-                            })
-
-                            let res =
-                            {
-                                title: product.title,
-                                url: url.replace('products.json', 'products/' + product.handle),
-                                variants: variants
-                            }
-                            return res
-                        });
-
-                        return newProductJson
-                    }).then(async function (res) {
-                        let source = await FileHandle.readFile(file)
-                        let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
-                        await FileHandle.writeFile(JSON.stringify(res), file)
-
-                        let results = await FileHandle.compareObjects(res, sourceJSON)
-                        await console.log(results)
-                        return results;
-
-                    }).then((res: Config.ShopifyATC[]) => {
-                        let webhook: Config.Webhook = { id: discordId, token: discordToken }
-                        if (res.length > 0) {
-                            res.forEach(element => {
-                                Discord.Webhook.atcMessage(element, webhook)
-                            });
-                        }
-                    })
-                }
-
-                if (doForever >= 3) {  // sets a hard limit   
-                    console.log("Running forever function...")
-                    setInterval(
-                        () => { getATC() }
-                        , doForever * 1000) // it takes in ms
-                } else {
-                    console.log('Looking for any changes on the site once...')
-                    getATC()
-                }
+                setForever(doForever, () => { Shopify.getATC(shopify) })
             });
 
+        let selenium = program.command('selenium')
+        selenium.description('Selenium commands')
 
-        program
+        selenium
             .command('changes')
-            .description('get changes for a website based on the selector and comparing to the file source')
+            .description('get changes for a website based on the selector and comparing to the file source with selenium')
+            .argument('<profileId>', 'the id from config.discord that you want to use')
+            .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
+            .action((profileId, options) => {
+                let profiles = Discord.Webhook.getWebhook(profileId)
+                let doForever = getDoForever(options)
+                setForever(doForever, () => { Selenium.doGetDifference(profiles) })
+            })
+
+        let cheerio = program.command('cheerio')
+        cheerio.description('Cheerio commands')
+        
+        cheerio
+            .command('changes')
+            .description('get changes for a website based on the selector and comparing to the file source with cheerio')
             .argument('<profileId>', 'the id from config.discord that you want to use')
             .option('-f, --forever <seconds>', 'runs forever for a specific amount of time in seconds. lower limit is 60')
             .action((profileId, options) => {
 
-                let doForever = getDoForever(options)
                 let profiles = Discord.Webhook.getWebhook(profileId)
-
-                function doGetDifference(forceNotify: boolean = false): void {
-                    profiles.forEach(profile => {
-                        try {
-                            Shared.getDifferencesUsingFileSystem(profile, forceNotify).then((result) => {
-                                (async () => {
-                                    await console.log(result) // if similar return false else true
-                                    if (result.Changes && !result.Error) {
-                                        const combined = await result.Content.join("\n")
-                                        const parsedProfile: Config.Discord = profile
-                                        await Discord.Webhook.sendMessage(parsedProfile, combined)
-
-                                    } else if (!result.Changes && result.Error) {
-                                        console.log("Encountered error")
-                                        // TODO: alert once
-                                    }
-                                })()
-                            })
-                        } catch (e) {
-                            console.log(e)
-                        } finally {
-                            return 1
-                        }
-                    });
-                }
-
-                if (doForever >= 5) {  // sets a hard limit   
-                    console.log("Running forever function...")
-                    setInterval(
-                        () => { doGetDifference() }
-                        , doForever * 1000) // it takes in ms
-                } else {
-                    console.log('Looking for any changes on the site once...')
-                    let forceNotify = true
-                    doGetDifference(forceNotify)
-                }
+                let doForever = getDoForever(options)
+                setForever(doForever, () => { Cheerio.doGetDifference(profiles) })
             })
 
         program

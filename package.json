@@ -12,11 +12,14 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.4",
+    "cheerio": "*",
     "chrome-aws-lambda": "^10.0.0",
     "commander": "^8.0.0",
     "discord.js": "13.3.1",
     "express": "^4.17.1",
     "pg": "^8.7.1",
+    "puppeteer": "^10.4.0",
+    "puppeteer-core": "^10.1.0",
     "sequelize": "^6.6.5",
     "serverless": "^2.51.2",
     "serverless-http": "^2.7.0",
@@ -26,8 +29,6 @@
   "devDependencies": {
     "@types/express": "^4.17.12",
     "nodemon": "^2.0.9",
-    "puppeteer": "^10.1.0",
-    "puppeteer-core": "^10.1.0",
     "sequelize-cli": "^6.2.0",
     "serverless-offline": "^7.0.0",
     "serverless-plugin-typescript": "^1.1.9",
