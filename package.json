@@ -15,7 +15,9 @@
     "precommit-test": "echo 'checking...' && exit 0"
   },
   "pre-commit": {
-    "run": ["precommit-test"]
+    "run": [
+      "precommit-test"
+    ]
   },
   "author": "Kho, Bryan",
   "license": "MIT",
