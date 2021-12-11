@@ -17,6 +17,7 @@ export namespace Parse {
 
   const setForever = (doForever: number, func: Function) => {
     const blah: any = "lol";
+    const blah2: any = "lol";
     if (doForever >= 3) {
       // sets a hard limit
       console.log("Running forever function...");
