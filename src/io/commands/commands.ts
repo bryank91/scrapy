@@ -6,9 +6,9 @@ import { Discord } from '../discord/webhook'
 
 import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
-import { Selenium } from 'io/actions/selenium'
-import { Cheerio } from 'io/actions/cheerio'
-import { Shopify } from 'io/actions/shopify';
+import { Selenium } from '../actions/selenium'
+import { Cheerio } from '../actions/cheerio'
+import { Shopify } from '../actions/shopify';
 
 import axios from 'axios';
 
