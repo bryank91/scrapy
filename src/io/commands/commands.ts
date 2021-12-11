@@ -15,6 +15,22 @@ export namespace Parse {
     return options.forever ? parseInt(String(options.forever)) : 0;
   };
 
+  const setForever2 = (doForever: any, func: any) => {
+    if (doForever == 3) {
+      console.log('test');
+    }
+    if (doForever >= 3) {
+      // sets a hard limit
+      console.log("Running forever function...");
+      setInterval(() => {
+        func();
+      }, doForever * 1000); // it takes in ms
+    } else {
+      console.log("Looking for any changes on the site once...");
+      func();
+    }
+  };
+
   const setForever = (doForever: any, func: Function) => {
     if (doForever >= 3) {
       // sets a hard limit
