@@ -16,9 +16,7 @@ export namespace Parse {
   };
 
   const setForever = (doForever: any, func: any) => {
-    if (
-      doForever >= 3
-    ) {
+    if (doForever >= 3) {
       // sets a hard limit
       console.log("Running forever function...");
       setInterval(() => {
