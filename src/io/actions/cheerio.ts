@@ -1,5 +1,5 @@
 import { Shared } from "../actions/shared"
-import { Data as Config } from "data/config"
+import { Data as Config } from "../../data/config"
 import { Discord } from '../discord/webhook'
 import axios, { AxiosResponse } from 'axios'
 
