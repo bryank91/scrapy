@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Monitor', {
+    await queryInterface.createTable('Monitors', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,7 +28,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'Difference',
+          model: 'Differences',
           key: 'id'
         }  
       },
@@ -36,7 +36,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'Template',
+          model: 'Templates',
           key: 'id'
         }
       },
@@ -44,7 +44,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {        
-          model: 'DiscordWebhook',
+          model: 'DiscordWebhooks',
           key: 'id'
         }
       },
@@ -52,7 +52,7 @@ module.exports = {
         allowNull: true, // will not be required in most cases
         type: Sequelize.INTEGER,
         references: {        
-          model: 'NestedSelector',
+          model: 'NestedSelectors',
           key: 'id'
         }
       },
@@ -60,7 +60,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'MonitorType',
+          model: 'MonitorTypes',
           key: 'id'
         }
       },          
@@ -75,6 +75,6 @@ module.exports = {
     });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Monitor');
+    await queryInterface.dropTable('Monitors');
   }
 };
