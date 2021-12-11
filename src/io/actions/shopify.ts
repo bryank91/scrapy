@@ -1,103 +1,129 @@
-import axios from 'axios';
-import { FileHandle } from "../file/fileHandle"
-import { Data as Config } from "data/config"
-import { Discord } from '../discord/webhook'
+import axios from "axios";
+import { FileHandle } from "../file/fileHandle";
+import { Data as Config } from "data/config";
+import { Discord } from "../discord/webhook";
 
 export namespace Shopify {
+  export interface Construct {
+    url: string; // url to check against. needs to be product.json
+    file: string; // file to verify against
+    discordId: string;
+    discordToken: string;
+  }
 
-    export type Construct = {
-        url: string // url to check against. needs to be product.json
-        file: string // file to verify against
-        discordId: string
-        discordToken: string 
-    }
+  export function getShopifyJson(shopify: Construct, timeout = 5000) {
+    axios
+      .get(shopify.url, { timeout })
+      .then((response) => {
+        const productJson = response.data;
+        const newProductJson: Config.SimpleDiscord[] = productJson.products.map(
+          (product: { handle: string; title: string }) => {
+            const link: string = shopify.url.replace(
+              "products.json",
+              "products/" + product.handle
+            );
+            return { title: product.title, url: link };
+          }
+        );
+        return newProductJson;
+      })
+      .then(async function (res) {
+        const source = await FileHandle.readFile(shopify.file);
+        const sourceJSON = (await (source.Content.length > 1))
+          ? JSON.parse(source.Content)
+          : [];
+        await FileHandle.writeFile(JSON.stringify(res), shopify.file);
 
-    export function getShopifyJson(shopify:Construct, timeout: number = 5000) {
+        const results = await FileHandle.compareObjects(res, sourceJSON);
+        await console.log(results);
+        return results;
+      })
+      .then((res: Config.SimpleDiscord[]) => {
+        const webhook: Config.Webhook = {
+          id: shopify.discordId,
+          token: shopify.discordToken,
+        };
+        if (res.length > 0) Discord.Webhook.simpleMessage(res, webhook);
+      });
+  }
 
-        axios.get(shopify.url, {timeout: timeout}).then((response) => {
-            let productJson = response.data
-            let newProductJson: Config.SimpleDiscord[] = productJson["products"].map((product: any) => {
-                let link: string = shopify.url.replace('products.json', 'products/' + product.handle)
-                return { title: product.title, url: link }
-            });
-            return newProductJson
-        }).then(async function (res) {
-            let source = await FileHandle.readFile(shopify.file)
-            let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
-            await FileHandle.writeFile(JSON.stringify(res), shopify.file)
+  export function getATC(shopify: Shopify.Construct, timeout = 5000) {
+    axios
+      .get(shopify.url, { timeout })
+      .then((response) => {
+        const productJson = response.data;
+        const newProductJson: Config.ShopifyATC[] = productJson.products.map(
+          (product: Config.ShopifyProduct) => {
+            const variants: Config.Variants[] = product.variants.map(
+              (variant: Config.Variants) => {
+                const res = {
+                  id: variant.id,
+                  title: variant.title,
+                  url: shopify.url.replace(
+                    "products.json",
+                    "cart/" + variant.id + ":1"
+                  ),
+                  option1: variant.option1,
+                  option2: variant.option2,
+                  option3: variant.option3,
+                };
 
-            let results = await FileHandle.compareObjects(res, sourceJSON)
-            await console.log(results)
-            return results;
+                return res;
+              }
+            );
 
-        }).then((res: Config.SimpleDiscord[]) => {
-            let webhook: Config.Webhook = { id: shopify.discordId, token: shopify.discordToken }
-            if (res.length > 0) Discord.Webhook.simpleMessage(res, webhook)
-        })
-    }
+            const res = {
+              title: product.title,
+              url: shopify.url.replace(
+                "products.json",
+                "products/" + product.handle
+              ),
+              variants,
+            };
+            return res;
+          }
+        );
 
-    export function getATC(shopify:Shopify.Construct, timeout: number = 5000) {
-        axios.get(shopify.url, {timeout: timeout}).then((response) => {
-            let productJson = response.data
-            let newProductJson: Config.ShopifyATC[] = productJson["products"].map((product: any) => {
+        return newProductJson;
+      })
+      .then(async function (res) {
+        const source = await FileHandle.readFile(shopify.file);
+        const sourceJSON = (await (source.Content.length > 1))
+          ? JSON.parse(source.Content)
+          : [];
+        await FileHandle.writeFile(JSON.stringify(res), shopify.file);
 
-                let variants: any[] = product.variants.map((variant: any) => {
-                    let res =
-                    {
-                        title: variant.title,
-                        url: shopify.url.replace('products.json', 'cart/' + variant.id + ":1"),
-                        option1: variant.option1 !== undefined && variant.option1,
-                        option2: variant.option2 !== undefined && variant.option2,
-                        option3: variant.option3 !== undefined && variant.option3
-                    }
-
-                    return res
-                })
-
-                let res =
-                {
-                    title: product.title,
-                    url: shopify.url.replace('products.json', 'products/' + product.handle),
-                    variants: variants
-                }
-                return res
-            });
-
-            return newProductJson
-        }).then(async function (res) {
-            let source = await FileHandle.readFile(shopify.file)
-            let sourceJSON = await (source.Content.length > 1) ? JSON.parse(source.Content) : []
-            await FileHandle.writeFile(JSON.stringify(res), shopify.file)
-
-            let results = await FileHandle.compareObjects(res, sourceJSON)
-            await console.log(results)
-            return results;
-
-        }).then((res: Config.ShopifyATC[]) => {
-            let webhook: Config.Webhook = { id: shopify.discordId, token: shopify.discordToken }
-            if (res.length > 0) {
-                res.forEach(element => {
-                    Discord.Webhook.atcMessage(element, webhook)
-                });
-            }
-        })
-    }
-
-    function profileToShopify(profile: any) : Shopify.Construct {
-        let shopify : Shopify.Construct = {
-            url: profile.url,
-            file: profile.file,
-            discordId: profile.webhook.id,
-            discordToken: profile.webhook.token
+        const results = await FileHandle.compareObjects(res, sourceJSON);
+        await console.log(results);
+        return results;
+      })
+      .then((res: Config.ShopifyATC[]) => {
+        const webhook: Config.Webhook = {
+          id: shopify.discordId,
+          token: shopify.discordToken,
+        };
+        if (res.length > 0) {
+          res.forEach((element) => {
+            Discord.Webhook.atcMessage(element, webhook);
+          });
         }
-        return shopify
-    }
+      });
+  }
 
-    export function getShopifyJsonProfile(profiles: any[] | []) {
-        profiles.forEach((profile) => {
-            let construct = profileToShopify(profile)
-            getShopifyJson(construct)
-        })
-    }
+  const profileToShopify = (profile: Config.Profile): Shopify.Construct => {
+    const shopify: Shopify.Construct = {
+      url: profile.url,
+      file: profile.file,
+      discordId: profile.webhook.id,
+      discordToken: profile.webhook.token,
+    };
+    return shopify;
+  };
 
+  export function getShopifyJsonProfile(profiles: Config.Profile[] | []) {
+    profiles.forEach((profile) => {
+      const construct = profileToShopify(profile);
+      getShopifyJson(construct);
+    });
+  }
 }

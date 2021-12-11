@@ -7,11 +7,11 @@
     "start": "set NODE_PATH=./build&& node build/index.js",
     "build": "tsc -p .",
     "dev": "nodemon src/index.ts",
-    "lint": "npx eslint src",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix"
+    "format": "npm run lint:fix && npm run prettier:fix"
   },
   "author": "Kho, Bryan",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "chrome-aws-lambda": "^10.0.0",
     "commander": "^8.0.0",
     "discord.js": "13.3.1",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "pg": "^8.7.1",
     "puppeteer": "^10.4.0",

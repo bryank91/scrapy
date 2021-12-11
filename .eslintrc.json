@@ -5,6 +5,11 @@
         "ecmaVersion": 6,
         "sourceType": "module"
     },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "env": {
         "browser": false,
         "node": true,
@@ -18,7 +23,6 @@
         "@typescript-eslint/array-type": "error",
 
         "brace-style": "off",
-        "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
 
         "@typescript-eslint/naming-convention": [
             "error",
@@ -36,8 +40,6 @@
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "as" }],
 
-        "max-statements-per-line": ["error", { "max": 1 }],
-
         "no-duplicate-imports": "off",
         "@typescript-eslint/no-duplicate-imports": "error",
 
@@ -46,11 +48,14 @@
         "@typescript-eslint/no-this-alias": "error",
 
         "no-unused-expressions": "off",
-        "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
+        "@typescript-eslint/no-unused-expressions": "off",
 
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
-        "@typescript-eslint/prefer-namespace-keyword": "error",
+
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/ban-types": "off",
 
         "quotes": "off",
         "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
@@ -65,31 +70,8 @@
             "named": "never"
         }],
 
-        "@typescript-eslint/triple-slash-reference": "error",
-        "@typescript-eslint/type-annotation-spacing": "error",
-        "@typescript-eslint/unified-signatures": "error",
-
-        // scripts/eslint/rules
-        "object-literal-surrounding-space": "error",
-        "no-type-assertion-whitespace": "error",
-        "type-operator-spacing": "error",
-        "only-arrow-functions": ["error", {
-            "allowNamedFunctions": true ,
-            "allowDeclarations": true
-        }],
-        "no-double-space": "error",
-        "boolean-trivia": "error",
-        "no-in-operator": "error",
-        "simple-indent": "error",
-        "debug-assert": "error",
-        "no-keywords": "error",
-        "one-namespace-per-file": "error",
-
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
-
-        // eslint-plugin-no-null
-        "no-null/no-null": "error",
 
         // eslint-plugin-jsdoc
         "jsdoc/check-alignment": "error",
@@ -99,7 +81,6 @@
         "curly": ["error", "multi-line"],
         "dot-notation": "error",
         "eqeqeq": "error",
-        "linebreak-style": ["error", "windows"],
         "new-parens": "error",
         "no-caller": "error",
         "no-duplicate-case": "error",
@@ -110,22 +91,14 @@
         "no-new-func": "error",
         "no-new-wrappers": "error",
         "no-return-await": "error",
-        "no-restricted-globals": ["error",
-            { "name": "setTimeout" },
-            { "name": "clearTimeout" },
-            { "name": "setInterval" },
-            { "name": "clearInterval" },
-            { "name": "setImmediate" },
-            { "name": "clearImmediate" }
-        ],
+        "no-restricted-globals": "off",
         "no-sparse-arrays": "error",
         "no-template-curly-in-string": "error",
         "no-throw-literal": "error",
         "no-trailing-spaces": "error",
         "no-undef-init": "error",
-        "no-unsafe-finally": "error",
+        "no-unsafe-finally": "off",
         "no-unused-labels": "error",
-        "no-var": "error",
         "object-shorthand": "error",
         "prefer-const": "error",
         "prefer-object-spread": "error",

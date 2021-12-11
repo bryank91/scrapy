@@ -1,52 +1,48 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '.';
-import Monitor from './monitor';
+import { DataTypes, Model, Optional } from "sequelize";
+import { sequelize } from ".";
+import Monitor from "./monitor";
 
 interface DifferenceAttributes {
-    id: string;
-    name: string;
-    value: string;
-};
+  id: string;
+  name: string;
+  value: string;
+}
 
-interface DifferenceCreationAttributes
-  extends Optional<DifferenceAttributes, 'id'> {}
+type DifferenceCreationAttributes = Optional<DifferenceAttributes, "id">;
 
 interface DifferenceInstance
   extends Model<DifferenceAttributes, DifferenceCreationAttributes>,
     DifferenceAttributes {
-      createdAt: Date;
-      updatedAt: Date;
-    }
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const Difference = sequelize.define<DifferenceInstance>(
-    'Difference',
-    {
-        id: {
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            type: DataTypes.UUID
-        },
-        name: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        value: {
-            allowNull: false,
-            type: DataTypes.TEXT,
-        }
-    }
-);
+const Difference = sequelize.define<DifferenceInstance>("Difference", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.UUID,
+  },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  value: {
+    allowNull: false,
+    type: DataTypes.TEXT,
+  },
+});
 
 Difference.hasMany(Monitor, {
-    sourceKey: 'id',
-    foreignKey: 'differenceId',
-    as: 'monitors'
+  sourceKey: "id",
+  foreignKey: "differenceId",
+  as: "monitors",
 });
 
 Monitor.belongsTo(Difference, {
-    foreignKey: 'differenceId',
-    as: 'difference'
+  foreignKey: "differenceId",
+  as: "difference",
 });
 
 export default Difference;

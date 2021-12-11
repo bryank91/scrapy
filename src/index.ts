@@ -1,13 +1,10 @@
-import { OptionValues } from "commander"
-import { Router } from "./io/commands/routers"
-import { Server } from "./io/server/server"
-const sls = require('serverless-http');
+import { Router } from "./io/commands/routers";
 
 // if no arguments are passed, default to server
 if (process.argv.length > 2) {
-        console.log("Running with arguments")
-        const _ = Router.init(process.argv)
-        // Router.routeOptions(options)
+  console.log("Running with arguments");
+  Router.init(process.argv);
+  // Router.routeOptions(options)
 } else {
-        Router.server()
+  Router.server();
 }
