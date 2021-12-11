@@ -3,12 +3,12 @@ import { Shared } from "../actions/shared"
 import { Router } from "../commands/routers"
 import { OCR } from "../ocr/ocr"
 import { Discord } from '../discord/webhook'
-
 import { FileHandle } from "../file/fileHandle"
 import { Data as Config } from "data/config"
 import { Selenium } from 'io/actions/selenium'
 import { Cheerio } from 'io/actions/cheerio'
 import { Shopify } from 'io/actions/shopify';
+
 
 import axios from 'axios';
 
@@ -76,7 +76,7 @@ export namespace Parse {
             .option('--id <discordId>', 'discord id')
             .option('--token <discordToken>', 'discord token')
             .action((url, options) => {
-                console.log('Gathering inventory for product...')
+                console.log('Gathering inventory for product...');
                 Shared.getInventory(url).then((result) => {
                     if (result.length > 0 && options.id && options.token) {
                         const webhook: Config.Webhook = { id: options.id, token: options.token }
