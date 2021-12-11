@@ -11,10 +11,11 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run lint:fix && npm run prettier:fix"
+    "format": "npm run lint:fix && npm run prettier:fix",
+    "precommit-test": "echo 'checking...' && exit 0"
   },
   "pre-commit": {
-    "run": ["format"]
+    "run": ["precommit-test"]
   },
   "author": "Kho, Bryan",
   "license": "MIT",
