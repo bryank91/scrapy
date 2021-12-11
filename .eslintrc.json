@@ -46,6 +46,7 @@
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-this-alias": "error",
+        "@typescript-eslint/no-explicit-any": "error",
 
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": "off",
