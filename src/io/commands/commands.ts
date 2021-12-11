@@ -7,8 +7,6 @@ import { Discord } from '../discord/webhook';
 import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "data/config";
 
-import DiscordWebhook from '../../../models/discordwebhook';
-
 import axios from 'axios';
 
 export namespace Parse {
@@ -64,10 +62,6 @@ export namespace Parse {
             .option('--token <discordToken>', 'discord token')
             .action((url, options) => {
                 console.log('Gathering inventory for product...');
-                DiscordWebhook.create({ name: 'test webhook', webhookId: 'test id', webhookToken: 'test token '}).then(resp => {
-                    console.log('created = ', resp);
-                });
-                return undefined;
                 Shared.getInventory(url).then((result) => {
                     if (result.length > 0 && options.id && options.token) {
                         const webhook: Config.Webhook = { id: options.id, token: options.token }

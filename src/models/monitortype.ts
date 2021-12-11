@@ -39,4 +39,9 @@ MonitorType.hasMany(Monitor, {
     as: 'monitors'
 });
 
+Monitor.belongsTo(MonitorType, {
+    foreignKey: 'monitorTypeId',
+    as: 'monitorType'
+});
+
 export default MonitorType;

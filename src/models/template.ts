@@ -49,4 +49,9 @@ Template.hasMany(Monitor, {
     as: 'monitors'
 });
 
+Monitor.belongsTo(Template, {
+    foreignKey: 'templateId',
+    as: 'template'
+});
+
 export default Template;

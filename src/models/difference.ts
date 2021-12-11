@@ -44,4 +44,9 @@ Difference.hasMany(Monitor, {
     as: 'monitors'
 });
 
+Monitor.belongsTo(Difference, {
+    foreignKey: 'differenceId',
+    as: 'difference'
+});
+
 export default Difference;

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '.';
+import ErrorLogging from './errorlogging';
 import Monitor from './monitor';
 
 interface DiscordWebhookAttributes {
@@ -47,6 +48,22 @@ DiscordWebhook.hasMany(Monitor, {
     sourceKey: 'id',
     foreignKey: 'discordWebhookId',
     as: 'monitors'
+});
+
+DiscordWebhook.hasMany(ErrorLogging, {
+    sourceKey: 'id',
+    foreignKey: 'errorLoggingId',
+    as: 'errorloggings'
+});
+
+Monitor.belongsTo(DiscordWebhook, {
+    foreignKey: 'discordWebhookId',
+    as: 'discordWebhook'
+});
+
+ErrorLogging.belongsTo(DiscordWebhook, {
+    foreignKey: 'discordWebhookId',
+    as: 'discordWebhook'
 });
 
 export default DiscordWebhook;

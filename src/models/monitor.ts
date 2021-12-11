@@ -78,29 +78,29 @@ const Monitor = sequelize.define<MonitorInstance>(
     }
 );
 
-Monitor.belongsTo(DiscordWebhook, {
-    foreignKey: 'discordWebhookId',
-    as: 'discordWebhook'
-});
+// Monitor.belongsTo(DiscordWebhook, {
+//     foreignKey: 'discordWebhookId',
+//     as: 'discordWebhook'
+// });
 
-Monitor.belongsTo(Difference, {
-    foreignKey: 'differenceId',
-    as: 'difference'
-});
+// Monitor.belongsTo(Difference, {
+//     foreignKey: 'differenceId',
+//     as: 'difference'
+// });
 
-Monitor.belongsTo(MonitorType, {
-    foreignKey: 'monitorTypeId',
-    as: 'monitorType'
-});
+// Monitor.belongsTo(MonitorType, {
+//     foreignKey: 'monitorTypeId',
+//     as: 'monitorType'
+// });
 
-Monitor.belongsTo(NestedSelector, {
-    foreignKey: 'nestedSelectorId',
-    as: 'nestedSelector'
-});
+// Monitor.belongsTo(NestedSelector, {
+//     foreignKey: 'nestedSelectorId',
+//     as: 'nestedSelector'
+// });
 
-Monitor.belongsTo(Template, {
-    foreignKey: 'templateId',
-    as: 'template'
-});
+// Monitor.belongsTo(Template, {
+//     foreignKey: 'templateId',
+//     as: 'template'
+// });
 
 export default Monitor;

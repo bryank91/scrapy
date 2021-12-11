@@ -44,4 +44,9 @@ NestedSelector.hasMany(Monitor, {
     as: 'monitors'
 });
 
+Monitor.belongsTo(NestedSelector, {
+    foreignKey: 'nestedSelectorId',
+    as: 'nestedSelector'
+});
+
 export default NestedSelector;
