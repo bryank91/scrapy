@@ -14,7 +14,7 @@
     "format": "npm run lint:fix && npm run prettier:fix"
   },
   "pre-commit": {
-    "run": ["lint:fix", "prettier"]
+    "run": ["format"]
   },
   "author": "Kho, Bryan",
   "license": "MIT",
