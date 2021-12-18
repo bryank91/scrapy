@@ -8,6 +8,7 @@ import { Data as Config } from "../../data/config";
 import { Selenium } from "../actions/selenium";
 import { Cheerio } from "../actions/cheerio";
 import { Shopify } from "../actions/shopify";
+import { dbactions } from "./dbactions";
 
 export namespace Parse {
   // returns if options exist for forever. takes in options from commander
@@ -30,6 +31,34 @@ export namespace Parse {
 
   export function options(program: Command, str: string[]) {
     program.version("0.1.0");
+
+    program
+      .command("db:create")
+      .description("add record into database")
+      .argument("<model>", "Model type of record")
+      .argument("<json>", "JSON string of record")
+      .action(async (model, json) => {
+        await dbactions.createOne(model, json);
+      });
+
+    program
+      .command("db:update")
+      .description("updates existing record by id in database")
+      .argument("<model>", "Model type of record")
+      .argument("<recordid>", "Record ID to update")
+      .argument("<json>", "JSON string of record")
+      .action(async (model, recordid, json) => {
+        await dbactions.updateOne(model, recordid, json);
+      });
+
+    program
+      .command("db:delete")
+      .description("deletes existing record by id in database")
+      .argument("<model>", "Model type of record")
+      .argument("<recordid>", "Record ID to delete")
+      .action(async (model, recordid) => {
+        await dbactions.deleteOne(model, recordid);
+      });
 
     const util = program.command("util");
 
