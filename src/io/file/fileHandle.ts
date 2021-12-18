@@ -40,10 +40,7 @@ export namespace FileHandle {
 
   // compare the difference between the source and the target file
   // returns true if similar else false
-  export async function compare(
-    source: Data.File.File,
-    target: Data.File.File
-  ): Promise<boolean> {
+  export async function compare(source: Data.File.File, target: Data.File.File): Promise<boolean> {
     return source.Content === target.Content;
   }
 
@@ -54,10 +51,7 @@ export namespace FileHandle {
 
   // compare differences with 2 arrays of objects of the same types
   // as you can't compare objects correctly
-  export async function compareObjects<T>(
-    source: T[],
-    target: T[]
-  ): Promise<T[]> {
+  export async function compareObjects<T>(source: T[], target: T[]): Promise<T[]> {
     const sourceString = source.map((e) => JSON.stringify(e));
     const targetString = target.map((e) => JSON.stringify(e));
     const res = sourceString.filter((x) => !targetString.includes(x));

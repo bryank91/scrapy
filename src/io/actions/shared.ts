@@ -15,12 +15,7 @@ export namespace Shared {
 
   const initBrowser = async () => {
     const browser = await chromium.puppeteer.launch({
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--single-process",
-        "--no-zygote",
-      ],
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--single-process", "--no-zygote"],
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
       headless: true,
@@ -38,15 +33,10 @@ export namespace Shared {
     const errorLogger = await Discord.Webhook.getErrorLogger();
 
     if (errorLogger && pageData.Response.status() !== 200) {
-      Discord.Webhook.logError(
-        errorLogger,
-        "Unable to talk to site in " + site
-      );
+      Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site);
     }
 
-    const products: Config.ShopifyProduct[] = await html.getProducts(
-      pageData.Page
-    );
+    const products: Config.ShopifyProduct[] = await html.getProducts(pageData.Page);
     const inventory = await html.getSingleTextContentBasedOnSelector(
       pageData.Page,
       "#VariantJson-product-template"
@@ -81,22 +71,17 @@ export namespace Shared {
       const errorLogger = await Discord.Webhook.getErrorLogger();
 
       if (errorLogger && pageData.Response.status() !== 200) {
-        Discord.Webhook.logError(
-          errorLogger,
-          "Unable to talk to site in " + profile.domain
-        );
+        Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + profile.domain);
       }
 
-      const selectorValues: string[] | null =
-        await html.getValueBasedOnSelector(pageData.Page, profile.selector);
+      const selectorValues: string[] | null = await html.getValueBasedOnSelector(
+        pageData.Page,
+        profile.selector
+      );
 
       const metadata = await Promise.all(
         profile.metadataSelector.map(async (el) => {
-          const res = await html.getValueBasedOnAttribute(
-            pageData.Page,
-            el.selector,
-            el.attribute
-          );
+          const res = await html.getValueBasedOnAttribute(pageData.Page, el.selector, el.attribute);
           if (el.attribute === "href" && res !== null) {
             return html.cleanHref(res, profile.domain); // allows cleaning of href
           } else {
@@ -105,16 +90,14 @@ export namespace Shared {
         })
       );
 
-      const merged: string[] | null | undefined = selectorValues?.map(
-        (el, i) => {
-          let res = el; //TODO: mutable
+      const merged: string[] | null | undefined = selectorValues?.map((el, i) => {
+        let res = el; //TODO: mutable
 
-          metadata.forEach((element) => {
-            res = res + "\n" + element?.[i];
-          });
-          return res;
-        }
-      );
+        metadata.forEach((element) => {
+          res = res + "\n" + element?.[i];
+        });
+        return res;
+      });
 
       const newFileContent: string = merged?.length
         ? merged.join("\n--\n") // unsafe mode as we handle null/undefined values

@@ -18,10 +18,7 @@ export namespace Shopify {
         const productJson = response.data;
         const newProductJson: Config.SimpleDiscord[] = productJson.products.map(
           (product: { handle: string; title: string }) => {
-            const link: string = shopify.url.replace(
-              "products.json",
-              "products/" + product.handle
-            );
+            const link: string = shopify.url.replace("products.json", "products/" + product.handle);
             return { title: product.title, url: link };
           }
         );
@@ -29,9 +26,7 @@ export namespace Shopify {
       })
       .then(async function (res) {
         const source = await FileHandle.readFile(shopify.file);
-        const sourceJSON = (await (source.Content.length > 1))
-          ? JSON.parse(source.Content)
-          : [];
+        const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
         await FileHandle.writeFile(JSON.stringify(res), shopify.file);
 
         const results = await FileHandle.compareObjects(res, sourceJSON);
@@ -54,30 +49,22 @@ export namespace Shopify {
         const productJson = response.data;
         const newProductJson: Config.ShopifyATC[] = productJson.products.map(
           (product: Config.ShopifyProduct) => {
-            const variants: Config.Variants[] = product.variants.map(
-              (variant: Config.Variants) => {
-                const res = {
-                  id: variant.id,
-                  title: variant.title,
-                  url: shopify.url.replace(
-                    "products.json",
-                    "cart/" + variant.id + ":1"
-                  ),
-                  option1: variant.option1,
-                  option2: variant.option2,
-                  option3: variant.option3,
-                };
+            const variants: Config.Variants[] = product.variants.map((variant: Config.Variants) => {
+              const res = {
+                id: variant.id,
+                title: variant.title,
+                url: shopify.url.replace("products.json", "cart/" + variant.id + ":1"),
+                option1: variant.option1,
+                option2: variant.option2,
+                option3: variant.option3,
+              };
 
-                return res;
-              }
-            );
+              return res;
+            });
 
             const res = {
               title: product.title,
-              url: shopify.url.replace(
-                "products.json",
-                "products/" + product.handle
-              ),
+              url: shopify.url.replace("products.json", "products/" + product.handle),
               variants,
             };
             return res;
@@ -88,9 +75,7 @@ export namespace Shopify {
       })
       .then(async function (res) {
         const source = await FileHandle.readFile(shopify.file);
-        const sourceJSON = (await (source.Content.length > 1))
-          ? JSON.parse(source.Content)
-          : [];
+        const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
         await FileHandle.writeFile(JSON.stringify(res), shopify.file);
 
         const results = await FileHandle.compareObjects(res, sourceJSON);
