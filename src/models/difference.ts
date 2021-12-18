@@ -10,7 +10,7 @@ interface DifferenceAttributes {
 
 type DifferenceCreationAttributes = Optional<DifferenceAttributes, "id">;
 
-interface DifferenceInstance
+export interface DifferenceInstance
   extends Model<DifferenceAttributes, DifferenceCreationAttributes>,
     DifferenceAttributes {
   createdAt: Date;
