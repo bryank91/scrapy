@@ -20,10 +20,7 @@ export namespace html {
   }
 
   // goto param takes in the url and browser takes in the lamda pupeteer browser
-  export async function navigate(
-    goto: string,
-    browser: Browser
-  ): Promise<PageData> {
+  export async function navigate(goto: string, browser: Browser): Promise<PageData> {
     const page = await browser.newPage();
 
     // set extra headers
@@ -54,18 +51,13 @@ export namespace html {
       });
     } catch (e: unknown) {
       if ((e as Error)?.name === "TimeoutError") {
-        console.log(
-          `Timed out after ${timeoutInSeconds} seconds - no access to inventory`
-        );
+        console.log(`Timed out after ${timeoutInSeconds} seconds - no access to inventory`);
         return null;
       }
     }
-    const html = await page.$$eval(
-      selector,
-      (element: { textContent: string | null }[]) => {
-        return element[0].textContent;
-      }
-    );
+    const html = await page.$$eval(selector, (element: { textContent: string | null }[]) => {
+      return element[0].textContent;
+    });
     return html;
   }
 
@@ -79,9 +71,7 @@ export namespace html {
     try {
       (await page.waitForSelector(selector, { timeout })) !== null;
       const arrayOfSelectors = await page.$$eval(selector, (anchors) => {
-        return anchors
-          .map((anchor) => anchor.textContent ?? "")
-          .filter((v) => v);
+        return anchors.map((anchor) => anchor.textContent ?? "").filter((v) => v);
       });
       return arrayOfSelectors;
     } catch (e) {
@@ -97,9 +87,7 @@ export namespace html {
   ): Promise<string[] | null> {
     const arrayOfAttributes = await page.evaluate(
       function (selector, attribute) {
-        return Array.from(document.querySelectorAll(selector), (el) =>
-          el.getAttribute(attribute)
-        );
+        return Array.from(document.querySelectorAll(selector), (el) => el.getAttribute(attribute));
       },
       selector,
       attribute
@@ -109,10 +97,7 @@ export namespace html {
   }
 
   // parse array of objects in JSON string with the keyword as the key
-  export async function parseObjectsToList(
-    jsonString: string,
-    keyword: string
-  ) {
+  export async function parseObjectsToList(jsonString: string, keyword: string) {
     const json = JSON.parse(jsonString) as Record<string, string>[];
     return json.map((i) => i[keyword]);
   }

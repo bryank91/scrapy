@@ -26,10 +26,7 @@ export namespace Cheerio {
     });
   }
 
-  const getSelector = (
-    response: AxiosResponse<unknown>,
-    selector: string
-  ): string => {
+  const getSelector = (response: AxiosResponse<unknown>, selector: string): string => {
     const $ = cheerio.load(response.data);
     $(selector).text();
     console.log($);

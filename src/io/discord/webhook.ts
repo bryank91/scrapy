@@ -32,22 +32,16 @@ export namespace Discord.Webhook {
     }
   }
 
-  export async function sendMessage(
-    config: Config.Discord,
-    message: string
-  ): Promise<void> {
+  export async function sendMessage(config: Config.Discord, message: string): Promise<void> {
     const webhookClient = await new WebhookClient(config.webhook);
 
     const embed = new MessageEmbed();
 
     config.title && embed.setTitle(config.title);
     config.footer && embed.setFooter(config.footer);
-    config.url &&
-      embed.setURL(config.url).addFields({ name: "Source", value: config.url });
+    config.url && embed.setURL(config.url).addFields({ name: "Source", value: config.url });
     config.selector &&
-      embed
-        .setURL(config.url)
-        .addFields({ name: "Selector", value: config.selector });
+      embed.setURL(config.url).addFields({ name: "Selector", value: config.selector });
 
     try {
       embed.setDescription(message).setTimestamp();
@@ -141,14 +135,7 @@ export namespace Discord.Webhook {
       embed.setTitle(messages.title);
       const parsedMessage = messages.variants.map((el) => {
         return {
-          name:
-            el.title +
-            " - " +
-            el.option1 +
-            " - " +
-            el.option2 +
-            " - " +
-            el.option3,
+          name: el.title + " - " + el.option1 + " - " + el.option2 + " - " + el.option3,
           value: el.url,
         };
       });
@@ -164,10 +151,7 @@ export namespace Discord.Webhook {
     }
   }
 
-  export async function logError(
-    webhook: Config.Webhook,
-    message: string
-  ): Promise<void> {
+  export async function logError(webhook: Config.Webhook, message: string): Promise<void> {
     const webhookClient = await new WebhookClient(webhook);
     const embed = new MessageEmbed();
     embed.setTitle("ScrapyErrorLogger");

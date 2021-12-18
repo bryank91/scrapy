@@ -8,37 +8,31 @@ interface NestedSelectorAttributes {
   attribute: string;
 }
 
-type NestedSelectorCreationAttributes = Optional<
-  NestedSelectorAttributes,
-  "id"
->;
+type NestedSelectorCreationAttributes = Optional<NestedSelectorAttributes, "id">;
 
-interface NestedSelectorInstance
+export interface NestedSelectorInstance
   extends Model<NestedSelectorAttributes, NestedSelectorCreationAttributes>,
     NestedSelectorAttributes {
   createdAt: Date;
   updatedAt: Date;
 }
 
-const NestedSelector = sequelize.define<NestedSelectorInstance>(
-  "NestedSelector",
-  {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.UUID,
-    },
-    selector: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    attribute: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-  }
-);
+const NestedSelector = sequelize.define<NestedSelectorInstance>("NestedSelector", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.UUID,
+  },
+  selector: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  attribute: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+});
 
 NestedSelector.hasMany(Monitor, {
   sourceKey: "id",

@@ -48,6 +48,20 @@ You might need to force install chromium for fresh installations using "node nod
 `npm run build`
 `npm run start -- <arg>`
 
+### Working with database items
+> To create, read, update or delete database records, run the following commands or refer to --help
+
+The first argument refers to a database action, the 2nd argument refers to the model. Ensure the data is in a correct JSON string format that matches the respective model.
+
+`npm run start db:findOne discordwebhook 1`
+
+`npm run start db:findAll discordwebhook`
+
+`npm run start db:create discordwebhook '{"name":"tname", "webhookId": "tid", "webhookToken": "ttoken" }'`
+
+`npm run start db:update discordwebhook 1 '{"name":"newname" }'`
+
+`npm run start db:delete discordwebhook 1`
 
 ### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless

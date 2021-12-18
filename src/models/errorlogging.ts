@@ -10,7 +10,7 @@ interface ErrorLoggingAttributes {
 
 type ErrorLoggingCreationAttributes = Optional<ErrorLoggingAttributes, "id">;
 
-interface ErrorLoggingInstance
+export interface ErrorLoggingInstance
   extends Model<ErrorLoggingAttributes, ErrorLoggingCreationAttributes>,
     ErrorLoggingAttributes {
   createdAt: Date;

@@ -16,7 +16,7 @@ interface MonitorAttributes {
 
 type MonitorCreationAttributes = Optional<MonitorAttributes, "id">;
 
-interface MonitorInstance
+export interface MonitorInstance
   extends Model<MonitorAttributes, MonitorCreationAttributes>,
     MonitorAttributes {
   createdAt: Date;
