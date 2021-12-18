@@ -10,41 +10,35 @@ interface DiscordWebhookAttributes {
   webhookToken: string;
 }
 
-type DiscordWebhookCreationAttributes = Optional<
-  DiscordWebhookAttributes,
-  "id"
->;
+type DiscordWebhookCreationAttributes = Optional<DiscordWebhookAttributes, "id">;
 
-interface DiscordWebhookInstance
+export interface DiscordWebhookInstance
   extends Model<DiscordWebhookAttributes, DiscordWebhookCreationAttributes>,
     DiscordWebhookAttributes {
   createdAt: Date;
   updatedAt: Date;
 }
 
-const DiscordWebhook = sequelize.define<DiscordWebhookInstance>(
-  "DiscordWebhook",
-  {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.UUID,
-    },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    webhookId: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    webhookToken: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-  }
-);
+const DiscordWebhook = sequelize.define<DiscordWebhookInstance>("DiscordWebhook", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.UUID,
+  },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  webhookId: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  webhookToken: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+});
 
 DiscordWebhook.hasMany(Monitor, {
   sourceKey: "id",

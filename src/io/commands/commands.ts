@@ -33,31 +33,56 @@ export namespace Parse {
     program.version("0.1.0");
 
     program
+      .command("db:findOne")
+      .description("finds a record by id")
+      .argument("<model>", "Model type of record")
+      .argument("<recordid>", "Record ID of record")
+      .action(async (model, recordid) => {
+        const record = await dbactions.findOne(model, recordid);
+        console.log(`Found: `, record?.toJSON());
+      });
+
+    program
+      .command("db:findAll")
+      .description("finds all records")
+      .argument("<model>", "Model type of record")
+      .action(async (model) => {
+        const records = await dbactions.findAll(model);
+        console.log(
+          `Found ${records.length}: `,
+          records.map((v) => v.toJSON())
+        );
+      });
+
+    program
       .command("db:create")
-      .description("add record into database")
+      .description("creates a new record")
       .argument("<model>", "Model type of record")
       .argument("<json>", "JSON string of record")
       .action(async (model, json) => {
-        await dbactions.createOne(model, json);
+        const record = await dbactions.createOne(model, json);
+        console.log("Created record: ", record.toJSON());
       });
 
     program
       .command("db:update")
-      .description("updates existing record by id in database")
+      .description("updates an existing record by id")
       .argument("<model>", "Model type of record")
       .argument("<recordid>", "Record ID to update")
       .argument("<json>", "JSON string of record")
       .action(async (model, recordid, json) => {
         await dbactions.updateOne(model, recordid, json);
+        console.log(`Updated record given id: ${recordid}`);
       });
 
     program
       .command("db:delete")
-      .description("deletes existing record by id in database")
+      .description("deletes a record by id")
       .argument("<model>", "Model type of record")
       .argument("<recordid>", "Record ID to delete")
       .action(async (model, recordid) => {
         await dbactions.deleteOne(model, recordid);
+        console.log(`Deleted record given id: ${recordid}`);
       });
 
     const util = program.command("util");
@@ -85,9 +110,7 @@ export namespace Parse {
           const targetFile = await FileHandle.readFile(target);
           const isSimilar = await FileHandle.compare(sourceFile, targetFile);
 
-          (await isSimilar)
-            ? console.log("It is similar")
-            : console.log("different");
+          (await isSimilar) ? console.log("It is similar") : console.log("different");
         })();
       });
 
@@ -105,9 +128,7 @@ export namespace Parse {
               id: options.id,
               token: options.token,
             };
-            Discord.Webhook.productMessage(result, webhook).finally(() =>
-              console.log("Done")
-            );
+            Discord.Webhook.productMessage(result, webhook).finally(() => console.log("Done"));
           } else {
             console.log(result);
           }
@@ -148,10 +169,7 @@ export namespace Parse {
     shopify
       .command("profile")
       .description("periodically checks stock based on profiles")
-      .argument(
-        "<profileId>",
-        "the id from config.discord that you want to use"
-      )
+      .argument("<profileId>", "the id from config.discord that you want to use")
       .option(
         "-f, --forever <seconds>",
         "runs forever for a specific amount of time in seconds. lower limit is 60"
@@ -199,10 +217,7 @@ export namespace Parse {
       .description(
         "get changes for a website based on the selector and comparing to the file source with selenium"
       )
-      .argument(
-        "<profileId>",
-        "the id from config.discord that you want to use"
-      )
+      .argument("<profileId>", "the id from config.discord that you want to use")
       .option(
         "-f, --forever <seconds>",
         "runs forever for a specific amount of time in seconds. lower limit is 60"
@@ -223,10 +238,7 @@ export namespace Parse {
       .description(
         "get changes for a website based on the selector and comparing to the file source with cheerio"
       )
-      .argument(
-        "<profileId>",
-        "the id from config.discord that you want to use"
-      )
+      .argument("<profileId>", "the id from config.discord that you want to use")
       .option(
         "-f, --forever <seconds>",
         "runs forever for a specific amount of time in seconds. lower limit is 60"

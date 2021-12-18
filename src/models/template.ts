@@ -11,7 +11,7 @@ interface TemplateAttributes {
 
 type TemplateCreationAttributes = Optional<TemplateAttributes, "id">;
 
-interface TemplateInstance
+export interface TemplateInstance
   extends Model<TemplateAttributes, TemplateCreationAttributes>,
     TemplateAttributes {
   createdAt: Date;
