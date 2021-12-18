@@ -3,7 +3,6 @@ import { Shared } from "../actions/shared";
 import { Router } from "../commands/routers";
 import { OCR } from "../ocr/ocr";
 import { Discord } from "../discord/webhook";
-import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "../../data/config";
 import { Selenium } from "../actions/selenium";
 import { Cheerio } from "../actions/cheerio";
@@ -106,9 +105,9 @@ export namespace Parse {
       .description("compare the differences between 2 files")
       .action((source, target) => {
         (async () => {
-          const sourceFile = await FileHandle.readFile(source);
-          const targetFile = await FileHandle.readFile(target);
-          const isSimilar = await FileHandle.compare(sourceFile, targetFile);
+          const sourceContents = await dbactions.getContentsByName(source);
+          const targetContents = await dbactions.getContentsByName(target);
+          const isSimilar = sourceContents === targetContents;
 
           (await isSimilar) ? console.log("It is similar") : console.log("different");
         })();

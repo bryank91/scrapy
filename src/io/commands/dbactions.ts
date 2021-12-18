@@ -16,6 +16,15 @@ export namespace dbactions {
     | NestedSelectorInstance
     | TemplateInstance;
 
+  export async function getContentsByName(name: string): Promise<string> {
+    const result = await Difference.findOne({ where: { name } });
+    return result?.value ?? "";
+  }
+
+  export async function writeContents(name: string, value: string): Promise<void> {
+    await Difference.upsert({ name, value });
+  }
+
   export async function findOne(model: string, id: string): Promise<ModelRecord | null> {
     switch (model) {
       case "difference":
