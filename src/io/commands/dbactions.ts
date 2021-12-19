@@ -17,12 +17,16 @@ export namespace dbactions {
     | TemplateInstance;
 
   export async function getContentsByName(name: string): Promise<string> {
-    const result = await Difference.findOne({ where: { name } });
-    return result?.value ?? "";
+    return (await Difference.findOne({ where: { name } }))?.value ?? "";
   }
 
   export async function writeContents(name: string, value: string): Promise<void> {
-    await Difference.update({ name, value }, { where: { name } });
+    const existing = await getContentsByName(name);
+    if (existing) {
+      await Difference.update({ name, value }, { where: { name } });
+    } else {
+      await Difference.create({ name, value });
+    }
   }
 
   export async function findOne(model: string, id: string): Promise<ModelRecord | null> {
