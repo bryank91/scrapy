@@ -4,7 +4,7 @@ import { html } from "../actions/html";
 import { Data } from "../../data/html";
 import { Data as Config } from "../../data/config";
 import { Discord } from "../discord/webhook";
-import { dbactions } from "io/commands/dbactions";
+import { dbactions } from "../commands/dbactions";
 
 export namespace Shared {
   export interface ReturnComparison {

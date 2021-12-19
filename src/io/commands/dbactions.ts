@@ -22,7 +22,7 @@ export namespace dbactions {
   }
 
   export async function writeContents(name: string, value: string): Promise<void> {
-    await Difference.upsert({ name, value });
+    await Difference.update({ name, value }, { where: { name } });
   }
 
   export async function findOne(model: string, id: string): Promise<ModelRecord | null> {

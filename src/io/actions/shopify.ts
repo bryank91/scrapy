@@ -2,7 +2,7 @@ import axios from "axios";
 import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "data/config";
 import { Discord } from "../discord/webhook";
-import { dbactions } from "io/commands/dbactions";
+import { dbactions } from "../commands/dbactions";
 
 export namespace Shopify {
   export interface Construct {
