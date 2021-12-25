@@ -53,15 +53,15 @@ You might need to force install chromium for fresh installations using "node nod
 
 The first argument refers to a database action, the 2nd argument refers to the model. Ensure the data is in a correct JSON string format that matches the respective model.
 
-`npm run start db:findOne discordwebhook 1`
+`npm run start db findOne discordWebhooks 1`
 
-`npm run start db:findAll discordwebhook`
+`npm run start db findAll discordWebhooks`
 
-`npm run start db:create discordwebhook '{"name":"tname", "webhookId": "tid", "webhookToken": "ttoken" }'`
+`npm run start db create discordWebhooks '{"name":"tname", "webhookId": "tid", "webhookToken": "ttoken" }'`
 
-`npm run start db:update discordwebhook 1 '{"name":"newname" }'`
+`npm run start db update discordWebhooks 1 '{"name":"newname" }'`
 
-`npm run start db:delete discordwebhook 1`
+`npm run start db delete discordWebhooks 1`
 
 ### Running in docker
 > To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
