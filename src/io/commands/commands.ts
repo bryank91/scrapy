@@ -31,8 +31,11 @@ export namespace Parse {
   export function options(program: Command, str: string[]) {
     program.version("0.1.0");
 
-    program
-      .command("db:findOne")
+    const db = program.command("db");
+
+    db.description("run CRUD commands against database");
+
+    db.command("findOne")
       .description("finds a record by id")
       .argument("<model>", "Model type of record")
       .argument("<recordid>", "Record ID of record")
@@ -41,8 +44,7 @@ export namespace Parse {
         console.log(`Found: `, record?.toJSON());
       });
 
-    program
-      .command("db:findAll")
+    db.command("findAll")
       .description("finds all records")
       .argument("<model>", "Model type of record")
       .action(async (model) => {
@@ -53,8 +55,7 @@ export namespace Parse {
         );
       });
 
-    program
-      .command("db:create")
+    db.command("create")
       .description("creates a new record")
       .argument("<model>", "Model type of record")
       .argument("<json>", "JSON string of record")
@@ -63,8 +64,7 @@ export namespace Parse {
         console.log("Created record: ", record.toJSON());
       });
 
-    program
-      .command("db:update")
+    db.command("update")
       .description("updates an existing record by id")
       .argument("<model>", "Model type of record")
       .argument("<recordid>", "Record ID to update")
@@ -74,8 +74,7 @@ export namespace Parse {
         console.log(`Updated record given id: ${recordid}`);
       });
 
-    program
-      .command("db:delete")
+    db.command("delete")
       .description("deletes a record by id")
       .argument("<model>", "Model type of record")
       .argument("<recordid>", "Record ID to delete")
@@ -100,9 +99,9 @@ export namespace Parse {
       });
     util
       .command("compare")
-      .argument("<source>", "the source file that you want to compare against")
-      .argument("<target>", "the target file that you want compare against")
-      .description("compare the differences between 2 files")
+      .argument("<source>", "the name in the differences table")
+      .argument("<target>", "the name in the differences table")
+      .description("compare the differences between 2 db entries")
       .action((source, target) => {
         (async () => {
           const sourceContents = await dbactions.getContentsByName(source);

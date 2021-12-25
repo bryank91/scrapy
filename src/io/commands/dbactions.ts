@@ -30,20 +30,20 @@ export namespace dbactions {
   }
 
   export async function findOne(model: string, id: string): Promise<ModelRecord | null> {
-    switch (model) {
-      case "difference":
+    switch (model.toLowerCase()) {
+      case "differences":
         return Difference.findOne({ where: { id } });
-      case "discordwebhook":
+      case "differencesWebhooks":
         return DiscordWebhook.findOne({ where: { id } });
-      case "errorlogging":
+      case "errorLoggings":
         return ErrorLogging.findOne({ where: { id } });
-      case "monitor":
+      case "monitors":
         return Monitor.findOne({ where: { id } });
-      case "monitortype":
+      case "monitortypes":
         return MonitorType.findOne({ where: { id } });
-      case "nestedselector":
+      case "nestedSelectors":
         return NestedSelector.findOne({ where: { id } });
-      case "template":
+      case "templates":
         return Template.findOne({ where: { id } });
       default:
         throw Error("Unsupported model");
@@ -51,20 +51,20 @@ export namespace dbactions {
   }
 
   export async function findAll(model: string): Promise<ModelRecord[]> {
-    switch (model) {
-      case "difference":
+    switch (model.toLowerCase()) {
+      case "differences":
         return Difference.findAll();
-      case "discordwebhook":
+      case "differencesWebhooks":
         return DiscordWebhook.findAll();
-      case "errorlogging":
+      case "errorLoggings":
         return ErrorLogging.findAll();
-      case "monitor":
+      case "monitors":
         return Monitor.findAll();
-      case "monitortype":
+      case "monitortypes":
         return MonitorType.findAll();
-      case "nestedselector":
+      case "nestedSelectors":
         return NestedSelector.findAll();
-      case "template":
+      case "templates":
         return Template.findAll();
       default:
         throw Error("Unsupported model");
@@ -73,20 +73,20 @@ export namespace dbactions {
 
   export async function createOne(model: string, json: string): Promise<ModelRecord> {
     const data = JSON.parse(json);
-    switch (model) {
-      case "difference":
+    switch (model.toLowerCase()) {
+      case "differences":
         return Difference.create(data);
-      case "discordwebhook":
+      case "differencesWebhooks":
         return DiscordWebhook.create(data);
-      case "errorlogging":
+      case "errorLoggings":
         return ErrorLogging.create(data);
-      case "monitor":
+      case "monitors":
         return Monitor.create(data);
-      case "monitortype":
+      case "monitortypes":
         return MonitorType.create(data);
-      case "nestedselector":
+      case "nestedSelectors":
         return NestedSelector.create(data);
-      case "template":
+      case "templates":
         return Template.create(data);
       default:
         throw Error("Unsupported model");
@@ -95,26 +95,26 @@ export namespace dbactions {
 
   export async function updateOne(model: string, id: string, json: string): Promise<void> {
     const data = JSON.parse(json);
-    switch (model) {
-      case "difference":
+    switch (model.toLowerCase()) {
+      case "differences":
         await Difference.update(data, { where: { id } });
         break;
-      case "discordwebhook":
+      case "differencesWebhooks":
         await DiscordWebhook.update(data, { where: { id } });
         break;
-      case "errorlogging":
+      case "errorLoggings":
         await ErrorLogging.update(data, { where: { id } });
         break;
-      case "monitor":
+      case "monitors":
         await Monitor.update(data, { where: { id } });
         break;
-      case "monitortype":
+      case "monitortypes":
         await MonitorType.update(data, { where: { id } });
         break;
-      case "nestedselector":
+      case "nestedSelectors":
         await NestedSelector.update(data, { where: { id } });
         break;
-      case "template":
+      case "templates":
         await Template.update(data, { where: { id } });
         break;
       default:
@@ -123,26 +123,26 @@ export namespace dbactions {
   }
 
   export async function deleteOne(model: string, id: string): Promise<void> {
-    switch (model) {
-      case "difference":
+    switch (model.toLowerCase()) {
+      case "differences":
         await Difference.destroy({ where: { id } });
         break;
-      case "discordwebhook":
+      case "differencesWebhooks":
         await DiscordWebhook.destroy({ where: { id } });
         break;
-      case "errorlogging":
+      case "errorLoggings":
         await ErrorLogging.destroy({ where: { id } });
         break;
-      case "monitor":
+      case "monitors":
         await Monitor.destroy({ where: { id } });
         break;
-      case "monitortype":
+      case "monitortypes":
         await MonitorType.destroy({ where: { id } });
         break;
-      case "nestedselector":
+      case "nestedSelectors":
         await NestedSelector.destroy({ where: { id } });
         break;
-      case "template":
+      case "templates":
         await Template.destroy({ where: { id } });
         break;
       default:
