@@ -2,9 +2,9 @@ const chromium = require("chrome-aws-lambda");
 
 import { html } from "../actions/html";
 import { Data } from "../../data/html";
-import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "../../data/config";
 import { Discord } from "../discord/webhook";
+import { dbactions } from "../commands/dbactions";
 
 export namespace Shared {
   export interface ReturnComparison {
@@ -103,22 +103,19 @@ export namespace Shared {
         ? merged.join("\n--\n") // unsafe mode as we handle null/undefined values
         : "";
 
-      const fileExist = await FileHandle.checkFileExist(profile.file);
+      const oldContents = await dbactions.getContentsByName(profile.file);
 
-      const oldFile = await FileHandle.readFile(profile.file);
+      await dbactions.writeContents(profile.file, newFileContent);
 
-      await FileHandle.writeFile(newFileContent, profile.file);
       await browser.close();
 
-      if (!fileExist && !forceNotify) {
+      if (!oldContents.length && !forceNotify) {
         return {
           Changes: false,
-          Content: newFileContent
-            .split("\n")
-            .filter((x) => !oldFile.Content.split("\n").includes(x)),
+          Content: newFileContent.split("\n"),
           Error: false,
         };
-      } else if (oldFile.Content === newFileContent) {
+      } else if (oldContents === newFileContent) {
         return {
           Changes: false,
           Content: [], // no changes hence empty array
@@ -127,9 +124,7 @@ export namespace Shared {
       } else {
         return {
           Changes: true,
-          Content: newFileContent
-            .split("\n")
-            .filter((x) => !oldFile.Content.split("\n").includes(x)),
+          Content: newFileContent.split("\n").filter((x) => !oldContents.split("\n").includes(x)),
           Error: false,
         };
       }

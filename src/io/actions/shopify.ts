@@ -2,6 +2,7 @@ import axios from "axios";
 import { FileHandle } from "../file/fileHandle";
 import { Data as Config } from "data/config";
 import { Discord } from "../discord/webhook";
+import { dbactions } from "../commands/dbactions";
 
 export namespace Shopify {
   export interface Construct {
@@ -25,9 +26,9 @@ export namespace Shopify {
         return newProductJson;
       })
       .then(async function (res) {
-        const source = await FileHandle.readFile(shopify.file);
-        const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
-        await FileHandle.writeFile(JSON.stringify(res), shopify.file);
+        const sourceContents = await dbactions.getContentsByName(shopify.file);
+        const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
+        await dbactions.writeContents(shopify.file, JSON.stringify(res));
 
         const results = await FileHandle.compareObjects(res, sourceJSON);
         await console.log(results);
@@ -74,9 +75,9 @@ export namespace Shopify {
         return newProductJson;
       })
       .then(async function (res) {
-        const source = await FileHandle.readFile(shopify.file);
-        const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
-        await FileHandle.writeFile(JSON.stringify(res), shopify.file);
+        const sourceContents = await dbactions.getContentsByName(shopify.file);
+        const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
+        await dbactions.writeContents(shopify.file, JSON.stringify(res));
 
         const results = await FileHandle.compareObjects(res, sourceJSON);
         await console.log(results);
