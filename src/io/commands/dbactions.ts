@@ -30,7 +30,7 @@ export namespace dbactions {
   }
 
   export async function findOne(model: string, id: string): Promise<ModelRecord | null> {
-    switch (model.toLowerCase()) {
+    switch (model) {
       case "differences":
         return Difference.findOne({ where: { id } });
       case "discordWebhooks":
@@ -51,7 +51,7 @@ export namespace dbactions {
   }
 
   export async function findAll(model: string): Promise<ModelRecord[]> {
-    switch (model.toLowerCase()) {
+    switch (model) {
       case "differences":
         return Difference.findAll();
       case "discordWebhooks":
@@ -73,7 +73,7 @@ export namespace dbactions {
 
   export async function createOne(model: string, json: string): Promise<ModelRecord> {
     const data = JSON.parse(json);
-    switch (model.toLowerCase()) {
+    switch (model) {
       case "differences":
         return Difference.create(data);
       case "discordWebhooks":
@@ -95,7 +95,7 @@ export namespace dbactions {
 
   export async function updateOne(model: string, id: string, json: string): Promise<void> {
     const data = JSON.parse(json);
-    switch (model.toLowerCase()) {
+    switch (model) {
       case "differences":
         await Difference.update(data, { where: { id } });
         break;
@@ -123,7 +123,7 @@ export namespace dbactions {
   }
 
   export async function deleteOne(model: string, id: string): Promise<void> {
-    switch (model.toLowerCase()) {
+    switch (model) {
       case "differences":
         await Difference.destroy({ where: { id } });
         break;
