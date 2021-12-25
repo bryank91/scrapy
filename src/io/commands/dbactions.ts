@@ -33,7 +33,7 @@ export namespace dbactions {
     switch (model.toLowerCase()) {
       case "differences":
         return Difference.findOne({ where: { id } });
-      case "differencesWebhooks":
+      case "discordWebhooks":
         return DiscordWebhook.findOne({ where: { id } });
       case "errorLoggings":
         return ErrorLogging.findOne({ where: { id } });
@@ -54,7 +54,7 @@ export namespace dbactions {
     switch (model.toLowerCase()) {
       case "differences":
         return Difference.findAll();
-      case "differencesWebhooks":
+      case "discordWebhooks":
         return DiscordWebhook.findAll();
       case "errorLoggings":
         return ErrorLogging.findAll();
@@ -76,7 +76,7 @@ export namespace dbactions {
     switch (model.toLowerCase()) {
       case "differences":
         return Difference.create(data);
-      case "differencesWebhooks":
+      case "discordWebhooks":
         return DiscordWebhook.create(data);
       case "errorLoggings":
         return ErrorLogging.create(data);
@@ -99,7 +99,7 @@ export namespace dbactions {
       case "differences":
         await Difference.update(data, { where: { id } });
         break;
-      case "differencesWebhooks":
+      case "discordWebhooks":
         await DiscordWebhook.update(data, { where: { id } });
         break;
       case "errorLoggings":
@@ -127,7 +127,7 @@ export namespace dbactions {
       case "differences":
         await Difference.destroy({ where: { id } });
         break;
-      case "differencesWebhooks":
+      case "discordWebhooks":
         await DiscordWebhook.destroy({ where: { id } });
         break;
       case "errorLoggings":
