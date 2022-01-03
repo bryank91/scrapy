@@ -15,9 +15,6 @@ Supported sites
 - EB CLI (https://github.com/aws/aws-elastic-beanstalk-cli-setup)
 - Postgresql
 
-## Notes
-Dockerfile has been renamed to use Dockerfile-aws as there will be a conflict when docker-compose and dockerfile is used
-
 ## Configuration
 Ensure this is performed before any of the task
 1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
@@ -47,6 +44,12 @@ You might need to force install chromium for fresh installations using "node nod
 
 `npm run build`
 `npm run start -- <arg>`
+
+> When working with puppeteer-cluster, its good to develop this in debug mode
+in linux
+` export DEBUG='puppeteer-cluster:*' `
+or in windows
+` set export DEBUG='puppeteer-cluster:*' `
 
 ### Working with database items
 > To create, read, update or delete database records, run the following commands or refer to --help
@@ -162,63 +165,6 @@ To see logs:
 1. `az webapp loconfig --name scrapy --resource-group Scrapy --docker-container-logging filesystem`
 2. `az webapp log tail --name scrapy --resource-group Scrapy`
 
----
-
-## AWS (Deprecated)
-### Creating in Elastic Beanstalk 
-> Some files such as .ebignore allows you to push files that are ignored by .gitignore
-> This is important fo EB deployments
-1. Once EB is installed on your machine, make sure the AWS CLI is setup with your credentials
-2. Use `EB init` (or `eb init -f` if you require reconfiguration) to set up the zone and application 
-3. `EB create <environment>` to create the environment
-4. `EB Deploy` to deploy the application to the environment
-
-> There is some manual steps that you need to perform
-5. `EB ssh` to go into the environment
-6. `sudo bash` to run as root
-7. Follow the steps in https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html 
-to install node
-```
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install node
-```
-
-8. Run cronatab with `crontab -e`
-
-> Step 9 might differ depends on where node is installed.
-> use `whereis node`
-9. Copy what is in `docker-cron` into crontab
-
-### Deployment Steps
-1. docker build -t scrapy -f Dockerfile-aws .
-2. docker tag scrapy:latest <unique>/scrapy:latest (this implementation is hosted in ECR)
-3. docker push <unique>/scrapy:latest
-4. eb deploy <environment name>
-
-Source: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
-
----
-
-## Running serverless (Preview)
-### Deployment instructions
-
-> **Requirements**: Docker. In order to build images locally and push them to ECR, you need to have Docker installed on your local machine. Please refer to [official documentation](https://docs.docker.com/get-docker/).
-
-In order to deploy your service, run the following command
-
-```
-sls deploy
-```
-
-### Test your service
-
-After successful deployment, you can test your service remotely by using the following command:
-
-```
-sls invoke --function hello
-```
-
 ## References
 - https://dev.to/dariansampare/setting-up-docker-typescript-node-hot-reloading-code-changes-in-a-running-container-2b2f
 - https://www.serverless.com/blog/container-support-for-lambda
@@ -229,5 +175,15 @@ sls invoke --function hello
 
 ## Licence
 MIT
+
+## FAQ
+
+1. Getting this error: Error: Unable to launch browser, error message: Could not find expected browser (chrome) locally. What do i do?
+> node node_modules/puppeteer-core/install.js
+2. How do I debug puppeteer-cluster?
+> In linux
+` export DEBUG='puppeteer-cluster:*' `
+> In windows
+` set export DEBUG='puppeteer-cluster:*' `
 
 
