@@ -45,8 +45,8 @@ export namespace Shared {
       ...i,
       ...(listOfInventory[index] !== undefined &&
         listOfInventory[index] !== null && {
-        inventory: parseInt(listOfInventory[index]),
-      }),
+          inventory: parseInt(listOfInventory[index]),
+        }),
     }));
   }
 
@@ -117,8 +117,6 @@ export namespace Shared {
         Content: [], // no changes hence empty array
         Error: e,
       };
-    } finally {
-      await browser.close();
     }
   }
 }

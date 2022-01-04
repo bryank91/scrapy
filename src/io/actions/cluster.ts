@@ -73,8 +73,8 @@ export namespace PuppeteerCluster {
         ...i,
         ...(listOfInventory[index] !== undefined &&
           listOfInventory[index] !== null && {
-          inventory: parseInt(listOfInventory[index]),
-        }),
+            inventory: parseInt(listOfInventory[index]),
+          }),
       }));
     });
 
