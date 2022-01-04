@@ -119,16 +119,17 @@ export namespace Parse {
       .argument("<url>", "the url of the product")
       .option("--id <discordId>", "discord id")
       .option("--token <discordToken>", "discord token")
-      .option("--cluster", "runs using selenium cluster")
+      .option("--cluster", "runs using puppeteer cluster")
       .action(async (url, options) => {
         console.log("Gathering inventory for product...");
         if (options.cluster) {
           await console.log("Running cluster with: " + url);
-          Cluster.getInventoryCluster(url).then((result) => {
+          Cluster.getInventory(url).then((result) => {
             console.log(result);
           });
         } else {
-          Shared.getInventory(url).then((result) => {
+          const browser = await Shared.initBrowser();
+          Shared.getInventory(browser, url).then((result) => {
             if (result.length > 0 && options.id && options.token) {
               const webhook: Config.Webhook = {
                 id: options.id,
@@ -216,10 +217,10 @@ export namespace Parse {
         });
       });
 
-    const selenium = program.command("selenium");
-    selenium.description("Selenium commands");
+    const puppeteer = program.command("puppeteer");
+    puppeteer.description("Puppeteer type commands");
 
-    selenium
+    puppeteer
       .command("changes")
       .description(
         "get changes for a website based on the selector and comparing to the file source with selenium"
@@ -229,11 +230,23 @@ export namespace Parse {
         "-f, --forever <seconds>",
         "runs forever for a specific amount of time in seconds. lower limit is 60"
       )
+      .option("--cluster", "run using puppeteer cluster")
       .action((profileId, options) => {
         const profiles = Discord.Webhook.getWebhook(profileId);
         const doForever = getDoForever(options);
         setForever(doForever, () => {
-          Selenium.doGetDifference(profiles);
+          if (options.cluster) {
+            (async () => {
+              const cluster = await Cluster.initBrowser();
+              await Cluster.queueGetDifference(profiles, cluster);
+              await cluster.close();
+            })();
+          } else {
+            (async () => {
+              await Selenium.doGetDifference(profiles);
+              // await process.exit();
+            })();
+          }
         });
       });
 

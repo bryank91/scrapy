@@ -18,11 +18,14 @@ export class Server {
     });
 
     this._app.post("/getInventory", function (req, res) {
-      req.body.Url !== null
-        ? Shared.getInventory(req.body.Url).then((result) => {
-            res.send(result);
-          })
-        : res.send("Something went wrong");
+      (async () => {
+        const browser = await Shared.initBrowser();
+        req.body.Url !== null
+          ? Shared.getInventory(browser, req.body.Url).then((result) => {
+              res.send(result);
+            })
+          : res.send("Something went wrong");
+      })();
     });
 
     this._app.listen(process.env.PORT, () => {

@@ -1,4 +1,4 @@
-import { Browser, HTTPResponse, Page } from "puppeteer-core";
+import { Page } from "puppeteer-core";
 import { Data as Config } from "../../data/config";
 
 interface Window {
@@ -14,23 +14,6 @@ interface Window {
 declare const window: Window;
 
 export namespace html {
-  interface PageData {
-    Page: Page;
-    Response: HTTPResponse;
-  }
-
-  // goto param takes in the url and browser takes in the lamda pupeteer browser
-  export async function navigate(goto: string, browser: Browser): Promise<PageData> {
-    const page = await browser.newPage();
-
-    // set extra headers
-    await page.setExtraHTTPHeaders(Config.headers);
-
-    const response = await page.goto(goto);
-
-    return { Page: page, Response: response };
-  }
-
   // async get the id
   export async function getProducts(page: Page) {
     const products: Config.ShopifyProduct[] = await page.evaluate(() => {
