@@ -8,6 +8,7 @@ import { Selenium } from "../actions/selenium";
 import { Cheerio } from "../actions/cheerio";
 import { Shopify } from "../actions/shopify";
 import { dbactions } from "./dbactions";
+import { PuppeteerCluster as Cluster } from "../actions/cluster";
 
 export namespace Parse {
   // returns if options exist for forever. takes in options from commander
@@ -118,19 +119,27 @@ export namespace Parse {
       .argument("<url>", "the url of the product")
       .option("--id <discordId>", "discord id")
       .option("--token <discordToken>", "discord token")
-      .action((url, options) => {
+      .option("--cluster", "runs using selenium cluster")
+      .action(async (url, options) => {
         console.log("Gathering inventory for product...");
-        Shared.getInventory(url).then((result) => {
-          if (result.length > 0 && options.id && options.token) {
-            const webhook: Config.Webhook = {
-              id: options.id,
-              token: options.token,
-            };
-            Discord.Webhook.productMessage(result, webhook).finally(() => console.log("Done"));
-          } else {
+        if (options.cluster) {
+          await console.log("Running cluster with: " + url);
+          Cluster.getInventoryCluster(url).then((result) => {
             console.log(result);
-          }
-        });
+          });
+        } else {
+          Shared.getInventory(url).then((result) => {
+            if (result.length > 0 && options.id && options.token) {
+              const webhook: Config.Webhook = {
+                id: options.id,
+                token: options.token,
+              };
+              Discord.Webhook.productMessage(result, webhook).finally(() => console.log("Done"));
+            } else {
+              console.log(result);
+            }
+          });
+        }
       });
 
     const shopify = program.command("shopify");
