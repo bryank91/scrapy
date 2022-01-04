@@ -45,21 +45,19 @@ export namespace Shared {
       ...i,
       ...(listOfInventory[index] !== undefined &&
         listOfInventory[index] !== null && {
-          inventory: parseInt(listOfInventory[index]),
-        }),
+        inventory: parseInt(listOfInventory[index]),
+      }),
     }));
   }
 
   // gets the differences of a site and writes it to a file
   // will be able to run repetitively if a foreverTimer is provided
   // if not provided, defaults to 0 where it runs once
-  export async function getDifferencesUsingFileSystem(
+  export async function getDifferences(
     profile: Config.Discord,
     page: Page,
     forceNotify = false // notifies immediately regardless of fileExist
   ): Promise<ReturnComparison> {
-    const browser = await initBrowser();
-
     try {
       const selectorValues: string[] | null = await html.getValueBasedOnSelector(
         page,
@@ -78,7 +76,7 @@ export namespace Shared {
       );
 
       const merged: string[] | null | undefined = selectorValues?.map((el, i) => {
-        let res = el; //TODO: mutable
+        let res = el;
 
         metadata.forEach((element) => {
           res = res + "\n" + element?.[i];
@@ -93,8 +91,6 @@ export namespace Shared {
       const oldContents = await dbactions.getContentsByName(profile.file);
 
       await dbactions.writeContents(profile.file, newFileContent);
-
-      await browser.close();
 
       if (!oldContents.length && !forceNotify) {
         return {

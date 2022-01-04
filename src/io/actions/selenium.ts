@@ -15,7 +15,7 @@ export namespace Selenium {
           await page.setExtraHTTPHeaders(Config.headers);
           await page.goto(profile.url);
 
-          await Shared.getDifferencesUsingFileSystem(profile, page, forceNotify).then((result) => {
+          await Shared.getDifferences(profile, page, forceNotify).then((result) => {
             (async () => {
               await console.log(result); // if similar return false else true
               if (result.Changes && !result.Error) {

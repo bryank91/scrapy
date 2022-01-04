@@ -73,8 +73,8 @@ export namespace PuppeteerCluster {
         ...i,
         ...(listOfInventory[index] !== undefined &&
           listOfInventory[index] !== null && {
-            inventory: parseInt(listOfInventory[index]),
-          }),
+          inventory: parseInt(listOfInventory[index]),
+        }),
       }));
     });
 
@@ -93,7 +93,7 @@ export namespace PuppeteerCluster {
       cluster.queue(async ({ page }) => {
         const pageC = page as unknown as Page; // how puppeteer-core and puppeteer extra works?
         await pageC.goto(profile.url);
-        const data = await Shared.getDifferencesUsingFileSystem(profile, pageC);
+        const data = await Shared.getDifferences(profile, pageC);
         await console.log(data);
       });
     });
