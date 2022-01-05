@@ -4,6 +4,32 @@ import { Data as Config } from "data/config";
 import { Discord } from "../discord/webhook";
 import { dbactions } from "../commands/dbactions";
 
+// Helper function
+async function fileSystemCompare(
+  contents: Config.SimpleDiscord[] | Config.ShopifyATC[],
+  filename: string
+) {
+  const source = await FileHandle.readFile(filename);
+  const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
+  await FileHandle.writeFile(JSON.stringify(contents), filename);
+  const results = await FileHandle.compareObjects(contents, sourceJSON);
+  await console.log(results);
+  return results;
+}
+
+// Helper function
+async function databaseCompare(
+  contents: Config.SimpleDiscord[] | Config.ShopifyATC[],
+  filename: string
+) {
+  const sourceContents = await dbactions.getContentsByName(filename);
+  const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
+  await dbactions.writeContents(filename, JSON.stringify(contents));
+  const results = await FileHandle.compareObjects(contents, sourceJSON);
+  await console.log(results);
+  return results;
+}
+
 export namespace Shopify {
   export interface Construct {
     url: string; // url to check against. needs to be product.json
@@ -12,7 +38,7 @@ export namespace Shopify {
     discordToken: string;
   }
 
-  export function getShopifyJson(shopify: Construct, timeout = 5000) {
+  export function getShopifyJson(shopify: Construct, fileSystem = false, timeout = 5000) {
     axios
       .get(shopify.url, { timeout })
       .then((response) => {
@@ -26,13 +52,13 @@ export namespace Shopify {
         return newProductJson;
       })
       .then(async function (res) {
-        const sourceContents = await dbactions.getContentsByName(shopify.file);
-        const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
-        await dbactions.writeContents(shopify.file, JSON.stringify(res));
-
-        const results = await FileHandle.compareObjects(res, sourceJSON);
-        await console.log(results);
-        return results;
+        if (fileSystem) {
+          const result = (await fileSystemCompare(res, shopify.file)) as Config.SimpleDiscord[];
+          return result;
+        } else {
+          const result = (await databaseCompare(res, shopify.file)) as Config.SimpleDiscord[];
+          return result;
+        }
       })
       .then((res: Config.SimpleDiscord[]) => {
         const webhook: Config.Webhook = {
@@ -43,7 +69,7 @@ export namespace Shopify {
       });
   }
 
-  export function getATC(shopify: Shopify.Construct, timeout = 5000) {
+  export function getATC(shopify: Shopify.Construct, fileSystem = false, timeout = 5000) {
     axios
       .get(shopify.url, { timeout })
       .then((response) => {
@@ -75,13 +101,13 @@ export namespace Shopify {
         return newProductJson;
       })
       .then(async function (res) {
-        const sourceContents = await dbactions.getContentsByName(shopify.file);
-        const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
-        await dbactions.writeContents(shopify.file, JSON.stringify(res));
-
-        const results = await FileHandle.compareObjects(res, sourceJSON);
-        await console.log(results);
-        return results;
+        if (fileSystem) {
+          const result = (await fileSystemCompare(res, shopify.file)) as Config.ShopifyATC[];
+          return result;
+        } else {
+          const result = (await databaseCompare(res, shopify.file)) as Config.ShopifyATC[];
+          return result;
+        }
       })
       .then((res: Config.ShopifyATC[]) => {
         const webhook: Config.Webhook = {
