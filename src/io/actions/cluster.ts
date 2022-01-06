@@ -21,7 +21,23 @@ export namespace PuppeteerCluster {
   const puppeteer = addExtra(puppeteerCore);
   puppeteer.use(Stealth());
 
+  function getConfig(): Config.Cluster {
+    try {
+      let config: Config.Cluster = Config.cluster;
+      console.log(Config.cluster);
+      return Config.cluster;
+    } catch (e) {
+      console.log("Unable to retrieve cluster, reverting to default:\n" + e);
+      return {
+        maxConcurrency: 2,
+        monitor: false,
+        concurrencyType: Cluster.CONCURRENCY_CONTEXT
+      }
+    }
+  }
+
   export async function initBrowser() {
+    const config = getConfig();
     const cluster = await Cluster.launch({
       puppeteer,
       puppeteerOptions: {
@@ -33,9 +49,9 @@ export namespace PuppeteerCluster {
           "--no-sandbox",
         ],
       },
-      maxConcurrency: 1, // TODO: future get from configuration
-      concurrency: Cluster.CONCURRENCY_CONTEXT,
-      monitor: false,
+      maxConcurrency: config.maxConcurrency, // TODO: future get from configuration
+      concurrency: Cluster.CONCURRENCY_CONTEXT, // TODO: defaults to CONTEXT for now
+      monitor: config.monitor,
       // skipDuplicateUrls: true,
       // sameDomainDelay: 1000,
       // retryDelay: 3000,
@@ -73,8 +89,8 @@ export namespace PuppeteerCluster {
         ...i,
         ...(listOfInventory[index] !== undefined &&
           listOfInventory[index] !== null && {
-            inventory: parseInt(listOfInventory[index]),
-          }),
+          inventory: parseInt(listOfInventory[index]),
+        }),
       }));
     });
 
@@ -95,6 +111,11 @@ export namespace PuppeteerCluster {
         await pageC.goto(profile.url);
         const data = await Shared.getDifferences(profile, pageC);
         await console.log(data);
+        if (data.Content.length > 0 && data.Changes == true) {
+          await console.log(profile);
+          const combined = await data.Content.join("\n");
+          await Discord.Webhook.sendMessage(profile, combined);
+        }
       });
     });
     await cluster.idle();

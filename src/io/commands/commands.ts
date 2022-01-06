@@ -234,20 +234,23 @@ export namespace Parse {
       .action((profileId, options) => {
         const profiles = Discord.Webhook.getWebhook(profileId);
         const doForever = getDoForever(options);
-        setForever(doForever, () => {
-          if (options.cluster) {
-            (async () => {
-              const cluster = await Cluster.initBrowser();
-              await Cluster.queueGetDifference(profiles, cluster);
-              await cluster.close();
-            })();
-          } else {
+        if (options.cluster) {
+          (async () => {
+            const cluster = await Cluster.initBrowser();
+            setForever(doForever, () => {
+              (async () => {
+                await Cluster.queueGetDifference(profiles, cluster);
+              })();
+            });
+            // await cluster.close();
+          })();
+        } else {
+          setForever(doForever, () => {
             (async () => {
               await Selenium.doGetDifference(profiles);
-              // await process.exit();
             })();
-          }
-        });
+          });
+        }
       });
 
     const cheerio = program.command("cheerio");

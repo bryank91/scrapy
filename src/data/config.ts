@@ -1,8 +1,9 @@
 // retrieve headers for browsers
-export namespace Data {
+export namespace Data { // TODO: rename to config
   export const headers = require("../../config/headers.json");
   export const discord = require("../../config/discord.json");
   export const errorLogger = require("../../config/error.json");
+  export const cluster = require("../../config/cluster.json")
 
   export interface Webhook {
     id: string;
@@ -61,5 +62,13 @@ export namespace Data {
     url: string;
     file: string;
     webhook: Webhook;
+  }
+
+  export interface Cluster {
+    maxConcurrency: number;
+    monitor: boolean;
+    retryDelay?: number;
+    concurrencyType: number; // Cluster.CONCURRENCY_PAGE|Cluster.CONCURRENCY_CONTEXT|Cluster.CONCURRENCY_BROWSER
+    timeout?: number
   }
 }
