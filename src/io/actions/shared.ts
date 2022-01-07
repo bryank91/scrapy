@@ -3,8 +3,8 @@ const chromium = require("chrome-aws-lambda");
 import { html } from "../actions/html";
 import { Data } from "../../data/html";
 import { Data as Config } from "../../data/config";
-import { Discord } from "../discord/webhook";
 import { dbactions } from "../commands/dbactions";
+import { Browser, Page } from "puppeteer-core";
 
 export namespace Shared {
   export interface ReturnComparison {
@@ -13,7 +13,7 @@ export namespace Shared {
     Error: unknown;
   }
 
-  const initBrowser = async () => {
+  export const initBrowser = async () => {
     const browser = await chromium.puppeteer.launch({
       args: ["--no-sandbox", "--disable-setuid-sandbox", "--single-process", "--no-zygote"],
       defaultViewport: chromium.defaultViewport,
@@ -25,20 +25,14 @@ export namespace Shared {
     return browser;
   };
 
-  export async function getInventory(site: Data.Html.Site) {
-    const browser = await initBrowser();
+  export async function getInventory(browser: Browser, site: Data.Html.Site) {
+    const page = await browser.newPage();
+    await page.setExtraHTTPHeaders(Config.headers);
+    await page.goto(site);
 
-    const pageData = await html.navigate(site, browser);
-
-    const errorLogger = await Discord.Webhook.getErrorLogger();
-
-    if (errorLogger && pageData.Response.status() !== 200) {
-      Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + site);
-    }
-
-    const products: Config.ShopifyProduct[] = await html.getProducts(pageData.Page);
+    const products: Config.ShopifyProduct[] = await html.getProducts(page);
     const inventory = await html.getSingleTextContentBasedOnSelector(
-      pageData.Page,
+      page,
       "#VariantJson-product-template"
     );
     const listOfInventory: Data.Html.Inventory =
@@ -59,29 +53,20 @@ export namespace Shared {
   // gets the differences of a site and writes it to a file
   // will be able to run repetitively if a foreverTimer is provided
   // if not provided, defaults to 0 where it runs once
-  export async function getDifferencesUsingFileSystem(
+  export async function getDifferences(
     profile: Config.Discord,
+    page: Page,
     forceNotify = false // notifies immediately regardless of fileExist
   ): Promise<ReturnComparison> {
-    const browser = await initBrowser();
-
     try {
-      const pageData = await html.navigate(profile.url, browser);
-
-      const errorLogger = await Discord.Webhook.getErrorLogger();
-
-      if (errorLogger && pageData.Response.status() !== 200) {
-        Discord.Webhook.logError(errorLogger, "Unable to talk to site in " + profile.domain);
-      }
-
       const selectorValues: string[] | null = await html.getValueBasedOnSelector(
-        pageData.Page,
+        page,
         profile.selector
       );
 
       const metadata = await Promise.all(
         profile.metadataSelector.map(async (el) => {
-          const res = await html.getValueBasedOnAttribute(pageData.Page, el.selector, el.attribute);
+          const res = await html.getValueBasedOnAttribute(page, el.selector, el.attribute);
           if (el.attribute === "href" && res !== null) {
             return html.cleanHref(res, profile.domain); // allows cleaning of href
           } else {
@@ -91,7 +76,7 @@ export namespace Shared {
       );
 
       const merged: string[] | null | undefined = selectorValues?.map((el, i) => {
-        let res = el; //TODO: mutable
+        let res = el;
 
         metadata.forEach((element) => {
           res = res + "\n" + element?.[i];
@@ -106,8 +91,6 @@ export namespace Shared {
       const oldContents = await dbactions.getContentsByName(profile.file);
 
       await dbactions.writeContents(profile.file, newFileContent);
-
-      await browser.close();
 
       if (!oldContents.length && !forceNotify) {
         return {
@@ -134,8 +117,6 @@ export namespace Shared {
         Content: [], // no changes hence empty array
         Error: e,
       };
-    } finally {
-      await browser.close();
     }
   }
 }
