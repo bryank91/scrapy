@@ -21,9 +21,8 @@ export namespace PuppeteerCluster {
   const puppeteer = addExtra(puppeteerCore);
   puppeteer.use(Stealth());
 
-  function getConfig(): Config.Cluster {
+  export function getConfig(): Config.Cluster {
     try {
-      let config: Config.Cluster = Config.cluster;
       console.log(Config.cluster);
       return Config.cluster;
     } catch (e) {
@@ -31,8 +30,8 @@ export namespace PuppeteerCluster {
       return {
         maxConcurrency: 2,
         monitor: false,
-        concurrencyType: Cluster.CONCURRENCY_CONTEXT
-      }
+        concurrency: Cluster.CONCURRENCY_CONTEXT,
+      };
     }
   }
 
@@ -89,8 +88,8 @@ export namespace PuppeteerCluster {
         ...i,
         ...(listOfInventory[index] !== undefined &&
           listOfInventory[index] !== null && {
-          inventory: parseInt(listOfInventory[index]),
-        }),
+            inventory: parseInt(listOfInventory[index]),
+          }),
       }));
     });
 
@@ -111,7 +110,7 @@ export namespace PuppeteerCluster {
         await pageC.goto(profile.url);
         const data = await Shared.getDifferences(profile, pageC);
         await console.log(data);
-        if (data.Content.length > 0 && data.Changes == true) {
+        if (data.Content.length > 0 && data.Changes === true) {
           await console.log(profile);
           const combined = await data.Content.join("\n");
           await Discord.Webhook.sendMessage(profile, combined);

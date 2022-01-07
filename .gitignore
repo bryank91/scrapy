@@ -11,6 +11,7 @@ config/headers.json
 *txt
 config/discord.json
 config/error.json
+config/cluster.json
 .env
 .env.prod
 

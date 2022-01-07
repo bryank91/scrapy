@@ -23,7 +23,8 @@ export namespace Selenium {
                 const parsedProfile: Config.Discord = profile;
                 await Discord.Webhook.sendMessage(parsedProfile, combined);
               } else if (!result.Changes && result.Error) {
-                console.log("Encountered error");
+                console.log("Encountered error: ");
+                console.log(result.Error);
               }
             })();
           });

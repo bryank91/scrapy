@@ -10,7 +10,7 @@ async function fileSystemCompare(
   filename: string
 ) {
   const source = await FileHandle.readFile(filename);
-  const sourceJSON = (await (source.Content.length > 1)) ? JSON.parse(source.Content) : [];
+  const sourceJSON = source.Content.length > 1 ? JSON.parse(source.Content) : [];
   await FileHandle.writeFile(JSON.stringify(contents), filename);
   const results = await FileHandle.compareObjects(contents, sourceJSON);
   await console.log(results);

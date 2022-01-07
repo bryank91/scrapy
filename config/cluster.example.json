@@ -1,5 +1,5 @@
 {
-    "maxConcurrency": "2",
+    "maxConcurrency": 2,
     "monitor": true,
     "retryDelay": 5000,
     "concurrency": "CONTEXT",
