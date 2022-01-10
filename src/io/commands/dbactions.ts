@@ -38,12 +38,13 @@ export namespace dbactions {
       };
 
   export async function getContentsByName(name: string): Promise<string> {
-    return (await Difference.findOne({ where: { name } }))?.value ?? "";
+    return (await Difference.findOne({ where: { name } }))?.value ?? "<undefined>";
+    // temp measure to omit a certian keyword
   }
 
   export async function writeContents(name: string, value: string): Promise<void> {
     const existing = await getContentsByName(name);
-    if (existing) {
+    if (existing || existing !== "<undefined>") {
       await Difference.update({ name, value }, { where: { name } });
     } else {
       await Difference.create({ name, value });
