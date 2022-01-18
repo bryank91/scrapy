@@ -13,6 +13,7 @@ config/discord.json
 config/error.json
 config/cluster.json
 config/config.json
+config/sites.json
 .env
 .env.prod
 

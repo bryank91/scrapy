@@ -47,6 +47,7 @@ export namespace PuppeteerCluster {
           "--no-zygote",
           "--no-sandbox",
         ],
+        // devtools: true // use this to debug in console.log with headless false
       },
       maxConcurrency: config.maxConcurrency, // TODO: future get from configuration
       concurrency: Cluster.CONCURRENCY_CONTEXT, // TODO: defaults to CONTEXT for now
