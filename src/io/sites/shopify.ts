@@ -18,7 +18,7 @@ export namespace Shopify {
   }
 
   // returns an array of profile that can be used randomly
-  export function getProfile(profile: string): Profiles.Profile[] | null {
+  export function getFirstProfile(profile: string): Profiles.Profile[] | null {
     try {
       console.log(Profiles.Profile[profile]);
       return Profiles.Profile[profile];
@@ -70,11 +70,9 @@ export namespace Shopify {
   // fill in the details page and click continue
   export async function details(page: Page, profile: string) : Promise<void> {
     const pageC = page as unknown as Page;
-    const profiles = getProfile(profile);
+    const profiles = getFirstProfile(profile);
     // TODO - we need to randomise the selectors
-
     if (profiles) {
-      try {
         // predefine shopify selectors
         const firstNameSelector = 'input#checkout_shipping_address_first_name';
         const lastNameSelector = 'input#checkout_shipping_address_last_name';
@@ -89,30 +87,25 @@ export namespace Shopify {
         await pageC.type(firstNameSelector, profiles[0].details.firstName);
 
         await pageC.waitForSelector(lastNameSelector);
-        await pageC.type(lastNameSelector, profiles[0].details.firstName);
+        await pageC.type(lastNameSelector, profiles[0].details.lastName);
 
         await pageC.waitForSelector(address1Selector);
-        await pageC.type(address1Selector, profiles[0].details.firstName);
+        await pageC.type(address1Selector, profiles[0].details.address1);
 
         await pageC.waitForSelector(address2Selector);
-        await pageC.type(address2Selector, profiles[0].details.firstName);
+        await pageC.type(address2Selector, profiles[0].details.address2);
 
         await pageC.waitForSelector(citySelector);
-        await pageC.type(citySelector, profiles[0].details.firstName);
+        await pageC.type(citySelector, profiles[0].details.city);
 
         await pageC.waitForSelector(stateSelector);
-        await pageC.type(stateSelector, profiles[0].details.firstName);
+        await pageC.type(stateSelector, profiles[0].details.state);
 
         await pageC.waitForSelector(postcodeSelector);
-        await pageC.type(postcodeSelector, profiles[0].details.firstName);
+        await pageC.type(postcodeSelector, profiles[0].details.postcode);
 
         await pageC.waitForSelector(phoneSelector);
-        await pageC.type(phoneSelector, profiles[0].details.firstName);
-
-        
-      } catch (e) {
-        console.log(e);
-      }
+        await pageC.type(phoneSelector, profiles[0].details.phone);
     } else {
       console.log('Profile does not exist.. Please ensure it is define')
     }

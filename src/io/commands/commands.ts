@@ -234,6 +234,7 @@ export namespace Parse {
 
         const cluster = await Cluster.initBrowser();
         await ShopifySites.queue(cluster, profileId);
+        await cluster.close();
       });
 
     const puppeteer = program.command("puppeteer");
