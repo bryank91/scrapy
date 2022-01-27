@@ -12,7 +12,7 @@
     "prettier": "npx prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run lint:fix && npm run prettier:fix",
-    "debug": "npm run build && set DEBUG='puppeteer-cluster:*' && set NODE_PATH=./build && node inspect build/index.js"
+    "debug": "npm run build && set DEBUG='puppeteer-cluster:*' && set NODE_INSPECT_RESUME_ON_START=1 && set NODE_PATH=./build && node inspect build/index.js"
   },
   "pre-commit": "lint, prettier",
   "author": "Kho, Bryan",

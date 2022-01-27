@@ -9,6 +9,7 @@ export namespace Sites {
     concurrency: 2;
     shopify?: Shopify;
     bigw?: BigW;
+    profiles: string; // but links to Profiles. required to complete any site
   }
   export interface Shopify {
     identifier: number;
