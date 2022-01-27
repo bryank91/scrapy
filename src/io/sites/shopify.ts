@@ -82,6 +82,13 @@ export namespace Shopify {
         const stateSelector = 'select#checkout_shipping_address_province';
         const postcodeSelector = 'input#checkout_shipping_address_zip';
         const phoneSelector = 'input#checkout_shipping_address_phone';
+        const continueButton = 'button#continue_button';
+        const emailSelector = 'input#checkout_email';
+        const confirmAddress = 'button[aria-label="Suggested address:"]'
+
+        await pageC.waitForSelector(emailSelector);
+        await pageC.type(emailSelector, profiles[0].details.email);
+        await pageC.waitForTimeout(500)
 
         await pageC.waitForSelector(firstNameSelector);
         await pageC.type(firstNameSelector, profiles[0].details.firstName);
@@ -91,12 +98,14 @@ export namespace Shopify {
 
         await pageC.waitForSelector(address1Selector);
         await pageC.type(address1Selector, profiles[0].details.address1);
+        await pageC.waitForTimeout(500)
 
         await pageC.waitForSelector(address2Selector);
         await pageC.type(address2Selector, profiles[0].details.address2);
 
         await pageC.waitForSelector(citySelector);
         await pageC.type(citySelector, profiles[0].details.city);
+        await pageC.waitForTimeout(500)
 
         await pageC.waitForSelector(stateSelector);
         await pageC.type(stateSelector, profiles[0].details.state);
@@ -106,6 +115,21 @@ export namespace Shopify {
 
         await pageC.waitForSelector(phoneSelector);
         await pageC.type(phoneSelector, profiles[0].details.phone);
+
+        let currentUrl = pageC.url();
+        await pageC.waitForSelector(continueButton);
+        await pageC.click(continueButton);
+        await pageC.waitForTimeout(500); // give it time to redirect
+        
+
+        // there is a chance they will ask us to confirm the address here
+        // this is specifically for certain websites
+        // if page redirects, ignore this step
+        if (currentUrl === pageC.url()) {
+          await pageC.waitForSelector(confirmAddress);
+          await pageC.click(confirmAddress);
+        }
+
     } else {
       console.log('Profile does not exist.. Please ensure it is define')
     }
@@ -114,11 +138,57 @@ export namespace Shopify {
   // fill in the shipping page and click continue
   export async function shipping(page: Page) : Promise<void> {
     const pageC = page as unknown as Page;
+
+    const shippingSelector = 'input[name="checkout[shipping_rate][id]"]';
+    const continueButton = 'button#continue_button';    
+    await pageC.waitForSelector(shippingSelector); 
+    let el : any = await page.$(shippingSelector); // I am sure there will be an element to return here
+    await el.click(); // defaults to the first one
+    await pageC.waitForSelector(continueButton);
+    await pageC.click(continueButton);
   }
 
   // fill in the payment page and click continue
-  export async function payment(page: Page) : Promise<void> {
+  export async function payment(page: Page, profile: string) : Promise<void> {
     const pageC = page as unknown as Page;
+    const profiles = getFirstProfile(profile);
+
+    //assumption credit card exist
+    if (profiles) {
+      const cardFieldsIframeSelector = 'iframe.card-fields-iframe';
+      const creditCardNumberSelector = 'input#number';
+      const nameOnCardSelector = 'input#name';
+      const creditCardExpirationDateSelector = 'input#expiry';
+      const creditCardCVVSelector = 'input#verification_value';
+      const continueButton = 'button#continue_button';
+
+      await pageC.waitForSelector(cardFieldsIframeSelector);
+      const cardFieldIframes = await pageC.$$(cardFieldsIframeSelector);
+
+      const cardNumberFrameHandle = cardFieldIframes[0];
+      const cardNumberFrame : any = await cardNumberFrameHandle.contentFrame(); // under the assumption will always return
+      // frames get detached..?
+
+      await cardNumberFrame.waitForSelector(creditCardNumberSelector);
+      await cardNumberFrame.type(creditCardNumberSelector, profiles[0].payment.cardNumber);
+
+      await cardNumberFrame.waitForSelector(nameOnCardSelector);
+      await cardNumberFrame.type(nameOnCardSelector, profiles[0].payment.name);
+
+      await cardNumberFrame.waitForSelector(creditCardExpirationDateSelector);
+      await cardNumberFrame.type(creditCardExpirationDateSelector, profiles[0].payment.exp);
+
+      await cardNumberFrame.waitForSelector(creditCardCVVSelector);
+      await cardNumberFrame.type(creditCardCVVSelector, profiles[0].payment.cvv);
+
+      await pageC.waitForSelector(continueButton);
+      await pageC.click(continueButton);
+
+      // SUCCESS!
+
+    } else {
+      console.log('profile does not exist')
+    }
 }
 
   export async function queue(cluster: ClusterRunner, profile: string) {
@@ -136,6 +206,8 @@ export namespace Shopify {
         await addToCart(pageC, config.shopify!.identifier.toString(), config.domain);
         await checkout(pageC, config.domain);
         await details(pageC, config.profiles);
+        await shipping(pageC);
+        await payment(pageC, config.profiles);
       });
       await cluster.idle();
     }

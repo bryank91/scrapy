@@ -16,8 +16,7 @@ export namespace Profiles {
   export interface Payment {
     name: string;
     cardNumber: string;
-    expMonth: string;
-    expYear: string;
+    exp: string;
     cvv: string;
   }
 

@@ -54,6 +54,7 @@ or in windows
 > When debugging the application, you can use debugger
 `set NODE_INSPECT_RESUME_ON_START=1` 
 Set the `debugger;` in your script where you want the breakpoint to stop
+Use the debugger tool in VS code to run with `debugger`
 
 ### Working with database items
 > To create, read, update or delete database records, run the following commands or refer to --help
