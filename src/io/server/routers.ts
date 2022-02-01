@@ -13,11 +13,11 @@ export namespace Router {
   export async function server() {
     console.log("Running server");
     const express = require("express");
-    let app = express();
+    const appInit = express();
 
     // initialize the server
-    const serverConfig = await Server.run(app);
-    app = serverConfig.app;
+    const serverConfig = await Server.run(appInit);
+    const app = serverConfig.app;
     const cluster = serverConfig.cluster;
 
     app.get("/", (req: unknown, res: any) => {
