@@ -46,10 +46,10 @@ export namespace PuppeteerCluster {
           // '--single-process',
           "--no-zygote",
           "--no-sandbox",
-          '--disable-web-security',
-          '--disable-features=IsolateOrigins,site-per-process'
+          "--disable-web-security",
+          "--disable-features=IsolateOrigins,site-per-process",
         ],
-        devtools: false // use this to debug in console.log with headless false
+        devtools: false, // use this to debug in console.log with headless false
       },
       maxConcurrency: config.maxConcurrency, // TODO: future get from configuration
       concurrency: Cluster.CONCURRENCY_CONTEXT, // TODO: defaults to CONTEXT for now

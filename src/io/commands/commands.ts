@@ -228,8 +228,8 @@ export namespace Parse {
         "enable debug mode. will not send webhooks and enable headless mode <Under Development>"
       )
       .action(async (profileId, options) => {
-        console.log(options)
-        console.log("Running shopify checkout based on:" + profileId);
+        console.log(options);
+        console.log("Running shopify checkout based on: ", profileId);
         // TODO: concurrency adjustor for checkout function
 
         const cluster = await Cluster.initBrowser();
