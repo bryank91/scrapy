@@ -1,9 +1,8 @@
 import { Command, OptionValues } from "commander";
-import { Server } from "../server/server";
+import { Server } from "./server";
 import { Parse } from "../commands/commands";
 import { Shared } from "../actions/shared";
 import { Shopify as ShopifySites } from "io/sites/shopify";
-import express, { Express } from "express";
 
 export namespace Router {
   export function init(argv: string[]): OptionValues {

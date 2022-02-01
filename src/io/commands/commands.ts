@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { Shared } from "../actions/shared";
-import { Router } from "../commands/routers";
+import { Router } from "../server/routers";
 import { OCR } from "../ocr/ocr";
 import { Discord } from "../discord/webhook";
 import { Data as Config } from "../../data/config";
