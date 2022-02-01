@@ -311,8 +311,8 @@ export namespace Parse {
     program
       .command("server")
       .description("runs a express server")
-      .action(() => {
-        Router.server();
+      .action(async () => {
+        await Router.server();
       });
 
     program.option("-d, --debug", "enable more verbose logging");
