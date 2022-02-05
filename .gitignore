@@ -12,6 +12,9 @@ config/headers.json
 config/discord.json
 config/error.json
 config/cluster.json
+config/config.json
+config/sites.json
+config/profiles.json
 .env
 .env.prod
 

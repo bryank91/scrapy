@@ -1,0 +1,25 @@
+{
+  "bot1": {
+    "type": "shopify",
+    "site": "https://bot1.myshopify.com",
+    "domain": "https://myshopify.com",
+    "webhook": "https://bot1.myshopify.com/admin/webhooks/84905898/",
+    "concurrency": 2,
+    "shopify": {
+      "identifier": 123456,
+      "size": 10
+    },
+    "profiles": "botprofile1"
+  },
+  "bot2": {
+    "type": "bigw",
+    "site": "https://bot1.myshopify.com",
+    "domain": "https://myshopify.com",
+    "webhook": "https://bot1.myshopify.com/admin/webhooks/84905898/",
+    "concurrency": 2,
+    "bigw": {
+      "link": "something.bigw.com/123456"
+    },
+    "profiles": "botprofile1"
+  }
+}

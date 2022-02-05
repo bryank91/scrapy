@@ -3,7 +3,7 @@ const chromium = require("chrome-aws-lambda");
 import { html } from "../actions/html";
 import { Data } from "../../data/html";
 import { Data as Config } from "../../data/config";
-import { dbactions } from "../commands/dbactions";
+import { dbactions } from "../database/dbactions";
 import { Browser, Page } from "puppeteer-core";
 
 export namespace Shared {

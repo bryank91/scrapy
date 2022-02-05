@@ -36,7 +36,7 @@ Ensure this is performed before any of the task
 4. `npm run start -- <arg>`
 
 ``` 
-You might need to force install chromium for fresh installations using "node node_modules/puppeteer/install.js" 
+You might need to force install chromium for fresh installations using "node node_modules/puppeteer-core/install.js" 
 ```
 
 ### Running the application
@@ -50,6 +50,12 @@ in linux
 ` export DEBUG='puppeteer-cluster:*' `
 or in windows
 ` set export DEBUG='puppeteer-cluster:*' `
+
+> When debugging the application, you can use debugger
+`set NODE_INSPECT_RESUME_ON_START=1` 
+Set the `debugger;` in your script where you want the breakpoint to stop
+Use the debugger tool in VS code to run with `debugger`
+You can also set breakpoints in the *built* scripts 
 
 ### Working with database items
 > To create, read, update or delete database records, run the following commands or refer to --help

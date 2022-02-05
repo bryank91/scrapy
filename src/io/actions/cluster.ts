@@ -40,17 +40,20 @@ export namespace PuppeteerCluster {
     const cluster = await Cluster.launch({
       puppeteer,
       puppeteerOptions: {
-        headless: true,
+        headless: true, // set to false for debugging
         args: [
           //'--proxy-server=' + proxy_server, TODO: setup proxy
           // '--single-process',
           "--no-zygote",
           "--no-sandbox",
+          "--disable-web-security",
+          "--disable-features=IsolateOrigins,site-per-process",
         ],
+        devtools: false, // use this to debug in console.log with headless false
       },
       maxConcurrency: config.maxConcurrency, // TODO: future get from configuration
       concurrency: Cluster.CONCURRENCY_CONTEXT, // TODO: defaults to CONTEXT for now
-      monitor: config.monitor,
+      // monitor: config.monitor,
       // skipDuplicateUrls: true,
       // sameDomainDelay: 1000,
       // retryDelay: 3000,

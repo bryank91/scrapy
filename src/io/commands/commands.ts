@@ -1,13 +1,15 @@
 import { Command } from "commander";
 import { Shared } from "../actions/shared";
-import { Router } from "../commands/routers";
+import { Router } from "../server/routers";
 import { OCR } from "../ocr/ocr";
 import { Discord } from "../discord/webhook";
 import { Data as Config } from "../../data/config";
 import { Selenium } from "../actions/selenium";
 import { Cheerio } from "../actions/cheerio";
 import { Shopify } from "../actions/shopify";
-import { dbactions } from "./dbactions";
+import { Shopify as ShopifySites } from "../sites/shopify";
+
+import { dbactions } from "../database/dbactions";
 import { PuppeteerCluster as Cluster } from "../actions/cluster";
 
 export namespace Parse {
@@ -217,6 +219,24 @@ export namespace Parse {
         });
       });
 
+    shopify
+      .command("checkout")
+      .description("automatically checkout based on the the profile set")
+      .argument("<profileId>", "the id from sites profile that you want to use")
+      .option(
+        "-d, --debug",
+        "enable debug mode. will not send webhooks and enable headless mode <Under Development>"
+      )
+      .action(async (profileId, options) => {
+        console.log(options);
+        console.log("Running shopify checkout based on: ", profileId);
+        // TODO: concurrency adjustor for checkout function
+
+        const cluster = await Cluster.initBrowser();
+        await ShopifySites.queue(cluster, profileId);
+        await cluster.close();
+      });
+
     const puppeteer = program.command("puppeteer");
     puppeteer.description("Puppeteer type commands");
 
@@ -253,6 +273,11 @@ export namespace Parse {
         }
       });
 
+    puppeteer
+      .command("automate")
+      .description("automatically buy the item based on given id")
+      .argument("<profileId>", "the id from config.discord that you want to use");
+
     const cheerio = program.command("cheerio");
     cheerio.description("Cheerio commands");
 
@@ -286,8 +311,8 @@ export namespace Parse {
     program
       .command("server")
       .description("runs a express server")
-      .action(() => {
-        Router.server();
+      .action(async () => {
+        await Router.server();
       });
 
     program.option("-d, --debug", "enable more verbose logging");

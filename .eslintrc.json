@@ -46,7 +46,7 @@
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-this-alias": "error",
-        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "off", // TODO: enable when we have a better way to handle `any`
 
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": "off",

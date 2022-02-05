@@ -1,4 +1,4 @@
-import { Router } from "./io/commands/routers";
+import { Router } from "./io/server/routers";
 
 // if no arguments are passed, default to server
 if (process.argv.length > 2) {

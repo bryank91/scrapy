@@ -1,0 +1,21 @@
+{
+  "botprofile1": [{
+    "details": {
+      "firstName": "profile1",
+      "lastName": "profile1",
+      "email": "profile1@hotmail.com",
+      "phone": "0412341234",
+      "address1": "100 Test Street",
+      "address2": "",
+      "city": "Perth",
+      "state": "Western Australia",
+      "postcode": "6000"
+    },
+    "payment": {
+      "name": "test",
+      "cardNumber": "1234 1234 1234 1234",
+      "exp": "12/12",
+      "cvv": "123"
+    }
+  }]
+}
