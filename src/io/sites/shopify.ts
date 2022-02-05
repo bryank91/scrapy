@@ -57,13 +57,14 @@ export namespace Shopify {
     try {
       await page.evaluate(
         async (variantId, domain) => {
-          const data: any = [];
+          const data: Record<string, Blob | string> = {};
           data.id! = variantId;
-          data.quantity! = 1;
-          data.form_type = 1;
+          data.quantity! = "1";
+          data.form_type = "1";
           const formData = new FormData();
           for (const name in data) {
-            formData.append(name, data[name]);
+            const value = data[name];
+            formData.append(name, value);
           }
 
           // change the website.com to a shopify enabled website
