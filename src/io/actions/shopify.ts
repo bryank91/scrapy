@@ -23,7 +23,8 @@ async function databaseCompare(
   filename: string
 ) {
   const sourceContents = await dbactions.getContentsByName(filename);
-  const sourceJSON = sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
+  console.log(sourceContents);
+  const sourceJSON = sourceContents != '<undefined>' && sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
   await dbactions.writeContents(filename, JSON.stringify(contents));
   const results = await FileHandle.compareObjects(contents, sourceJSON);
   await console.log(results);

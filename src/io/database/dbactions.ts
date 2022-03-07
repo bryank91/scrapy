@@ -44,7 +44,7 @@ export namespace dbactions {
 
   export async function writeContents(name: string, value: string): Promise<void> {
     const existing = await getContentsByName(name);
-    if (existing || existing !== "<undefined>") {
+    if (existing && existing !== "<undefined>") {
       await Difference.update({ name, value }, { where: { name } });
     } else {
       await Difference.create({ name, value });

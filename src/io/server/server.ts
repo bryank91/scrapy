@@ -13,6 +13,7 @@ export namespace Server {
     // need to handle Cluster types instead of using any
     dotenv.config();
     app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
     const server = app.listen(process.env.PORT, () => {
       console.log(`server running on port ` + process.env.PORT);

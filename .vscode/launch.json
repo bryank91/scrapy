@@ -11,6 +11,22 @@
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "start", "--", "shopify", "checkout", "bot1"],
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Server",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "start"],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Shopify Profile Keebs",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "start", "--", "shopify", "profile", "keebs"],
+        },
     ]
 }
