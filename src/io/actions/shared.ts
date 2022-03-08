@@ -56,14 +56,21 @@ export namespace Shared {
   export async function getDifferences(
     profile: Config.Discord,
     page: Page,
-    forceNotify = false // notifies immediately regardless of fileExist
+    forceNotify = false, // notifies immediately regardless of fileExist
+    timeout = 5000
   ): Promise<ReturnComparison> {
+    let selectorValues: string[] | null = null;
     try {
-      const selectorValues: string[] | null = await html.getValueBasedOnSelector(
-        page,
-        profile.selector
-      );
+      selectorValues = await html.getValueBasedOnSelector(page, profile.selector);
+    } catch (e) {
+      return {
+        Changes: false,
+        Content: [], // no changes hence empty array
+        Error: "Issues getting selectors",
+      };
+    }
 
+    try {
       const metadata = await Promise.all(
         profile.metadataSelector.map(async (el) => {
           const res = await html.getValueBasedOnAttribute(page, el.selector, el.attribute);
@@ -90,7 +97,7 @@ export namespace Shared {
 
       const oldContents = await dbactions.getContentsByName(profile.file);
 
-      await dbactions.writeContents(profile.file, newFileContent);
+      await dbactions.writeContentsDifference(profile.file, newFileContent);
 
       if (!oldContents.length && !forceNotify) {
         return {
@@ -105,6 +112,8 @@ export namespace Shared {
           Error: false,
         };
       } else {
+        console.log(oldContents + "\n" + "-----------\n");
+        console.log(newFileContent + "\n" + "-----------\n");
         return {
           Changes: true,
           Content: newFileContent.split("\n").filter((x) => !oldContents.split("\n").includes(x)),

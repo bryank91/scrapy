@@ -52,13 +52,13 @@ export namespace html {
     timeout = 5000
   ): Promise<string[] | null> {
     try {
-      (await page.waitForSelector(selector, { timeout })) !== null;
+      (await page.waitForSelector(selector, { timeout: timeout })) !== null;
       const arrayOfSelectors = await page.$$eval(selector, (anchors) => {
         return anchors.map((anchor) => anchor.textContent ?? "").filter((v) => v);
       });
       return arrayOfSelectors;
     } catch (e) {
-      console.log("Timeout limit reached. Exiting..");
+      console.log("Error:" + e);
       return null;
     }
   }

@@ -51,13 +51,10 @@ export namespace PuppeteerCluster {
         ],
         devtools: false, // use this to debug in console.log with headless false
       },
-      maxConcurrency: config.maxConcurrency, // TODO: future get from configuration
+      maxConcurrency: config.maxConcurrency,
       concurrency: Cluster.CONCURRENCY_CONTEXT, // TODO: defaults to CONTEXT for now
-      // monitor: config.monitor,
-      // skipDuplicateUrls: true,
-      // sameDomainDelay: 1000,
-      // retryDelay: 3000,
-      // workerCreationDelay: 3000
+      monitor: config.monitor,
+      timeout: config.timeout,
     });
 
     return cluster;
@@ -65,11 +62,13 @@ export namespace PuppeteerCluster {
 
   export async function getInventory(site: string) {
     const cluster = await initBrowser();
+    const clusterConfig = PuppeteerCluster.getConfig();
 
     await cluster.task(async ({ page, data: url }) => {
       const pageC = page as unknown as Page; // how puppeteer-core and puppeteer extra works?
-      const response = await pageC.goto(url);
-
+      const response = await pageC.goto(url, {
+        timeout: clusterConfig.timeout,
+      });
       const errorLogger = await Discord.Webhook.getErrorLogger();
 
       if (errorLogger && response.status() !== 200) {
@@ -96,27 +95,56 @@ export namespace PuppeteerCluster {
       }));
     });
 
-    cluster.queue(site);
-
-    const result = await cluster.execute(site);
+    await cluster.queue(site);
 
     await cluster.idle();
     await cluster.close();
+  }
 
-    return result;
+  async function findKeyword(
+    profile: Config.Discord,
+    data: Shared.ReturnComparison
+  ): Promise<void> {
+    let reg = new RegExp(profile.title, "gi");
+
+    let res = data.Content.filter((x) => {
+      let match = x.match(reg);
+      if (match != null && match.length > 0) {
+        console.log("Found the match: " + match);
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    console.log(res);
+    if (res != null && res.length > 0) {
+      await Discord.Webhook.singleMessage(
+        "@here Found " + profile.title + " in keyword",
+        profile.webhook
+      );
+    }
   }
 
   export async function queueGetDifference(profiles: Config.Discord[], cluster: ClusterRunner) {
+    const clusterConfig = PuppeteerCluster.getConfig();
     profiles.forEach((profile) => {
       cluster.queue(async ({ page }) => {
-        const pageC = page as unknown as Page; // how puppeteer-core and puppeteer extra works?
-        await pageC.goto(profile.url);
-        const data = await Shared.getDifferences(profile, pageC);
+        const pageC = page as unknown as Page;
+        await pageC.goto(profile.url, {
+          timeout: clusterConfig.timeout,
+        });
+        const data = await Shared.getDifferences(profile, pageC, false, clusterConfig.timeout);
         await console.log(data);
         if (data.Content.length > 0 && data.Changes === true) {
           await console.log(profile);
           const combined = await data.Content.join("\n");
-          await Discord.Webhook.sendMessage(profile, combined);
+          // only send data if its not a timeout issue or selector issue
+          if (data.Content[0]!.length > 1) {
+            // set more than 1 just in case its a new line
+            await Discord.Webhook.sendMessage(profile, combined);
+            await findKeyword(profile, data);
+          }
         }
       });
     });

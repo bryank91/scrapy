@@ -90,30 +90,30 @@ export namespace Router {
 
     // create a new monitor with differences, monitors, nestedSelectors and templates
     app.post("/monitor", function (req: any, res: any) {
-      (async () => {
+      async () => {
         if (req.body) {
-
-          const difference = req.body.difference; 
+          const difference = req.body.difference;
 
           // find if difference exist, if not create it
           DbActions.findOne("differences", difference.id).then((result) => {
-            let differenceInstance = result; // either differenceInstance or null
+            const differenceInstance = result; // either differenceInstance or null
             if (!differenceInstance) {
               DbActions.createOne("differences", JSON.stringify(req.body)).then((result) => {
                 // res.json(result);
               });
             } else {
-              DbActions.updateOne("differences", difference.id, JSON.stringify(req.body)).then((result) => {
-                // res.json(result);
-              });
+              DbActions.updateOne("differences", difference.id, JSON.stringify(req.body)).then(
+                (result) => {
+                  // res.json(result);
+                }
+              );
             }
           });
-          
+
           DbActions.createOne("monitors", JSON.stringify(req.body)).then((result) => {
             res.json(result);
           });
 
-          
           DbActions.createOne("monitors", JSON.stringify(req.body)).then((result) => {
             res.json(result);
           });
@@ -124,24 +124,20 @@ export namespace Router {
           DbActions.createOne("monitors", JSON.stringify(req.body)).then((result) => {
             res.json(result);
           });
-          
         } else {
-          res.status(400).json(
-            {
-        
-              name: "Monitor1",
-              siteUrl: "www.google.com",
-              selector: "test",
-              frequencySeconds: 60,
-              discordWebhookId: 1,
-              differenceId: 1,
-              monitorTypeId: 1,
-              nestedSelectorId: 1, // optional
-              templateId: 1
-            }
-          );
-        }      
-      })
+          res.status(400).json({
+            name: "Monitor1",
+            siteUrl: "www.google.com",
+            selector: "test",
+            frequencySeconds: 60,
+            discordWebhookId: 1,
+            differenceId: 1,
+            monitorTypeId: 1,
+            nestedSelectorId: 1, // optional
+            templateId: 1,
+          });
+        }
+      };
     });
 
     app.put("/monitor/:id", function (req: any, res: any) {
@@ -156,5 +152,4 @@ export namespace Router {
       })();
     });
   }
-
 }

@@ -19,8 +19,7 @@ export namespace Parse {
   };
 
   const setForever = (doForever: number, func: Function) => {
-    if (doForever >= 3) {
-      // sets a hard limit
+    if (doForever >= 1) {
       console.log("Running forever function...");
       setInterval(() => {
         func();
@@ -188,7 +187,11 @@ export namespace Parse {
         const profiles = Discord.Webhook.getWebhook(profileId);
         const doForever = getDoForever(options);
         setForever(doForever, () => {
-          Shopify.getShopifyJsonProfile(profiles);
+          try {
+            Shopify.getShopifyJsonProfile(profiles);
+          } catch (e) {
+            console.log(e);
+          }
         });
       });
 

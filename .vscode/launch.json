@@ -28,5 +28,13 @@
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "start", "--", "shopify", "profile", "keebs"],
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run monitor",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "start", "--", "puppeteer", "changes", "test","--cluster", "--forever", "10"],
+        },
     ]
 }

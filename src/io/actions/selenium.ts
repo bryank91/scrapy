@@ -32,7 +32,9 @@ export namespace Selenium {
         })();
       } catch (e) {
         console.log(e);
-        browser.close();
+        async () => {
+          await browser.close();
+        };
       }
     });
     return 1;

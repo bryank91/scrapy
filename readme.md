@@ -109,27 +109,15 @@ Run the project with
 
 > In certain cases, you might not be able to build. you will need to delete node_modules, downgrade npm and npm install
 
-To enhance reliability of the application, it is recommended to add the process_monitor.sh into crontab
+To enhance reliability of the application, it is recommended to add the process_monitor.sh into daemonize the application
 
-In `cronjob.env.sh` change `[user]` to your home directory name 
 
-`crontab -e`
-
-Add this into crontab 
-
-```
-*/1 * * * *     (. /home/[user]/scrapy/cronjob.env.sh; /home/[user]/scrapy/scripts/process_monitor.sh <directory> <command> >> /home/[user]/cron.log; )
-```
-
-Sample directory
-```
-"/home/[user]/scrapy"
-```
-
-Sample command
-```
-"changes profile1 --forever 30"
-``` 
+### Using PM2
+1. `npm install pm2@latest -g`
+2. Start setting up applications eg. `pm2 start build/index.js --name apple --watch -- shopify profile --forever 60 apple`
+3. To edit existing applications `pm2 restart <name> --max-memory-restart 700M`
+4. Use `pm2 monit` for monitoring
+Full guide available here: https://pm2.keymetrics.io/docs/usage/quick-start/
 
 
 ### Create App Service Steps

@@ -121,6 +121,15 @@ export namespace Discord.Webhook {
     }
   }
 
+  export async function singleMessage(message: string, webhook: Config.Webhook) {
+    const webhookClient = await new WebhookClient(webhook);
+    try {
+      webhookClient.send(message);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   export async function atcMessage(
     messages: Config.ShopifyATC,
     webhook: Config.Webhook,

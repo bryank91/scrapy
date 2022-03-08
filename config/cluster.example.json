@@ -3,5 +3,5 @@
     "monitor": true,
     "retryDelay": 5000,
     "concurrency": "CONTEXT",
-    "timeout": 20
+    "timeout": 10000
 }

@@ -24,8 +24,9 @@ async function databaseCompare(
 ) {
   const sourceContents = await dbactions.getContentsByName(filename);
   console.log(sourceContents);
-  const sourceJSON = sourceContents != '<undefined>' && sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
-  await dbactions.writeContents(filename, JSON.stringify(contents));
+  const sourceJSON =
+    sourceContents != "<undefined>" && sourceContents.length > 1 ? JSON.parse(sourceContents) : [];
+  await dbactions.writeContentsDifference(filename, JSON.stringify(contents));
   const results = await FileHandle.compareObjects(contents, sourceJSON);
   await console.log(results);
   return results;
@@ -39,7 +40,7 @@ export namespace Shopify {
     discordToken: string;
   }
 
-  export function getShopifyJson(shopify: Construct, fileSystem = false, timeout = 5000) {
+  export function getShopifyJson(shopify: Construct, fileSystem = false, timeout = 10000) {
     axios
       .get(shopify.url, { timeout })
       .then((response) => {
@@ -67,6 +68,11 @@ export namespace Shopify {
           token: shopify.discordToken,
         };
         if (res.length > 0) Discord.Webhook.simpleMessage(res, webhook);
+      })
+      .catch((err) => {
+        console.log(err.code);
+        console.log(err.message);
+        console.log(err.stack);
       });
   }
 
