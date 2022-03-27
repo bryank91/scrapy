@@ -54,6 +54,7 @@ export namespace PuppeteerCluster {
           "--disable-setuid-sandbox",
           // '--single-process', // <- this one doesn't works in Windows
         ],
+        timeout: config.timeout,
         devtools: false, // use this to debug in console.log with headless false
       },
       maxConcurrency: config.maxConcurrency,
