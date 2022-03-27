@@ -23,7 +23,6 @@ export namespace PuppeteerCluster {
 
   export function getConfig(): Config.Cluster {
     try {
-      console.log(Config.cluster);
       return Config.cluster;
     } catch (e) {
       console.log("Unable to retrieve cluster, reverting to default:\n" + e);
@@ -116,14 +115,13 @@ export namespace PuppeteerCluster {
     let res = data.Content.filter((x) => {
       let match = x.match(reg);
       if (match != null && match.length > 0) {
-        console.log("Found the match: " + match);
+        console.log("Found the match: " + match + " hence, alerting..");
         return true;
       } else {
         return false;
       }
     });
 
-    console.log(res);
     if (res != null && res.length > 0) {
       await Discord.Webhook.singleMessage(
         "@here Found " + profile.title + " in keyword",
@@ -136,6 +134,8 @@ export namespace PuppeteerCluster {
     const clusterConfig = PuppeteerCluster.getConfig();
     profiles.forEach((profile) => {
       cluster.queue(async ({ page }) => {
+        console.log("Using profile: \n");
+        console.log(profile);
         const pageC = page as unknown as Page;
 
         // block images from loading
@@ -145,13 +145,19 @@ export namespace PuppeteerCluster {
           else request.continue();
         });
 
-        await pageC.goto(profile.url, {
-          timeout: clusterConfig.timeout,
-        });
+        try {
+          await pageC.goto(profile.url, {
+            timeout: clusterConfig.timeout,
+          });
+        } catch (e) {
+          console.log(e);
+          console.log("\n Unable to go to the page. Potential timeout?");
+        }
+
         const data = await Shared.getDifferences(profile, pageC, false, clusterConfig.timeout);
-        await console.log(data);
+        console.log("Differences: \n");
+        console.log(data);
         if (data.Content.length > 0 && data.Changes === true) {
-          await console.log(profile);
           const combined = await data.Content.join("\n");
           // only send data if its not a timeout issue or selector issue
           if (data.Content[0]!.length > 1) {
