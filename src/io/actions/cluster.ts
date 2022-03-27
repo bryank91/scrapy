@@ -43,11 +43,16 @@ export namespace PuppeteerCluster {
         headless: true, // set to false for debugging
         args: [
           //'--proxy-server=' + proxy_server, TODO: setup proxy
-          // '--single-process',
           "--no-zygote",
-          "--no-sandbox",
+          "--no-sandbox", // <- this is risky for websites with lesser security
           "--disable-web-security",
           "--disable-features=IsolateOrigins,site-per-process",
+          "--disable-accelerated-2d-canvas",
+          "--no-first-run",
+          "--disable-gpu",
+          "--disable-dev-shm-usage",
+          "--disable-setuid-sandbox",
+          // '--single-process', // <- this one doesn't works in Windows
         ],
         devtools: false, // use this to debug in console.log with headless false
       },
@@ -131,6 +136,14 @@ export namespace PuppeteerCluster {
     profiles.forEach((profile) => {
       cluster.queue(async ({ page }) => {
         const pageC = page as unknown as Page;
+
+        // block images from loading
+        await page.setRequestInterception(true);
+        page.on("request", (request) => {
+          if (request.resourceType().toUpperCase() === "IMAGE") request.abort();
+          else request.continue();
+        });
+
         await pageC.goto(profile.url, {
           timeout: clusterConfig.timeout,
         });
