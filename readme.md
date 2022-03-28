@@ -17,9 +17,15 @@ Supported sites
 
 ## Configuration
 Ensure this is performed before any of the task
-1. Set up your environment. Copy .env.example to .env and configure your ports and profiles you want to use
-2. To configure profiles, copy discord.example.json to discord.json and configure your profiles
-3. To configure headers for puppeteer, copy headers.example.json to headers.json and configure the headers
+```
+Discord notifier = discord.json
+Headers in request = headers.json
+Configs for database = configs.json
+Cluster configuration = cluster.json
+Profiles for bot = profiles.json
+Sites bot configuration = sites.json
+Error Discord logging = error.json
+```
 
 ### Database Setup
 ``` Under the assumption postgresql is setup ```
