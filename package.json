@@ -15,9 +15,6 @@
     "format": "npm run lint:fix && npm run prettier:fix",
     "debug": "npm run build && set DEBUG='puppeteer-cluster:*' && set NODE_INSPECT_RESUME_ON_START=1 && set NODE_PATH=./build && node inspect build/index.js"
   },
-  "jest": {
-    "verbose": true
-  },
   "pre-commit": "lint, prettier",
   "author": "Kho, Bryan",
   "license": "MIT",
@@ -54,6 +51,7 @@
     "sequelize-cli": "^6.2.0",
     "serverless-offline": "^7.0.0",
     "serverless-plugin-typescript": "^1.1.9",
+    "ts-jest": "^27.1.4",
     "ts-node": "^10.0.0",
     "tslint-config-prettier": "^1.18.0"
   }
