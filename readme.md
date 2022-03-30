@@ -3,20 +3,14 @@
 Puppeteer scraping tool with multiple features. Currently built to run with Docker, Node and 
 Serverless (preview). Can be run as an express HTTP server or a CLI command
 
-Supported sites
-- Shopify
-
----
-
 ## Pre-requisites
 - Node 16 (use nvm)
 - Python 3.7.2 (https://www.python.org/downloads/) or use (brew install pyenv)
-- AWS CLI (https://aws.amazon.com/cli/)
-- EB CLI (https://github.com/aws/aws-elastic-beanstalk-cli-setup)
 - Postgresql
+- 2 VCPU machine, 1 GB of ram (will differ depend on your cluster configuration)
 
 ## Configuration
-Ensure this is performed before any of the task
+Ensure this is performed before any of the task. Refer to the .json.example for samples of configuration
 ```
 Discord notifier = discord.json
 Headers in request = headers.json
@@ -35,7 +29,6 @@ Error Discord logging = error.json
 
 ## Running in Docker and Development
 ### Local Development
-> This runs as nodemon which allows watch
 1. `npm install`
 2. `npm run build`
 3. `npm run start -- --help`
@@ -68,25 +61,13 @@ You can also set breakpoints in the *built* scripts
 
 The first argument refers to a database action, the 2nd argument refers to the model. Ensure the data is in a correct JSON string format that matches the respective model.
 
-`npm run start db findOne discordWebhooks 1`
-
-`npm run start db findAll discordWebhooks`
-
-`npm run start db create discordWebhooks '{"name":"tname", "webhookId": "tid", "webhookToken": "ttoken" }'`
-
-`npm run start db update discordWebhooks 1 '{"name":"newname" }'`
-
-`npm run start db delete discordWebhooks 1`
-
-### Running in docker
-> To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
-#### Dev
-1. `docker-compose -f docker-compose-dev.yml build`
-2. `docker-compose -f docker-compose-dev.yml up`
-
-#### Production
-1. `docker-compose build`
-2. `docker-compose up`
+```
+npm run start db findOne discordWebhooks 1
+npm run start db findAll discordWebhooks
+npm run start db create discordWebhooks '{"name":"tname", "webhookId": "tid", "webhookToken": "token" }'
+npm run start db update discordWebhooks 1 '{"name":"newname" }'
+npm run start db delete discordWebhooks 1
+```
 
 ---
 
@@ -115,9 +96,6 @@ Run the project with
 
 > In certain cases, you might not be able to build. you will need to delete node_modules, downgrade npm and npm install
 
-To enhance reliability of the application, it is recommended to add the process_monitor.sh into daemonize the application
-
-
 ### Using PM2
 1. `npm install pm2@latest -g`
 2. Start setting up applications eg. `pm2 start build/index.js --name apple --watch -- shopify profile --forever 60 apple`
@@ -125,53 +103,15 @@ To enhance reliability of the application, it is recommended to add the process_
 4. Use `pm2 monit` for monitoring
 Full guide available here: https://pm2.keymetrics.io/docs/usage/quick-start/
 
+## Running in docker (Untested)
+> To run this in docker, you will need to use docker-compose due to the naming convention in placed for serverless
+#### Dev
+1. `docker-compose -f docker-compose-dev.yml build`
+2. `docker-compose -f docker-compose-dev.yml up`
 
-### Create App Service Steps
-1. `az login` (pre-req you have Azure installed)
-2. Create Resource Group in AU 
-`az group create --name Scrapy --location "Australia Southeast"` (depending on the location you prefer)
-3. Create appservice plan 
-`az appservice plan create --name scrapy --resource-group Scrapy --sku B1 --is-linux`
-4. App deployment with docker-compose 
-`az webapp create --resource-group Scrapy --plan scrapy --name scrapy --multicontainer-config-type compose --multicontainer-config-file docker-compose-prod.yml`
-5. Gets the identity of the webapp 
-`az webapp identity assign --resource-group Scrapy --name scrapy --query principalId --output tsv`
-6. Gets the subscrption id 
-`az account show --query id --output tsv`
-7. With the crendentials above
-`az role assignment create --assignee <principal-id> --scope /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.ContainerRegistry/registries/<registry-name> --role "AcrPull"`
-8. `<principal-id>` is from step 5, `<registry-name>` is scrapy, `<subscription-id>` from from step 6, `<myResourceGroup>` is Scrapy
-9. Update the RG permissions 
-`az resource update --ids /subscriptions/<subscription-id>/resourceGroups/<myResourceGroup>/providers/Microsoft.Web/sites/<app-name>/config/web --set properties.acrUseManagedIdentityCreds=True`
-9. `<subscription-id>` is from step 6, `<myResourceGroup>` is Scrapy, `<app-name>` is scrapy
-10. You will need to try to access the site to trigger the docker-compose pull
-
-Source: https://docs.microsoft.com/en-us/azure/app-service/tutorial-custom-container?pivots=container-linux
-
-Pushing to ACR
-1. `az acr create --name scrapy --resource-group Scrapy --sku standard`
-2. `docker login scrapy.azurecr.io`
-3. `docker build -f Dockerfile-azure --tag scrapy:latest .`
-4. `docker tag scrapy scrapy.azurecr.io/scrapy`
-
-To remove:
-1. `az webapp delete --name scrapy --resource-group Scrapy` (to remove after testing)
-
-To SSH (not working atm):
-1. Configure: https://docs.microsoft.com/en-au/azure/app-service/configure-linux-open-ssh-session
-2.  `az webapp ssh --name scrapy --resource-group Scrapy`
-
-To see logs:
-1. `az webapp loconfig --name scrapy --resource-group Scrapy --docker-container-logging filesystem`
-2. `az webapp log tail --name scrapy --resource-group Scrapy`
-
-## References
-- https://dev.to/dariansampare/setting-up-docker-typescript-node-hot-reloading-code-changes-in-a-running-container-2b2f
-- https://www.serverless.com/blog/container-support-for-lambda
-- https://www.proud2becloud.com/how-to-build-a-serverless-backend-with-typescript-nodejs-and-aws-lambda/
-- https://www.serverless.com/blog/serverless-express-rest-api
-- https://acloudguru.com/blog/engineering/serverless-browser-automation-with-aws-lambda-and-puppeteer
-- https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker.html
+#### Production
+1. `docker-compose build`
+2. `docker-compose up`
 
 ## Licence
 MIT
@@ -180,10 +120,14 @@ MIT
 
 1. Getting this error: Error: Unable to launch browser, error message: Could not find expected browser (chrome) locally. What do i do?
 > node node_modules/puppeteer-core/install.js
+
 2. How do I debug puppeteer-cluster?
 > In linux
 ` export DEBUG='puppeteer-cluster:*' `
 > In windows
 ` set export DEBUG='puppeteer-cluster:*' `
+
+3. Why does it crash after awhile with errors such as target not found
+> There is currently a bug at the moment where if CPU usage is 100%, it does not recover properly
 
 
