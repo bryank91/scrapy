@@ -5,12 +5,14 @@ import { Data } from "../../data/html";
 import { Data as Config } from "../../data/config";
 import { dbactions } from "../database/dbactions";
 import { Browser, Page } from "puppeteer-core";
+import { Items } from "../../data/items"
 
 export namespace Shared {
   export interface ReturnComparison {
     Changes: boolean;
     Content: string[];
     Error: unknown;
+    Log: string | null;
   }
 
   export const initBrowser = async () => {
@@ -61,12 +63,13 @@ export namespace Shared {
   ): Promise<ReturnComparison> {
     let selectorValues: string[] | null = null;
     try {
-      selectorValues = await html.getValueBasedOnSelector(page, profile.selector);
+      selectorValues = await html.getValueBasedOnSelector(page, profile.selector, timeout);
     } catch (e) {
       return {
         Changes: false,
         Content: [], // no changes hence empty array
         Error: "Issues getting selectors",
+        Log: null
       };
     }
 
@@ -92,39 +95,59 @@ export namespace Shared {
       });
 
       const newFileContent: string = merged?.length
-        ? merged.join("\n--\n") // unsafe mode as we handle null/undefined values
+        // filter this in the differences table and eliminating any blanks
+        ? merged.filter(x => x.trim() != "").join("\n--\n")
         : "";
 
       const oldContents = await dbactions.getContentsByName(profile.file);
 
       await dbactions.writeContentsDifference(profile.file, newFileContent);
 
+      console.log(newFileContent + "\n \n VS \n \n" + oldContents)
+
       if (!oldContents.length && !forceNotify) {
         return {
           Changes: false,
           Content: newFileContent.split("\n"),
           Error: false,
+          Log: "Old contents length is less than 0"
         };
       } else if (oldContents === newFileContent) {
         return {
           Changes: false,
           Content: [], // no changes hence empty array
           Error: false,
+          Log: "Old contents is similar to new file contents"
         };
       } else {
-        console.log(oldContents + "\n" + "-----------\n");
-        console.log(newFileContent + "\n" + "-----------\n");
-        return {
-          Changes: true,
-          Content: newFileContent.split("\n").filter((x) => !oldContents.split("\n").includes(x)),
-          Error: false,
-        };
+
+        // TODO: bug found. it doesnt register read new items getting added into the list
+        const content = Items.compareTwoArraysWithNewLineEnumeration(newFileContent, oldContents);
+        const trimmedContent = content.filter(x => x.trim() != ""); // remove empty selectors
+
+        if (trimmedContent.length > 0) { //verify if its null
+          return {
+            Changes: true,
+            Content: trimmedContent,
+            Error: false,
+            Log: "Found changes, notifying.."
+          };
+        } else {
+          return {
+            Changes: false,
+            Content: trimmedContent,
+            Error: false,
+            Log: "All string arrays are empty. High chance selectors are not found or page is empty"
+          };
+        }
+
       }
     } catch (e) {
       return {
         Changes: false,
         Content: [], // no changes hence empty array
         Error: e,
+        Log: "Promise failed"
       };
     }
   }

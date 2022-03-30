@@ -157,15 +157,13 @@ export namespace PuppeteerCluster {
         const data = await Shared.getDifferences(profile, pageC, false, clusterConfig.timeout);
         console.log("Differences: \n");
         console.log(data);
-        if (data.Content.length > 0 && data.Changes === true) {
+        
+        if (data.Changes === true) {
           const combined = await data.Content.join("\n");
-          // only send data if its not a timeout issue or selector issue
-          if (data.Content[0]!.length > 1) {
-            // set more than 1 just in case its a new line
-            await Discord.Webhook.sendMessage(profile, combined);
-            await findKeyword(profile, data);
-          }
+          await Discord.Webhook.sendMessage(profile, combined);
+          await findKeyword(profile, data);
         }
+
       });
     });
     await cluster.idle();
