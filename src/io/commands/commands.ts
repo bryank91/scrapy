@@ -11,6 +11,8 @@ import { Shopify as ShopifySites } from "../sites/shopify";
 import { dbactions } from "../database/dbactions";
 import { PuppeteerCluster as Cluster } from "../actions/cluster";
 
+import { Crawler } from "../crawler/crawler"
+
 export namespace Parse {
   // returns if options exist for forever. takes in options from commander
   const getDoForever = (options: { forever: string }): number => {
@@ -291,7 +293,18 @@ export namespace Parse {
         "-f, --forever <seconds>",
         "runs forever for a specific amount of time in seconds"
       ).action((profileId, options) => {
-      
+        const profiles = Discord.Webhook.getWebhook(profileId);
+        const doForever = getDoForever(options);
+
+        const c = Crawler.setup();
+        setForever(doForever, () => {
+          (async () => {
+            profiles.forEach(profile => {
+              Crawler.queue(c, profile);
+            })
+          })();
+        });
+
       });
 
     program

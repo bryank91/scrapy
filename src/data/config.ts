@@ -5,6 +5,7 @@ export namespace Data {
   export const discord = require("../../config/discord.json");
   export const errorLogger = require("../../config/error.json");
   export const cluster = require("../../config/cluster.json");
+  export const crawler = require("../../config/crawler.json");
 
   export interface Webhook {
     id: string;
@@ -71,5 +72,9 @@ export namespace Data {
     retryDelay?: number;
     concurrency: number; // Cluster.CONCURRENCY_PAGE|Cluster.CONCURRENCY_CONTEXT|Cluster.CONCURRENCY_BROWSER
     timeout?: number;
+  }
+
+  export interface Crawler {
+    maxConnections: number
   }
 }

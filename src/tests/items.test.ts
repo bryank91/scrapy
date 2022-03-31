@@ -1,4 +1,4 @@
-import { Items } from "../src/data/items";
+import { Items } from "../data/items";
 
 const newFileContent = "test1\ntest2\ntest3\ntest4"
 const oldFileContent = "test1\ntest2\ntest3\ntest4"
