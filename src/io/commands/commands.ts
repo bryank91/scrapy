@@ -5,7 +5,6 @@ import { OCR } from "../ocr/ocr";
 import { Discord } from "../discord/webhook";
 import { Data as Config } from "../../data/config";
 import { Selenium } from "../actions/selenium";
-import { Cheerio } from "../actions/cheerio";
 import { Shopify } from "../actions/shopify";
 import { Shopify as ShopifySites } from "../sites/shopify";
 
@@ -281,25 +280,18 @@ export namespace Parse {
       .description("automatically buy the item based on given id")
       .argument("<profileId>", "the id from config.discord that you want to use");
 
-    const cheerio = program.command("cheerio");
-    cheerio.description("Cheerio commands");
+    const crawler = program.command("crawler");
+    crawler.description("Crawler commands. Great for low resource monitoring");
 
-    cheerio
-      .command("changes")
-      .description(
-        "get changes for a website based on the selector and comparing to the file source with cheerio"
-      )
-      .argument("<profileId>", "the id from config.discord that you want to use")
+    crawler
+      .command("monitor")
+      .description("monitor based on discord profiles set")
+      .argument("<profileId>","profile you would like to monitor in discord.json")
       .option(
         "-f, --forever <seconds>",
-        "runs forever for a specific amount of time in seconds. lower limit is 60"
-      )
-      .action((profileId, options) => {
-        const profiles = Discord.Webhook.getWebhook(profileId);
-        const doForever = getDoForever(options);
-        setForever(doForever, () => {
-          Cheerio.doGetDifference(profiles);
-        });
+        "runs forever for a specific amount of time in seconds"
+      ).action((profileId, options) => {
+      
       });
 
     program
