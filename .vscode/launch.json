@@ -7,10 +7,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Run Puppeteer bot",
+            "name": "Run Crawler",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "start", "--", "shopify", "checkout", "bot1"],
+            "runtimeArgs": ["run", "debug", "--", "crawler", "monitor", "test3"],
         },
         {
             "type": "node",
@@ -18,7 +18,7 @@
             "name": "Run Server",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "start"],
+            "runtimeArgs": ["run", "debug"],
         },
         {
             "type": "node",
@@ -26,7 +26,7 @@
             "name": "Run Shopify Profile Keebs",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "start", "--", "shopify", "profile", "keebs"],
+            "runtimeArgs": ["run", "debug", "--", "shopify", "profile", "keebs"],
         },
         {
             "type": "node",
@@ -34,7 +34,7 @@
             "name": "Run monitor",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "start", "--", "puppeteer", "changes", "test","--cluster", "--forever", "10"],
+            "runtimeArgs": ["run", "debug", "--", "puppeteer", "changes", "test","--cluster", "--forever", "10"],
         },
     ]
 }

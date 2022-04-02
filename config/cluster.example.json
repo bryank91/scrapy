@@ -1,5 +1,6 @@
 {
     "maxConcurrency": 2,
+    "maxConnections": 8,
     "monitor": true,
     "retryDelay": 5000,
     "concurrency": "CONTEXT",
